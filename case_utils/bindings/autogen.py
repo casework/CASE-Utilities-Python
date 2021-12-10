@@ -40,9 +40,10 @@ class CASEPropertyConstructor(object):
         self.max_count: typing.Optional[int] = max_count
 
 class CASEClassConsructor(object):
-    def __init__(self, class_iri: str, *args, **kwargs) -> None:
+    def __init__(self, class_iri: str, *args, documentation_comment: str = None, **kwargs) -> None:
         self.class_iri: str = class_iri
         self.case_class_name: str = "case_" + class_basename(class_iri)
+        self.documentation_comment: typing.Optional[str] = documentation_comment
         self.parent_case_class_names: typing.Set[str] = set()
         self.required_properties: typing.Dict[str, CASEPropertyConstructor] = dict()
 
@@ -58,6 +59,13 @@ class CASEClassConsructor(object):
             % (self.case_class_name, ", ".join(sorted(python_parent_class_names)))
         )
         parts.append('    """')
+
+        if not self.documentation_comment is None:
+            documentation_comment_lines = self.documentation_comment.split("\n")
+            for documentation_comment_line in documentation_comment_lines:
+                parts.append(("    " + documentation_comment_line).rstrip())
+            parts.append("")
+
         parts.append("    Based on class with IRI %r." % self.class_iri)
         parts.append('    """')
         parts.append("    def __init__(self, *args, **kwargs) -> None:")
@@ -147,16 +155,21 @@ class NodeConstructor(object):
     )
 
     class_iris: typing.Set[str] = set()
-    query_str = """\
-SELECT ?nClass
+    class_iri_to_documentation_comment: typing.Dict[str, typing.Optional[str]] = dict() 
+    class_query_str = """\
+SELECT ?nClass ?nComment
 WHERE {
   ?nClass a sh:NodeShape .
   ?nClass a owl:Class .
   ?nClass sh:targetClass ?nClass .
+
+  OPTIONAL { ?nClass rdfs:comment ?nComment . }
 }
 """
-    for result in graph.query(query_str):
-        class_iris.add(result[0].toPython())
+    for class_result in graph.query(class_query_str):
+        class_iris.add(class_result[0].toPython())
+        if not class_result[1] is None:
+            class_iri_to_documentation_comment[class_result[0].toPython()] = class_result[1].toPython()
 
     class_iri_basename_to_case_class_constructor: typing.Dict[
         str, CASEClassConsructor
@@ -168,7 +181,7 @@ WHERE {
             raise ValueError("Duplicate class basename: %r." % class_iri_basename)
         class_iri_basename_to_case_class_constructor[
             class_iri_basename
-        ] = CASEClassConsructor(class_iri)
+        ] = CASEClassConsructor(class_iri, documentation_comment=class_iri_to_documentation_comment.get(class_iri))
 
     # Record direct parents.
     query_str = """\
