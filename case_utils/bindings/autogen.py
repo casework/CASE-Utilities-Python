@@ -84,6 +84,19 @@ class CASEClassConsructor(object):
         parts.append("            _type_iris = type_iris")
         parts.append("        super().__init__(*args, type_iris=_type_iris, **kwargs)")
 
+        # Add special-case initialization.
+        if self.case_class_name == "case_UcoObject":
+            parts.append("        self._facets: typing.List[case_Facet] = []")
+
+        # Build special-case methods.
+        if self.case_class_name == "case_UcoObject":
+            parts.append("    def add_facet(self, facet: case_Facet) -> None:")
+            parts.append("        self.facets.append(facet)")
+            parts.append("        self.graph.add((self.node, NS_UCO_CORE.hasFacet, facet.node))")
+            parts.append("    @property")
+            parts.append("    def facets(self) -> typing.List[case_Facet]:")
+            parts.append("        return self._facets")
+
         return "\n".join(parts)
 
 
@@ -127,6 +140,7 @@ import typing
 import rdflib
 
 NS_RDF = rdflib.RDF
+NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
 
 class NodeConstructor(object):
     def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
