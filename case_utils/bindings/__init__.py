@@ -60,7 +60,7 @@ class NodeConstructor(object):
 
     def add_to_graph(self, graph: rdflib.Graph) -> None:
         for type_iri in sorted(self.type_iris):
-            graph.add((self.node_iri, rdflib.RDF.type, rdflib.URIRef(type_iri)))
+            graph.add((self.node, rdflib.RDF.type, rdflib.URIRef(type_iri)))
 
 
 class case_API(case_ObservableObject):
