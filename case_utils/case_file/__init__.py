@@ -181,26 +181,25 @@ def create_file_node(
         for key in successful_hashdict._fields:
             if not key in ("md5", "sha1", "sha256", "sha512"):
                 continue
-            # TODO - case_Hash class is not defined in bindings, due to a not-yet-pinpointed iteration bug.
-            n_hash = rdflib.BNode()
+            hash_constructor = case_utils.bindings.case_Hash(graph)
             graph.add((
               content_data_constructor.node,
               NS_UCO_OBSERVABLE.hash,
-              n_hash
+              hash_constructor.node
             ))
             graph.add((
-              n_hash,
+              hash_constructor.node,
               NS_RDF.type,
               NS_UCO_TYPES.Hash
             ))
             graph.add((
-              n_hash,
+              hash_constructor.node,
               NS_UCO_TYPES.hashMethod,
               rdflib.Literal(key.upper(), datatype=NS_UCO_VOCABULARY.HashNameVocab)
             ))
             hash_value = getattr(successful_hashdict, key)
             graph.add((
-              n_hash,
+              hash_constructor.node,
               NS_UCO_TYPES.hashValue,
               rdflib.Literal(hash_value.upper(), datatype=NS_XSD.hexBinary)
             ))
