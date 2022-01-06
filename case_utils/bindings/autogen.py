@@ -74,8 +74,15 @@ class CASEClassConsructor(object):
         parts.append('    """')
 
         # Build initializer.
-        parts.append("    def __init__(self, *args, **kwargs) -> None:")
-        parts.append("        super().__init__(*args, **kwargs)")
+        parts.append("    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:")
+        # Add types in initializer.
+        if "'" in self.class_iri:
+            raise ValueError("Unexpected \"'\" character in IRI: %r." % self.class_iri)
+        parts.append("        if len(type_iris) == 0:")
+        parts.append("            _type_iris = {'%s'}" % self.class_iri)
+        parts.append("        else:")
+        parts.append("            _type_iris = type_iris")
+        parts.append("        super().__init__(*args, type_iris=_type_iris, **kwargs)")
 
         return "\n".join(parts)
 
@@ -119,12 +126,28 @@ import typing
 
 import rdflib
 
+NS_RDF = rdflib.RDF
+
 class NodeConstructor(object):
-    def __init__(self, node_iri: typing.Optional[str] = None, *args, **kwargs) -> None:
+    def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
         super().__init__()
+        self._graph: rdflib.Graph = graph
         self._node: typing.Union[None, rdflib.BNode, rdflib.URIRef] = None
         self._node_iri = node_iri
-        self._type_iris: typing.Set[str] = set()
+        self._type_iris: typing.Set[str] = type_iris
+        for type_iri in sorted(self.type_iris):
+            self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+
+    def add_type_iri(self, type_iri: str) -> None:
+        '''
+        Add additional RDF type to graph node.
+        '''
+        self.type_iris.add(type_iri)
+        self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+
+    @property
+    def graph(self) -> rdflib.Graph:
+        return self._graph
 
     @property
     def node(self) -> typing.Union[rdflib.BNode, rdflib.URIRef]:
