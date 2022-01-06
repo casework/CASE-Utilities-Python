@@ -781,6 +781,89 @@ class case_VictimTargeting(case_Victim):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_Hash(NodeConstructor):
+    """
+    A hash is a grouping of characteristics unique to the result of applying a mathematical algorithm that maps data of arbitrary size to a bit string (the 'hash') and is a one-way function, that is, a function which is practically infeasible to invert. This is commonly used for integrity checking of data. [based on https://en.wikipedia.org/wiki/Cryptographic_hash_function]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/types#Hash'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {"https://unifiedcyberontology.org/ontology/uco/types#Hash"}
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_DictionaryEntry(NodeConstructor):
+    """
+    A dictionary entry is a single (term/key, value) pair.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/types#DictionaryEntry'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/types#DictionaryEntry"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Dictionary(NodeConstructor):
+    """
+    A dictionary is list of (term/key, value) pairs with each term/key existing no more than once.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/types#Dictionary'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/types#Dictionary"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ControlledDictionaryEntry(NodeConstructor):
+    """
+    A controlled dictionary entry is a single (term/key, value) pair where the term/key is constrained to an explicitly defined set of values.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/types#ControlledDictionaryEntry'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/types#ControlledDictionaryEntry"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ControlledDictionary(NodeConstructor):
+    """
+    A controlled dictionary is a list of (term/key, value) pairs where each term/key exists no more than once and is constrained to an explicitly defined set of values.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/types#ControlledDictionary'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/types#ControlledDictionary"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_ToolConfigurationTypeFacet(case_Facet):
     """
     A tool configuration type facet is a grouping of characteristics unique to the instantial settings and setup of a tool.
@@ -815,6 +898,40 @@ class case_MaliciousTool(case_Tool):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_LibraryType(NodeConstructor):
+    """
+    A library type is a grouping of characteristics unique to a collection of resources incorporated into the build of a software.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#LibraryType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#LibraryType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_DependencyType(NodeConstructor):
+    """
+    A dependency type is a grouping of characteristics unique to something that a tool or other software relies on to function as intended.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#DependencyType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#DependencyType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_DefensiveTool(case_Tool):
     """
     A defensive tool is an artifact of hardware and/or software utilized to accomplish a task or purpose of guarding.
@@ -832,6 +949,74 @@ class case_DefensiveTool(case_Tool):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_ConfigurationSettingType(NodeConstructor):
+    """
+    A configuration setting type is a grouping of characteristics unique to a particular parameter or initial setting for the use of a tool, application, or other cyber object.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#ConfigurationSettingType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#ConfigurationSettingType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_CompilerType(NodeConstructor):
+    """
+    A compiler type is a grouping of characteristics unique to a specific program that translates computer code written in one programming language (the source language) into another language (the target language). Typically a program that translates source code from a high-level programming language to a lower-level language (e.g., assembly language, object code, or machine code) to create an executable program. [based on https://en.wikipedia.org/wiki/Compiler]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#CompilerType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#CompilerType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_BuildUtilityType(NodeConstructor):
+    """
+    A build utility type characterizes the tool used to convert from source code to executable code for a particular version of software.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#BuildUtilityType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#BuildUtilityType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_BuildInformationType(NodeConstructor):
+    """
+    A build information type is a grouping of characteristics that describe how a particular version of software was converted from source code to executable code.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#BuildInformationType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#BuildInformationType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_BuildFacet(case_Facet):
     """
     A build facet is a grouping of characteristics unique to a particular version of a software.
@@ -843,6 +1028,23 @@ class case_BuildFacet(case_Facet):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/tool#BuildFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_BuildConfigurationType(NodeConstructor):
+    """
+    A build configuration type is a characterization of how a particular version of software can or should be built.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/tool#BuildConfigurationType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/tool#BuildConfigurationType"
             }
         else:
             _type_iris = type_iris
@@ -894,6 +1096,23 @@ class case_BenevolentRole(case_Role):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/role#BenevolentRole"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_PatternExpression(NodeConstructor):
+    """
+    A pattern expression is a grouping of characteristics unique to an explicit logical expression defining a pattern (e.g., regular expression, SQL Select expression, etc.).
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/pattern#PatternExpression'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/pattern#PatternExpression"
             }
         else:
             _type_iris = type_iris
@@ -1172,6 +1391,23 @@ class case_WindowsService(case_ObservableObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_WindowsRegistryValue(NodeConstructor):
+    """
+    A Windows registry value is a grouping of characteristics unique to a particular value within a Windows registry (a hierarchical database that stores low-level settings for the Microsoft Windows operating system and for applications that opt to use the registry. [based on https://en.wikipedia.org/wiki/Windows_Registry]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#WindowsRegistryValue'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#WindowsRegistryValue"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_WindowsRegistryKeyFacet(case_Facet):
     """
     A Windows registry key facet is a grouping of characteristics unique to a particular key within a Windows registry (A hierarchical database that stores low-level settings for the Microsoft Windows operating system and for applications that opt to use the registry). [based on https://en.wikipedia.org/wiki/Windows_Registry]
@@ -1302,6 +1538,57 @@ class case_WindowsPrefetch(case_ObservableObject):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/observable#WindowsPrefetch"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_WindowsPESection(NodeConstructor):
+    """
+    A Windows PE section is a grouping of characteristics unique to a specific default or custom-defined region of a Windows PE (Portable Executable) file, consisting of an individual portion of the actual executable content of the file delineated according to unique purpose and memory protection requirements.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#WindowsPESection'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#WindowsPESection"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_WindowsPEOptionalHeader(NodeConstructor):
+    """
+    A Windows PE optional header is a grouping of characteristics unique to the 'optional header' of a Windows PE (Portable Executable) file, consisting of a collection of metadata about the executable code structure of the file.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#WindowsPEOptionalHeader'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#WindowsPEOptionalHeader"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_WindowsPEFileHeader(NodeConstructor):
+    """
+    A Windows PE file header is a grouping of characteristics unique to the 'header' of a Windows PE (Portable Executable) file, consisting of a collection of metadata about the overall nature and structure of the file.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#WindowsPEFileHeader'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#WindowsPEFileHeader"
             }
         else:
             _type_iris = type_iris
@@ -1631,6 +1918,23 @@ class case_WifiAddress(case_MACAddress):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_WhoisRegistrarInfoType(NodeConstructor):
+    """
+    A Whois registrar info type is a grouping of characteristics unique to registrar-related information present in a response record conformant to the WHOIS protocol standard (RFC 3912). [based on https://en.wikipedia.org/wiki/WHOIS]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#WhoisRegistrarInfoType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#WhoisRegistrarInfoType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_WhoisContactFacet(case_ContactFacet):
     """
     A Whois contact type is a grouping of characteristics unique to contact-related information present in a response record conformant to the WHOIS protocol standard (RFC 3912). [based on https://en.wikipedia.org/wiki/WHOIS]
@@ -1869,6 +2173,23 @@ class case_URLHistoryFacet(case_Facet):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_URLHistoryEntry(NodeConstructor):
+    """
+    A URL history entry is a grouping of characteristics unique to the properties of a single URL history entry for a particular browser.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#URLHistoryEntry'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#URLHistoryEntry"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_URLHistory(case_ObservableObject):
     """
     A URL history characterizes the stored URL history for a particular web browser
@@ -2067,6 +2388,40 @@ class case_Tweet(case_Message):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/observable#Tweet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_TriggerType(NodeConstructor):
+    """
+    A trigger type is a grouping of characterizes unique to a set of criteria that, when met, starts the execution of a task within a Windows operating system. [based on https://docs.microsoft.com/en-us/windows/win32/taskschd/task-triggers]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#TriggerType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#TriggerType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_TaskActionType(NodeConstructor):
+    """
+    A task action type is a grouping of characteristics for a scheduled action to be completed.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#TaskActionType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#TaskActionType"
             }
         else:
             _type_iris = type_iris
@@ -3246,6 +3601,23 @@ class case_MobileAccount(case_DigitalAccount):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_MimePartType(NodeConstructor):
+    """
+    A mime part type is a grouping of characteristics unique to a component of a multi-part email body.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#MimePartType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#MimePartType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_MftRecordFacet(case_Facet):
     """
     An MFT record facet is a grouping of characteristics unique to the details of a single file as managed in an NTFS (new technology filesystem) master file table (which is a collection of information about all files on an NTFS filesystem). [based on https://docs.microsoft.com/en-us/windows/win32/devnotes/master-file-table]
@@ -3467,6 +3839,23 @@ class case_Image(case_ObservableObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_IShowMessageActionType(NodeConstructor):
+    """
+    An IShow message action type is a grouping of characteristics unique to an action that shows a message box when a task is activate. [based on https://docs.microsoft.com/en-us/windows/win32/api/taskschd/nn-taskschd-ishowmessageaction?redirectedfrom=MSDN]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#IShowMessageActionType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#IShowMessageActionType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_IPv6AddressFacet(case_IPAddressFacet):
     """
     An IPv6 (Internet Protocol version 6) address facet is a grouping of characteristics unique to an IPv6 standards conformant identifier assigned to a device to enable routing and management of IPv6 standards conformant communication to or from that device.
@@ -3552,6 +3941,40 @@ class case_IPNetmask(case_ObservableObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_IExecActionType(NodeConstructor):
+    """
+    An IExec action type is a grouping of characteristics unique to an action that executes a command-line operation on a Windows operating system. [based on https://docs.microsoft.com/en-us/windows/win32/api/taskschd/nn-taskschd-iexecaction?redirectedfrom=MSDN]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#IExecActionType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#IExecActionType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_IComHandlerActionType(NodeConstructor):
+    """
+    An IComHandler action type is a grouping of characteristics unique to a Windows Task-related action that fires a Windows COM handler (smart code in the client address space that can optimize calls between a client and server). [based on https://docs.microsoft.com/en-us/windows/win32/taskschd/comhandleraction]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#IComHandlerActionType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#IComHandlerActionType"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_ICMPConnectionFacet(case_Facet):
     """
     An ICMP connection facet is a grouping of characteristics unique to portions of a network connection that are conformant to the Internet Control Message Protocol (ICMP) standard.
@@ -3631,6 +4054,23 @@ class case_HTTPConnection(case_NetworkConnection):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/observable#HTTPConnection"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_GlobalFlagType(NodeConstructor):
+    """
+    A global flag type is a grouping of characteristics unique to the Windows systemwide global variable named NtGlobalFlag that enables various internal debugging, tracing, and validation support in the operating system. [based on "Windows Global Flags, Chapter 3: System Mechanisms of Windows Internals by Solomon, Russinovich, and Ionescu]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#GlobalFlagType'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#GlobalFlagType"
             }
         else:
             _type_iris = type_iris
@@ -3909,6 +4349,23 @@ class case_ExtractedStringsFacet(case_Facet):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_ExtractedString(NodeConstructor):
+    """
+    An extracted string is a grouping of characteristics unique to a series of characters pulled from an observable object.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ExtractedString'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ExtractedString"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_ExtInodeFacet(case_Facet):
     """
     An extInode facet is a grouping of characteristics unique to a file system object (file, directory, etc.) conformant to the extended file system (EXT or related derivations) specification.
@@ -3971,6 +4428,23 @@ class case_Event(case_ObservableObject):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/observable#Event"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_EnvironmentVariable(NodeConstructor):
+    """
+    An environment variable is a grouping of characteristics unique to a dynamic-named value that can affect the way running processes will behave on a computer. [based on https://en.wikipedia.org/wiki/Environment_variable]
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#EnvironmentVariable'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#EnvironmentVariable"
             }
         else:
             _type_iris = type_iris
@@ -4453,6 +4927,91 @@ class case_ContentData(case_ObservableObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_ContactURL(NodeConstructor):
+    """
+    A contact URL is a grouping of characteristics unique to details for contacting a contact entity by Uniform Resource Locator (URL).
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactURL'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactURL"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactSIP(NodeConstructor):
+    """
+    A contact SIP is a grouping of characteristics unique to details for contacting a contact entity by Session Initiation Protocol (SIP).
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactSIP'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactSIP"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactProfile(NodeConstructor):
+    """
+    A contact profile is a grouping of characteristics unique to details for contacting a contact entity by online service.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactProfile'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactProfile"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactPhone(NodeConstructor):
+    """
+    A contact phone is a grouping of characteristics unique to details for contacting a contact entity by telephone.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactPhone'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactPhone"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactMessaging(NodeConstructor):
+    """
+    A contact messaging is a grouping of characteristics unique to details for contacting a contact entity by digital messaging.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactMessaging'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactMessaging"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_ContactListFacet(case_Facet):
     """
     A contact list facet is a grouping of characteristics unique to a set of multiple individual contacts such as that found in a digital address book.
@@ -4481,6 +5040,57 @@ class case_ContactList(case_ObservableObject):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/observable#ContactList"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactEmail(NodeConstructor):
+    """
+    A contact email is a grouping of characteristics unique to details for contacting a contact entity by email.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactEmail'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactEmail"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactAffiliation(NodeConstructor):
+    """
+    A contact affiliation is a grouping of characteristics unique to details of an organizational affiliation for a single contact entity.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactAffiliation'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactAffiliation"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ContactAddress(NodeConstructor):
+    """
+    A contact address is a grouping of characteristics unique to a geolocation address of a contact entity.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#ContactAddress'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#ContactAddress"
             }
         else:
             _type_iris = type_iris
@@ -4980,6 +5590,23 @@ class case_Application(case_ObservableObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_AlternateDataStream(NodeConstructor):
+    """
+    An alternate data stream is data content stored within an NTFS file that is independent of the standard content stream of the file and is hidden from access by default NTFS file viewing mechanisms.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/observable#AlternateDataStream'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/observable#AlternateDataStream"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_AccountFacet(case_Facet):
     """
     An account facet is a grouping of characteristics unique to an arrangement with an entity to enable and control the provision of some capability or service.
@@ -5144,6 +5771,23 @@ class case_LicenseMarking(case_MarkingModel):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/marking#LicenseMarking"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_GranularMarking(NodeConstructor):
+    """
+    A granular marking is a grouping of characteristics unique to specification of marking definitions (restrictions, permissions, and other guidance for how data can be used and shared) that apply to particular portions of a particular UCO object.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/marking#GranularMarking'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/marking#GranularMarking"
             }
         else:
             _type_iris = type_iris
@@ -5556,6 +6200,23 @@ class case_Grouping(case_ContextualCompilation):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_ExternalReference(NodeConstructor):
+    """
+    Characteristics of a reference to a resource outside of the UCO.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/core#ExternalReference'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/core#ExternalReference"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_ControlledVocabulary(case_UcoObject):
     """
     A controlled vocabulary is an explicitly constrained set of string values.
@@ -5633,6 +6294,23 @@ class case_Annotation(case_Assertion):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/core#Annotation"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ArrayOfAction(NodeConstructor):
+    """
+    An array of action is an ordered list of references to things that may be done or performed.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/action#ArrayOfAction'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/action#ArrayOfAction"
             }
         else:
             _type_iris = type_iris
