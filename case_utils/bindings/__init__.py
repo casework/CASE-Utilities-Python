@@ -26,6 +26,7 @@ import typing
 import rdflib
 
 NS_RDF = rdflib.RDF
+NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
 
 
 class NodeConstructor(object):
@@ -101,6 +102,15 @@ class case_UcoObject(NodeConstructor):
         else:
             _type_iris = type_iris
         super().__init__(*args, type_iris=_type_iris, **kwargs)
+        self._facets: typing.List[case_Facet] = []
+
+    def add_facet(self, facet: case_Facet) -> None:
+        self.facets.append(facet)
+        self.graph.add((self.node, NS_UCO_CORE.hasFacet, facet.node))
+
+    @property
+    def facets(self) -> typing.List[case_Facet]:
+        return self._facets
 
 
 class case_Observable(case_UcoObject):
