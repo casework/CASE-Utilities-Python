@@ -112,8 +112,8 @@ def create_file_node(
         ))
 
     if not disable_hashes:
-        content_data_constructor = case_utils.bindings.case_ContentDataFacet(graph)
-        file_constructor.add_facet(content_data_constructor)
+        content_data_facet_constructor = case_utils.bindings.case_ContentDataFacet(graph)
+        file_constructor.add_facet(content_data_facet_constructor)
 
         # Compute hashes until they are re-computed and match once.  (This is a lesson learned from working with a NAS that had a subtly faulty network cable.)
 
@@ -172,7 +172,7 @@ def create_file_node(
             )
         # TODO - Discuss whether this property should be recorded even if hashes are not attempted.
         graph.add((
-          content_data_constructor.node,
+          content_data_facet_constructor.node,
           NS_UCO_OBSERVABLE.sizeInBytes,
           rdflib.Literal(successful_hashdict.filesize)
         ))
@@ -183,7 +183,7 @@ def create_file_node(
                 continue
             hash_constructor = case_utils.bindings.case_Hash(graph)
             graph.add((
-              content_data_constructor.node,
+              content_data_facet_constructor.node,
               NS_UCO_OBSERVABLE.hash,
               hash_constructor.node
             ))
