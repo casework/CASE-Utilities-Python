@@ -32,6 +32,8 @@ all: \
 	cd dependencies \
 	  && git diff . \
 	    | cat
+	git submodule init dependencies/rdflib
+	git submodule update dependencies/rdflib
 	git submodule init dependencies/CASE-Examples-QC
 	git submodule update dependencies/CASE-Examples-QC
 	# Build an ontology terms list, which has a side effect of initiating further submodules.
