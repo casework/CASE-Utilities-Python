@@ -15,6 +15,8 @@ __version__ = "0.0.1"
 
 import argparse
 import importlib
+import logging
+import os
 import typing
 
 import networkx  # type: ignore
@@ -22,6 +24,8 @@ import rdflib.plugins.sparql
 
 import case_utils.ontology
 from case_utils.ontology.version_info import *
+
+_logger = logging.getLogger(os.path.basename(__file__))
 
 
 def class_basename(class_iri: str) -> str:
@@ -45,21 +49,15 @@ class CASEClassConstructor(object):
         self.class_iri: str = class_iri
         self.case_class_name: str = "case_" + class_basename(class_iri)
         self.documentation_comment: typing.Optional[str] = documentation_comment
-        self.parent_case_class_names: typing.Set[str] = set()
+        self.parent_constructor_class_names: typing.Set[str] = set()
         self.required_properties: typing.Dict[str, CASEPropertyConstructor] = dict()
 
     def __str__(self) -> str:
-        python_parent_class_names: typing.Set[str] = set()
-        if len(self.parent_case_class_names) == 0:
-            python_parent_class_names.add("NodeConstructor")
-        else:
-            python_parent_class_names |= self.parent_case_class_names
-
         parts: typing.List[str] = []
 
         parts.append(
             "class %s(%s):"
-            % (self.case_class_name, ", ".join(sorted(python_parent_class_names)))
+            % (self.case_class_name, ", ".join(sorted(self.parent_constructor_class_names)))
         )
 
         # Build class documentation string.
@@ -215,19 +213,22 @@ WHERE {
         if not class_result[1] is None:
             class_iri_to_documentation_comment[class_result[0].toPython()] = class_result[1].toPython()
 
-    class_iri_basename_to_case_class_constructor: typing.Dict[
+    constructor_class_name_to_case_class_constructor: typing.Dict[
         str, CASEClassConstructor
     ] = dict()
     class_iri_basename: str
     for class_iri in class_iris:
         class_iri_basename = class_basename(class_iri)
-        if class_iri_basename in class_iri_basename_to_case_class_constructor:
-            raise ValueError("Duplicate class basename: %r." % class_iri_basename)
-        class_iri_basename_to_case_class_constructor[
-            class_iri_basename
+        constructor_class_name = "case_" + class_iri_basename
+        if constructor_class_name in constructor_class_name_to_case_class_constructor:
+            _logger.debug("class_iri = %r.", class_iri)
+            raise ValueError("Duplicate class name: %r." % constructor_class_name)
+        constructor_class_name_to_case_class_constructor[
+            constructor_class_name
         ] = CASEClassConstructor(class_iri, documentation_comment=class_iri_to_documentation_comment.get(class_iri))
 
-    class_iri_dependencies = networkx.DiGraph()
+    # Link generated class names.
+    constructor_class_dependencies = networkx.DiGraph()
 
     # Record direct parents.
     query_str = """\
@@ -236,26 +237,38 @@ WHERE {
   ?nClass a sh:NodeShape .
   ?nClass a owl:Class .
   ?nClass sh:targetClass ?nClass .
-  ?nClass rdfs:subClassOf ?nParentClass .
+  OPTIONAL {
+    ?nClass rdfs:subClassOf ?nParentClass .
+  }
 }
 """
     for parent_result in graph.query(query_str):
         class_iri_basename = class_basename(parent_result[0].toPython())
-        parent_class_iri_basename = class_basename(parent_result[1].toPython())
-        class_iri_basename_to_case_class_constructor[
-            class_iri_basename
-        ].parent_case_class_names.add("case_" + parent_class_iri_basename)
-        class_iri_dependencies.add_edge(class_iri_basename, parent_class_iri_basename)
+        constructor_class_name = "case_" + class_iri_basename
+
+        n_parent_class = parent_result[1]
+        if n_parent_class is None:
+            parent_constructor_class_name = "NodeConstructor"
+        else:
+            parent_class_iri_basename = class_basename(parent_result[1].toPython())
+            parent_constructor_class_name = "case_" + parent_class_iri_basename
+        constructor_class_name_to_case_class_constructor[
+            constructor_class_name
+        ].parent_constructor_class_names.add(parent_constructor_class_name)
+        constructor_class_dependencies.add_edge(constructor_class_name, parent_constructor_class_name)
 
     # TODO Record properties.
 
     # Serialize classes in topological order of subclass hierarchy.
     # Near-one-liner for topological sort c/o: https://stackoverflow.com/a/56476639
-    for class_iri_basename in reversed(list(
-        networkx.topological_sort(class_iri_dependencies)
+    for constructor_class_name in reversed(list(
+        networkx.topological_sort(constructor_class_dependencies)
     )):
+        if constructor_class_name == "NodeConstructor":
+            # Skip the one hand-written class.
+            continue
         print("\n")
-        print(class_iri_basename_to_case_class_constructor[class_iri_basename])
+        print(constructor_class_name_to_case_class_constructor[constructor_class_name])
 
 
 if __name__ == "__main__":
