@@ -26,6 +26,7 @@ import warnings
 import rdflib  # type: ignore
 
 import case_utils
+import case_utils.bindings
 
 DEFAULT_PREFIX = "http://example.org/kb/"
 
@@ -53,7 +54,7 @@ def create_file_node(
   node_prefix : str = DEFAULT_PREFIX,
   disable_hashes : bool = False,
   disable_mtime : bool = False
-) -> rdflib.URIRef:
+) -> case_utils.bindings.case_File:
     r"""
     This function characterizes the file at filepath.
 
@@ -81,37 +82,23 @@ def create_file_node(
     if node_iri is None:
         node_slug = "file-" + case_utils.local_uuid.local_uuid()
         node_iri = rdflib.Namespace(node_prefix)[node_slug]
-    n_file = rdflib.URIRef(node_iri)
-    graph.add((
-      n_file,
-      NS_RDF.type,
-      NS_UCO_OBSERVABLE.File
-    ))
+    file_constructor = case_utils.bindings.case_File(graph, node_iri)
+    file_facet_constructor = case_utils.bindings.case_FileFacet(graph)
+    file_constructor.add_facet(file_facet_constructor)
 
     basename = os.path.basename(filepath)
     literal_basename = rdflib.Literal(basename)
-
-    file_stat = os.stat(filepath)
-    n_file_facet = rdflib.BNode()
     graph.add((
-      n_file_facet,
-      NS_RDF.type,
-      NS_UCO_OBSERVABLE.FileFacet,
-    ))
-    graph.add((
-      n_file_facet,
+      file_facet_constructor.node,
       NS_UCO_OBSERVABLE.fileName,
       literal_basename
     ))
+
+    file_stat = os.stat(filepath)
     graph.add((
-      n_file_facet,
+      file_facet_constructor.node,
       NS_UCO_OBSERVABLE.sizeInBytes,
       rdflib.Literal(int(file_stat.st_size))
-    ))
-    graph.add((
-      n_file,
-      NS_UCO_CORE.hasFacet,
-      n_file_facet
     ))
 
     if not disable_mtime:
@@ -119,23 +106,14 @@ def create_file_node(
         str_mtime = mtime_datetime.isoformat()
         literal_mtime = rdflib.Literal(str_mtime, datatype=NS_XSD.dateTime)
         graph.add((
-          n_file_facet,
+          file_facet_constructor.node,
           NS_UCO_OBSERVABLE.modifiedTime,
           literal_mtime
         ))
 
     if not disable_hashes:
-        n_contentdata_facet = rdflib.BNode()
-        graph.add((
-          n_file,
-          NS_UCO_CORE.hasFacet,
-          n_contentdata_facet
-        ))
-        graph.add((
-          n_contentdata_facet,
-          NS_RDF.type,
-          NS_UCO_OBSERVABLE.ContentDataFacet
-        ))
+        content_data_constructor = case_utils.bindings.case_ContentDataFacet(graph)
+        file_constructor.add_facet(content_data_constructor)
 
         # Compute hashes until they are re-computed and match once.  (This is a lesson learned from working with a NAS that had a subtly faulty network cable.)
 
@@ -194,7 +172,7 @@ def create_file_node(
             )
         # TODO - Discuss whether this property should be recorded even if hashes are not attempted.
         graph.add((
-          n_contentdata_facet,
+          content_data_constructor.node,
           NS_UCO_OBSERVABLE.sizeInBytes,
           rdflib.Literal(successful_hashdict.filesize)
         ))
@@ -203,9 +181,10 @@ def create_file_node(
         for key in successful_hashdict._fields:
             if not key in ("md5", "sha1", "sha256", "sha512"):
                 continue
+            # TODO - case_Hash class is not defined in bindings, due to a not-yet-pinpointed iteration bug.
             n_hash = rdflib.BNode()
             graph.add((
-              n_contentdata_facet,
+              content_data_constructor.node,
               NS_UCO_OBSERVABLE.hash,
               n_hash
             ))
@@ -226,7 +205,7 @@ def create_file_node(
               rdflib.Literal(hash_value.upper(), datatype=NS_XSD.hexBinary)
             ))
 
-    return n_file
+    return file_constructor
 
 def main() -> None:
     import argparse
@@ -265,7 +244,7 @@ def main() -> None:
         serialize_kwargs["context"] = context_dictionary
 
     node_iri = NS_BASE["file-" + case_utils.local_uuid.local_uuid()]
-    n_file = create_file_node(
+    create_file_node(
       graph,
       args.in_file,
       node_iri=node_iri,
