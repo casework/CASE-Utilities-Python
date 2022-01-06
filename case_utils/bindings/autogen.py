@@ -153,7 +153,7 @@ class NodeConstructor(object):
     def add_to_graph(self, graph: rdflib.Graph) -> None:
         for type_iri in sorted(self.type_iris):
             graph.add((
-                self.node_iri,
+                self.node,
                 rdflib.RDF.type,
                 rdflib.URIRef(type_iri)
             ))
