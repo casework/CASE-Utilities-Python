@@ -17,6 +17,7 @@ import argparse
 import importlib
 import typing
 
+import networkx  # type: ignore
 import rdflib.plugins.sparql
 
 import case_utils.ontology
@@ -189,6 +190,8 @@ WHERE {
             class_iri_basename
         ] = CASEClassConsructor(class_iri, documentation_comment=class_iri_to_documentation_comment.get(class_iri))
 
+    class_iri_dependencies = networkx.DiGraph()
+
     # Record direct parents.
     query_str = """\
 SELECT ?nClass ?nParentClass
@@ -205,13 +208,15 @@ WHERE {
         class_iri_basename_to_case_class_constructor[
             class_iri_basename
         ].parent_case_class_names.add("case_" + parent_class_iri_basename)
+        class_iri_dependencies.add_edge(class_iri_basename, parent_class_iri_basename)
 
     # TODO Record properties.
 
-    # Serialize classes.
-    for class_iri_basename in sorted(
-        class_iri_basename_to_case_class_constructor.keys()
-    ):
+    # Serialize classes in topological order of subclass hierarchy.
+    # Near-one-liner for topological sort c/o: https://stackoverflow.com/a/56476639
+    for class_iri_basename in reversed(list(
+        networkx.topological_sort(class_iri_dependencies)
+    )):
         print("\n")
         print(class_iri_basename_to_case_class_constructor[class_iri_basename])
 
