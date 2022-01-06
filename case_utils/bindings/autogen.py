@@ -53,11 +53,15 @@ class CASEClassConsructor(object):
             python_parent_class_names.add("NodeConstructor")
         else:
             python_parent_class_names |= self.parent_case_class_names
+
         parts: typing.List[str] = []
+
         parts.append(
             "class %s(%s):"
             % (self.case_class_name, ", ".join(sorted(python_parent_class_names)))
         )
+
+        # Build class documentation string.
         parts.append('    """')
 
         if not self.documentation_comment is None:
@@ -65,11 +69,13 @@ class CASEClassConsructor(object):
             for documentation_comment_line in documentation_comment_lines:
                 parts.append(("    " + documentation_comment_line).rstrip())
             parts.append("")
-
         parts.append("    Based on class with IRI %r." % self.class_iri)
         parts.append('    """')
+
+        # Build initializer.
         parts.append("    def __init__(self, *args, **kwargs) -> None:")
         parts.append("        super().__init__(*args, **kwargs)")
+
         return "\n".join(parts)
 
 
@@ -200,8 +206,9 @@ WHERE {
             class_iri_basename
         ].parent_case_class_names.add("case_" + parent_class_iri_basename)
 
-    # Record properties.
+    # TODO Record properties.
 
+    # Serialize classes.
     for class_iri_basename in sorted(
         class_iri_basename_to_case_class_constructor.keys()
     ):
