@@ -182,16 +182,7 @@ def create_file_node(
             if not key in ("md5", "sha1", "sha256", "sha512"):
                 continue
             hash_constructor = case_utils.bindings.case_Hash(graph)
-            graph.add((
-              content_data_facet_constructor.node,
-              NS_UCO_OBSERVABLE.hash,
-              hash_constructor.node
-            ))
-            graph.add((
-              hash_constructor.node,
-              NS_RDF.type,
-              NS_UCO_TYPES.Hash
-            ))
+            content_data_facet_constructor.add_hash(hash_constructor)
             graph.add((
               hash_constructor.node,
               NS_UCO_TYPES.hashMethod,
