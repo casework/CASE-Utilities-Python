@@ -40,7 +40,7 @@ class CASEPropertyConstructor(object):
         self.min_count: int = min_count
         self.max_count: typing.Optional[int] = max_count
 
-class CASEClassConsructor(object):
+class CASEClassConstructor(object):
     def __init__(self, class_iri: str, *args, documentation_comment: str = None, **kwargs) -> None:
         self.class_iri: str = class_iri
         self.case_class_name: str = "case_" + class_basename(class_iri)
@@ -216,7 +216,7 @@ WHERE {
             class_iri_to_documentation_comment[class_result[0].toPython()] = class_result[1].toPython()
 
     class_iri_basename_to_case_class_constructor: typing.Dict[
-        str, CASEClassConsructor
+        str, CASEClassConstructor
     ] = dict()
     class_iri_basename: str
     for class_iri in class_iris:
@@ -225,7 +225,7 @@ WHERE {
             raise ValueError("Duplicate class basename: %r." % class_iri_basename)
         class_iri_basename_to_case_class_constructor[
             class_iri_basename
-        ] = CASEClassConsructor(class_iri, documentation_comment=class_iri_to_documentation_comment.get(class_iri))
+        ] = CASEClassConstructor(class_iri, documentation_comment=class_iri_to_documentation_comment.get(class_iri))
 
     class_iri_dependencies = networkx.DiGraph()
 
