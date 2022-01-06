@@ -27,6 +27,9 @@ import rdflib
 
 NS_RDF = rdflib.RDF
 NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
+NS_UCO_OBSERVABLE = rdflib.Namespace(
+    "https://unifiedcyberontology.org/ontology/uco/observable#"
+)
 
 
 class NodeConstructor(object):
@@ -4908,6 +4911,15 @@ class case_ContentDataFacet(case_Facet):
         else:
             _type_iris = type_iris
         super().__init__(*args, type_iris=_type_iris, **kwargs)
+        self._hashes: typing.List[case_Hash] = []
+
+    def add_hash(self, hash: case_Hash) -> None:
+        self.hashes.append(hash)
+        self.graph.add((self.node, NS_UCO_OBSERVABLE.hash, hash.node))
+
+    @property
+    def hashes(self) -> typing.List[case_Hash]:
+        return self._hashes
 
 
 class case_ContentData(case_ObservableObject):
