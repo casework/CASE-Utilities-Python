@@ -85,6 +85,8 @@ class CASEClassConstructor(object):
         # Add special-case initialization.
         if self.case_class_name == "case_UcoObject":
             parts.append("        self._facets: typing.List[case_Facet] = []")
+        elif self.case_class_name == "case_ContentDataFacet":
+            parts.append("        self._hashes: typing.List[case_Hash] = []")
 
         # Build special-case methods.
         if self.case_class_name == "case_UcoObject":
@@ -94,6 +96,13 @@ class CASEClassConstructor(object):
             parts.append("    @property")
             parts.append("    def facets(self) -> typing.List[case_Facet]:")
             parts.append("        return self._facets")
+        elif self.case_class_name == "case_ContentDataFacet":
+            parts.append("    def add_hash(self, hash: case_Hash) -> None:")
+            parts.append("        self.hashes.append(hash)")
+            parts.append("        self.graph.add((self.node, NS_UCO_OBSERVABLE.hash, hash.node))")
+            parts.append("    @property")
+            parts.append("    def hashes(self) -> typing.List[case_Hash]:")
+            parts.append("        return self._hashes")
 
         return "\n".join(parts)
 
@@ -139,6 +148,7 @@ import rdflib
 
 NS_RDF = rdflib.RDF
 NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
+NS_UCO_OBSERVABLE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/observable#")
 
 class NodeConstructor(object):
     def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
