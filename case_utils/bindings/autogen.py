@@ -213,7 +213,6 @@ SELECT ?nClass ?nComment
 WHERE {
   ?nClass a sh:NodeShape .
   ?nClass a owl:Class .
-  ?nClass sh:targetClass ?nClass .
 
   OPTIONAL { ?nClass rdfs:comment ?nComment . }
 }
@@ -246,7 +245,6 @@ SELECT ?nClass ?nParentClass
 WHERE {
   ?nClass a sh:NodeShape .
   ?nClass a owl:Class .
-  ?nClass sh:targetClass ?nClass .
   OPTIONAL {
     ?nClass rdfs:subClassOf ?nParentClass .
   }
