@@ -39,7 +39,7 @@ class NodeConstructor(object):
         node_iri: typing.Optional[str] = None,
         *args,
         type_iris: typing.Set[str] = set(),
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
@@ -348,6 +348,21 @@ class case_Compilation(case_UcoObject):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
+class case_Action(case_UcoObject):
+    """
+    An action is something that may be done or performed.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/action#Action'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {"https://unifiedcyberontology.org/ontology/uco/action#Action"}
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
 class case_Victim(case_NeutralRole):
     """
     A victim is a role played by a person or organization that is/was the target of some malicious action.
@@ -582,21 +597,6 @@ class case_Appliance(case_Device):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
-class case_Action(case_UcoObject):
-    """
-    An action is something that may be done or performed.
-
-    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/action#Action'.
-    """
-
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://unifiedcyberontology.org/ontology/uco/action#Action"}
-        else:
-            _type_iris = type_iris
-        super().__init__(*args, type_iris=_type_iris, **kwargs)
-
-
 class case_Relationship(case_UcoObject):
     """
     A relationship is a grouping of characteristics unique to an assertion that one or more objects are related to another object in some way.
@@ -761,6 +761,23 @@ class case_Assertion(case_UcoObject):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/core#Assertion"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ActionLifecycle(case_Action):
+    """
+    An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles.
+
+    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/action#ActionLifecycle'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://unifiedcyberontology.org/ontology/uco/action#ActionLifecycle"
             }
         else:
             _type_iris = type_iris
@@ -6364,23 +6381,6 @@ class case_ActionPattern(case_Action, case_Pattern):
         super().__init__(*args, type_iris=_type_iris, **kwargs)
 
 
-class case_ActionLifecycle(case_Action):
-    """
-    An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles.
-
-    Based on class with IRI 'https://unifiedcyberontology.org/ontology/uco/action#ActionLifecycle'.
-    """
-
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://unifiedcyberontology.org/ontology/uco/action#ActionLifecycle"
-            }
-        else:
-            _type_iris = type_iris
-        super().__init__(*args, type_iris=_type_iris, **kwargs)
-
-
 class case_ActionFrequencyFacet(case_Facet):
     """
     An action frequency facet is a grouping of characteristics unique to the frequency of occurrence for an action.
@@ -6426,6 +6426,193 @@ class case_ActionArgumentFacet(case_Facet):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://unifiedcyberontology.org/ontology/uco/action#ActionArgumentFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_VictimActionLifecycle(case_ActionLifecycle):
+    """
+    A victim action life cycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role characterized by its potential to be harmed as a result of a crime, accident, or other event or action.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/VictimActionLifecycle'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/VictimActionLifecycle"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_SubjectActionLifecycle(case_ActionLifecycle):
+    """
+    A subject action life cycle is an action pattern consisting of an ordered set of multiple actions or subordinate action-lifecycles performed by an entity acting in a role whose conduct may be within the scope of an investigation.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Subject(case_Role):
+    """
+    Subject is a role whose conduct is within the scope of an investigation.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Subject'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Subject"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ProvenanceRecord(case_ContextualCompilation):
+    """
+    A provenance record is a grouping of characteristics unique to the provenantial (chronology of the ownership, custody or location) connection between an investigative action and a set of observations (items and/or actions) or interpretations that result from it.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/ProvenanceRecord'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/ProvenanceRecord"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Investigator(case_Role):
+    """
+    Investigator is a role involved in coordinating an investigation.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Investigator'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Investigator"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_InvestigativeAction(case_Action):
+    """
+    An investigative action is something that may be done or performed within the context of an investigation, typically to examine or analyze evidence or other data.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/InvestigativeAction'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/InvestigativeAction"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Investigation(case_ContextualCompilation):
+    """
+    An investigation is a grouping of characteristics unique to an exploration of the facts involved in a cyber-relevant set of suspicious activity.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Investigation'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Investigation"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_ExaminerActionLifecylce(case_ActionLifecycle):
+    """
+    An examiner action life cycle is an action pattern consisting of an ordered set of actions or subordinate action-lifecycles performed by an entity acting in a role involved in providing scientific evaluations of evidence that is used to aid law enforcement investigations and court cases.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Examiner(case_Role):
+    """
+    Examiner is a role involved in providing scientific evaluations of evidence that are used to aid law enforcement investigations and court cases.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Examiner'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Examiner"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Authorization(case_UcoObject):
+    """
+    An authorization is a grouping of characteristics unique to some form of authoritative permission identified for investigative action.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Authorization'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Authorization"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(*args, type_iris=_type_iris, **kwargs)
+
+
+class case_Attorney(case_Role):
+    """
+    Attorney is a role involved in preparing, interpreting, and applying law.
+
+    Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Attorney'.
+    """
+
+    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.caseontology.org/case/investigation/Attorney"
             }
         else:
             _type_iris = type_iris
