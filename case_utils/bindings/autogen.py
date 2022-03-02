@@ -154,7 +154,7 @@ class NodeConstructor(object):
     def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
-        self._node: typing.Union[None, rdflib.BNode, rdflib.URIRef] = None
+        self._node: typing.Optional[rdflib.IdentifiedNode] = None
         self._node_iri = node_iri
         self._type_iris: typing.Set[str] = type_iris
         for type_iri in sorted(self.type_iris):
@@ -172,7 +172,7 @@ class NodeConstructor(object):
         return self._graph
 
     @property
-    def node(self) -> typing.Union[rdflib.BNode, rdflib.URIRef]:
+    def node(self) -> rdflib.IdentifiedNode:
         '''
         Set on first access.
         '''
