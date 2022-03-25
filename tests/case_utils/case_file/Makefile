@@ -109,6 +109,7 @@ sample.txt.done.log: \
 sample.txt.json: \
   $(tests_srcdir)/src/compact.py \
   $(tests_srcdir)/src/isomorphic_diff.py \
+  $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
   $(top_srcdir)/case_utils/local_uuid.py \
   sample.txt-nocompact.json
@@ -140,6 +141,7 @@ sample.txt.json: \
 sample.txt.ttl: \
   $(RDF_TOOLKIT_JAR) \
   $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
   $(top_srcdir)/case_utils/local_uuid.py \
   sample.txt.done.log
@@ -162,6 +164,7 @@ sample.txt.ttl: \
 sample.txt-disable_hashes.ttl: \
   $(RDF_TOOLKIT_JAR) \
   $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
   $(top_srcdir)/case_utils/local_uuid.py \
   sample.txt.done.log
@@ -186,6 +189,7 @@ sample.txt-disable_hashes.ttl: \
 sample.txt-nocompact.json: \
   $(tests_srcdir)/.venv.done.log \
   $(tests_srcdir)/src/isomorphic_diff.py \
+  $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
   $(top_srcdir)/case_utils/local_uuid.py \
   sample.txt.done.log
