@@ -26,9 +26,9 @@ import typing
 import rdflib
 
 NS_RDF = rdflib.RDF
-NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
+NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
 NS_UCO_OBSERVABLE = rdflib.Namespace(
-    "https://unifiedcyberontology.org/ontology/uco/observable#"
+    "https://ontology.unifiedcyberontology.org/uco/observable/"
 )
 
 
