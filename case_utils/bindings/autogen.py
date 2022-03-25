@@ -32,7 +32,7 @@ def class_basename(class_iri: str) -> str:
     if "caseontology.org" in class_iri:
         class_iri_basename = class_iri.split("/")[-1]
     elif "unifiedcyberontology.org" in class_iri:
-        class_iri_basename = class_iri.split("#")[-1]
+        class_iri_basename = class_iri.split("/")[-1]
     else:
         raise NotImplementedError("Unrecognized IRI form: %r." % class_iri)
     return class_iri_basename
