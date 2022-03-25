@@ -15,7 +15,7 @@
 This script executes a SPARQL CONSTRUCT query, returning a graph of the generated triples.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 import argparse
 import logging
@@ -31,36 +31,37 @@ from case_utils.ontology.version_info import *
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 def main() -> None:
     parser = argparse.ArgumentParser()
 
     # Configure debug logging before running parse_args, because there could be an error raised before the construction of the argument parser.
-    logging.basicConfig(level=logging.DEBUG if ("--debug" in sys.argv or "-d" in sys.argv) else logging.INFO)
+    logging.basicConfig(
+        level=logging.DEBUG
+        if ("--debug" in sys.argv or "-d" in sys.argv)
+        else logging.INFO
+    )
 
-    built_version_choices_list = ["none", "case-" + CURRENT_CASE_VERSION]
-
+    parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument(
-      "-d",
-      "--debug",
-      action="store_true"
+        "--built-version",
+        choices=tuple(built_version_choices_list),
+        default="case-" + CURRENT_CASE_VERSION,
+        help="Ontology version to use to supplement query, such as for subclass querying.  Does not require networking to use.  Default is most recent CASE release.",
     )
     parser.add_argument(
-      "--built-version",
-      choices=tuple(built_version_choices_list),
-      default="case-"+CURRENT_CASE_VERSION,
-      help="Ontology version to use to supplement query, such as for subclass querying.  Does not require networking to use.  Default is most recent CASE release."
+        "--disallow-empty-results",
+        action="store_true",
+        help="Raise error if no results are returned for query.",
     )
     parser.add_argument(
-      "--disallow-empty-results",
-      action="store_true",
-      help="Raise error if no results are returned for query."
-    )
-    parser.add_argument(
-      "--output-format",
-      help="Override extension-based format guesser."
+        "--output-format", help="Override extension-based format guesser."
     )
     parser.add_argument("out_graph")
-    parser.add_argument("in_sparql")
+    parser.add_argument(
+        "in_sparql",
+        help="File containing a SPARQL CONSTRUCT query.  Note that prefixes not mapped with a PREFIX statement will be mapped according to their first occurrence among input graphs.",
+    )
     parser.add_argument("in_graph", nargs="+")
     args = parser.parse_args()
 
@@ -72,7 +73,7 @@ def main() -> None:
     out_graph = rdflib.Graph()
 
     # Inherit prefixes defined in input context dictionary.
-    nsdict = {k:v for (k,v) in in_graph.namespace_manager.namespaces()}
+    nsdict = {k: v for (k, v) in in_graph.namespace_manager.namespaces()}
     for prefix in sorted(nsdict.keys()):
         out_graph.bind(prefix, nsdict[prefix])
 
@@ -83,9 +84,13 @@ def main() -> None:
     assert not construct_query_text is None
 
     if "subClassOf" in construct_query_text:
-        case_utils.ontology.load_subclass_hierarchy(in_graph, built_version=args.built_version)
+        case_utils.ontology.load_subclass_hierarchy(
+            in_graph, built_version=args.built_version
+        )
 
-    construct_query_object = rdflib.plugins.sparql.prepareQuery(construct_query_text, initNs=nsdict)
+    construct_query_object = rdflib.plugins.sparql.prepareQuery(
+        construct_query_text, initNs=nsdict
+    )
 
     # https://rdfextras.readthedocs.io/en/latest/working_with.html
     construct_query_result = in_graph.query(construct_query_object)
@@ -98,18 +103,19 @@ def main() -> None:
 
     output_format = None
     if args.output_format is None:
-        output_format = case_utils.guess_format(args.out_graph)
+        output_format = rdflib.util.guess_format(args.out_graph)
     else:
         output_format = args.output_format
 
-    serialize_kwargs : typing.Dict[str, typing.Any] = {
-      "format": output_format
-    }
+    serialize_kwargs: typing.Dict[str, typing.Any] = {"format": output_format}
     if output_format == "json-ld":
-        context_dictionary = {k:v for (k,v) in out_graph.namespace_manager.namespaces()}
+        context_dictionary = {
+            k: v for (k, v) in out_graph.namespace_manager.namespaces()
+        }
         serialize_kwargs["context"] = context_dictionary
 
     out_graph.serialize(args.out_graph, **serialize_kwargs)
+
 
 if __name__ == "__main__":
     main()

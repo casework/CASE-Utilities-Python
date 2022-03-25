@@ -21,15 +21,17 @@ import os
 import sys
 import uuid
 
-USE_DEMO_UUID : bool = False
+USE_DEMO_UUID: bool = False
 
-DEMO_UUID_COUNTER : int = 0
+DEMO_UUID_COUNTER: int = 0
+
 
 def configure() -> None:
     global USE_DEMO_UUID
 
     if os.getenv("DEMO_UUID_REQUESTING_NONRANDOM") == "NONRANDOM_REQUESTED":
         USE_DEMO_UUID = True
+
 
 def demo_uuid() -> str:
     """
@@ -42,7 +44,9 @@ def demo_uuid() -> str:
     global DEMO_UUID_COUNTER
 
     if os.getenv("DEMO_UUID_REQUESTING_NONRANDOM") != "NONRANDOM_REQUESTED":
-        raise EnvironmentError("demo_uuid() called without DEMO_UUID_REQUESTING_NONRANDOM in environment.")
+        raise EnvironmentError(
+            "demo_uuid() called without DEMO_UUID_REQUESTING_NONRANDOM in environment."
+        )
 
     # Component: An emphasis this is an example.
     parts = ["example.org"]
@@ -52,13 +56,14 @@ def demo_uuid() -> str:
     parts.append(str(DEMO_UUID_COUNTER))
 
     # Component: Present working directory, replacing $HOME with '~'.
-    env_HOME : str = os.getenv("HOME", "/nonexistent")
+    env_HOME: str = os.getenv("HOME", "/nonexistent")
     parts.append(os.getcwd().replace(env_HOME, "~"))
 
     # Component: Argument vector.
     parts.extend(sys.argv)
 
     return str(uuid.uuid5(uuid.NAMESPACE_URL, "/".join(parts)))
+
 
 def local_uuid() -> str:
     """

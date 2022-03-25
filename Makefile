@@ -34,16 +34,6 @@ all: \
 	    | cat
 	git submodule init dependencies/rdflib
 	git submodule update dependencies/rdflib
-	git submodule init dependencies/CASE-Examples-QC
-	git submodule update dependencies/CASE-Examples-QC
-	# Build an ontology terms list, which has a side effect of initiating further submodules.
-	$(MAKE) \
-	  --directory dependencies/CASE-Examples-QC \
-	  .git_submodule_init.done.log \
-	  .venv.done.log
-	$(MAKE) \
-	  --directory dependencies/CASE-Examples-QC/tests \
-	  ontology_vocabulary.txt
 	test -r dependencies/CASE/ontology/master/case.ttl \
 	  || (git submodule init dependencies/CASE && git submodule update dependencies/CASE)
 	test -r dependencies/CASE/ontology/master/case.ttl
@@ -93,10 +83,6 @@ clean:
 	        tests/examples \
 	        || true \
 	  )
-	@#Remove flag files that are normally set after deeper submodules and rdf-toolkit are downloaded.
-	@rm -f \
-	  dependencies/CASE-Examples-QC/.git_submodule_init.done.log \
-	  dependencies/CASE-Examples-QC/.lib.done.log
 
 # This recipe guarantees timestamp update order, and is otherwise intended to be a no-op.
 dependencies/CASE/ontology/master/case.ttl: \

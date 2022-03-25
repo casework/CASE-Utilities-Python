@@ -1,30 +1,53 @@
 {
     "@context": {
+        "brick": "https://brickschema.org/schema/Brick#",
+        "csvw": "http://www.w3.org/ns/csvw#",
+        "dc": "http://purl.org/dc/elements/1.1/",
+        "dcam": "http://purl.org/dc/dcam/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "dcmitype": "http://purl.org/dc/dcmitype/",
+        "dcterms": "http://purl.org/dc/terms/",
+        "doap": "http://usefulinc.com/ns/doap#",
+        "foaf": "http://xmlns.com/foaf/0.1/",
         "kb": "http://example.org/kb/",
+        "odrl": "http://www.w3.org/ns/odrl/2/",
+        "org": "http://www.w3.org/ns/org#",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "prof": "http://www.w3.org/ns/dx/prof/",
+        "prov": "http://www.w3.org/ns/prov#",
+        "qb": "http://purl.org/linked-data/cube#",
         "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "uco-core": "https://unifiedcyberontology.org/ontology/uco/core#",
-        "uco-observable": "https://unifiedcyberontology.org/ontology/uco/observable#",
-        "uco-types": "https://unifiedcyberontology.org/ontology/uco/types#",
-        "uco-vocabulary": "https://unifiedcyberontology.org/ontology/uco/vocabulary#",
+        "schema": "https://schema.org/",
+        "sh": "http://www.w3.org/ns/shacl#",
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "sosa": "http://www.w3.org/ns/sosa/",
+        "ssn": "http://www.w3.org/ns/ssn/",
+        "time": "http://www.w3.org/2006/time#",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+        "uco-vocabulary": "https://ontology.unifiedcyberontology.org/uco/vocabulary/",
+        "vann": "http://purl.org/vocab/vann/",
+        "void": "http://rdfs.org/ns/void#",
         "xml": "http://www.w3.org/XML/1998/namespace",
         "xsd": "http://www.w3.org/2001/XMLSchema#"
     },
     "@graph": [
         {
-            "@id": "kb:file-a44b2ee3-968f-5528-883a-fa65ac45ce2c",
+            "@id": "kb:file-44aa82fe-a733-5892-8daa-7a28378d6afc",
             "@type": "uco-observable:File",
             "uco-core:hasFacet": [
                 {
-                    "@id": "_:N2767c0726ce542be9a1ad27b1f7ae944"
+                    "@id": "_:N86dc036c736c420684afd0e2cdea35e8"
                 },
                 {
-                    "@id": "_:N78869d50bb384b24b8fd147d9bfe7e51"
+                    "@id": "_:N30cc9a3cb8d741c3896d6ff81ae053f6"
                 }
             ]
         },
         {
-            "@id": "_:N2767c0726ce542be9a1ad27b1f7ae944",
+            "@id": "_:N86dc036c736c420684afd0e2cdea35e8",
             "@type": "uco-observable:FileFacet",
             "uco-observable:fileName": "sample.txt",
             "uco-observable:modifiedTime": {
@@ -34,26 +57,26 @@
             "uco-observable:sizeInBytes": 4
         },
         {
-            "@id": "_:N78869d50bb384b24b8fd147d9bfe7e51",
+            "@id": "_:N30cc9a3cb8d741c3896d6ff81ae053f6",
             "@type": "uco-observable:ContentDataFacet",
             "uco-observable:hash": [
                 {
-                    "@id": "_:N6407c0f0a27545e0a15a7e147e862003"
+                    "@id": "_:Ncdaad817bed0440cb8df78ea13bca979"
                 },
                 {
-                    "@id": "_:Na90e92d493a84c78802a307bbbdaafda"
+                    "@id": "_:Nb29e43af29e74e30af823ba2ac7fc826"
                 },
                 {
-                    "@id": "_:Nfe3e54d32dcc4ef79934ca120dc3d59e"
+                    "@id": "_:Nad4c18c5ea3a45589ee33d98134f4f6e"
                 },
                 {
-                    "@id": "_:N80c90d89e47b4f30b585752201376e22"
+                    "@id": "_:N3a34ed3719864b4fbd9e6da88ae97d54"
                 }
             ],
             "uco-observable:sizeInBytes": 4
         },
         {
-            "@id": "_:N6407c0f0a27545e0a15a7e147e862003",
+            "@id": "_:Ncdaad817bed0440cb8df78ea13bca979",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -65,7 +88,7 @@
             }
         },
         {
-            "@id": "_:Na90e92d493a84c78802a307bbbdaafda",
+            "@id": "_:Nb29e43af29e74e30af823ba2ac7fc826",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -77,7 +100,7 @@
             }
         },
         {
-            "@id": "_:Nfe3e54d32dcc4ef79934ca120dc3d59e",
+            "@id": "_:Nad4c18c5ea3a45589ee33d98134f4f6e",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -89,7 +112,7 @@
             }
         },
         {
-            "@id": "_:N80c90d89e47b4f30b585752201376e22",
+            "@id": "_:N3a34ed3719864b4fbd9e6da88ae97d54",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",

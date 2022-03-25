@@ -25,50 +25,57 @@ Validation Report
 Conforms: True
 """.strip()
 
-def _guess_format(
-  basename
-) -> typing.Optional[str]:
+
+def _guess_format(basename) -> typing.Optional[str]:
     """
     Guess format by file extension.
     """
     filepath = srcdir / basename
     return rdflib.util.guess_format(str(filepath))
 
-def _parse_graph(
-  basename : str,
-  asserted_format : str
-) -> rdflib.Graph:
+
+def _parse_graph(basename: str, asserted_format: str) -> rdflib.Graph:
     graph = rdflib.Graph()
     filepath = srcdir / basename
     graph.parse(str(filepath), format=asserted_format)
     return graph
 
-def _verify_plaintext_report(
-  basename: str
-) -> None:
+
+def _verify_plaintext_report(basename: str) -> None:
     filepath = srcdir / basename
     with filepath.open("r") as fh:
         assert PLAINTEXT_VALIDATION_PASS == fh.read(50)[:-1]
 
-@pytest.mark.xfail(reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True
+)
 def test_format_human_output_jsonld() -> None:
     subject_file = "format_human_output_jsonld.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
     _parse_graph(subject_file, asserted_format)
 
-@pytest.mark.xfail(reason="Known mismatch", raises=rdflib.plugins.parsers.notation3.BadSyntax, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch",
+    raises=rdflib.plugins.parsers.notation3.BadSyntax,
+    strict=True,
+)
 def test_format_human_output_turtle() -> None:
     subject_file = "format_human_output_turtle.ttl"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "turtle"
     _parse_graph(subject_file, asserted_format)
 
+
 def test_format_human_output_txt() -> None:
     _verify_plaintext_report("format_human_output_txt.txt")
 
+
 def test_format_human_output_unspecified() -> None:
     _verify_plaintext_report("format_human_output_unspecified.txt")
+
 
 def test_format_jsonld_output_jsonld() -> None:
     subject_file = "format_jsonld_output_jsonld.jsonld"
@@ -76,12 +83,18 @@ def test_format_jsonld_output_jsonld() -> None:
     assert asserted_format == "json-ld"
     graph = _parse_graph(subject_file, asserted_format)
 
-@pytest.mark.xfail(reason="Known mismatch", raises=rdflib.plugins.parsers.notation3.BadSyntax, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch",
+    raises=rdflib.plugins.parsers.notation3.BadSyntax,
+    strict=True,
+)
 def test_format_jsonld_output_turtle() -> None:
     subject_file = "format_jsonld_output_turtle.ttl"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "turtle"
     _parse_graph(subject_file, asserted_format)
+
 
 def test_format_jsonld_output_txt() -> None:
     subject_file = "format_jsonld_output_txt.txt"
@@ -89,18 +102,23 @@ def test_format_jsonld_output_txt() -> None:
     assert asserted_format is None
     _parse_graph(subject_file, "json-ld")
 
+
 def test_format_jsonld_output_unspecified() -> None:
     subject_file = "format_jsonld_output_unspecified.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
     graph = _parse_graph(subject_file, asserted_format)
 
-@pytest.mark.xfail(reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True
+)
 def test_format_turtle_output_jsonld() -> None:
     subject_file = "format_turtle_output_jsonld.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
     _parse_graph(subject_file, asserted_format)
+
 
 def test_format_turtle_output_turtle() -> None:
     subject_file = "format_turtle_output_turtle.ttl"
@@ -108,11 +126,13 @@ def test_format_turtle_output_turtle() -> None:
     assert asserted_format == "turtle"
     graph = _parse_graph(subject_file, asserted_format)
 
+
 def test_format_turtle_output_txt() -> None:
     subject_file = "format_turtle_output_txt.txt"
     asserted_format = _guess_format(subject_file)
     assert asserted_format is None
     _parse_graph(subject_file, "turtle")
+
 
 def test_format_turtle_output_unspecified() -> None:
     subject_file = "format_turtle_output_unspecified.ttl"
@@ -120,22 +140,32 @@ def test_format_turtle_output_unspecified() -> None:
     assert asserted_format == "turtle"
     graph = _parse_graph(subject_file, asserted_format)
 
-@pytest.mark.xfail(reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch", raises=json.decoder.JSONDecodeError, strict=True
+)
 def test_format_unspecified_output_jsonld() -> None:
     subject_file = "format_unspecified_output_jsonld.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
     _parse_graph(subject_file, asserted_format)
 
-@pytest.mark.xfail(reason="Known mismatch", raises=rdflib.plugins.parsers.notation3.BadSyntax, strict=True)
+
+@pytest.mark.xfail(
+    reason="Known mismatch",
+    raises=rdflib.plugins.parsers.notation3.BadSyntax,
+    strict=True,
+)
 def test_format_unspecified_output_turtle() -> None:
     subject_file = "format_unspecified_output_turtle.ttl"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "turtle"
     _parse_graph(subject_file, asserted_format)
 
+
 def test_format_unspecified_output_txt() -> None:
     _verify_plaintext_report("format_unspecified_output_txt.txt")
+
 
 def test_format_unspecified_output_unspecified() -> None:
     _verify_plaintext_report("format_unspecified_output_unspecified.txt")

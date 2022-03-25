@@ -29,7 +29,7 @@ a monolithic file; see case_utils.ontology if interested in further
 details.)
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 import argparse
 import importlib.resources
@@ -48,75 +48,77 @@ from case_utils.ontology.version_info import *
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="CASE wrapper to pySHACL command line tool.")
+    parser = argparse.ArgumentParser(
+        description="CASE wrapper to pySHACL command line tool."
+    )
 
     # Configure debug logging before running parse_args, because there
     # could be an error raised before the construction of the argument
     # parser.
-    logging.basicConfig(level=logging.DEBUG if ("--debug" in sys.argv or "-d" in sys.argv) else logging.INFO)
-
-    built_version_choices_list = ["none", "case-" + CURRENT_CASE_VERSION]
+    logging.basicConfig(
+        level=logging.DEBUG
+        if ("--debug" in sys.argv or "-d" in sys.argv)
+        else logging.INFO
+    )
 
     # Add arguments specific to case_validate.
     parser.add_argument(
-      '-d',
-      '--debug',
-      action='store_true',
-      help='Output additional runtime messages.'
+        "-d", "--debug", action="store_true", help="Output additional runtime messages."
     )
     parser.add_argument(
-      "--built-version",
-      choices=tuple(built_version_choices_list),
-      default="case-"+CURRENT_CASE_VERSION,
-      help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release."
+        "--built-version",
+        choices=tuple(built_version_choices_list),
+        default="case-" + CURRENT_CASE_VERSION,
+        help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release.",
     )
     parser.add_argument(
-      "--ontology-graph",
-      action="append",
-      help="Combined ontology (i.e. subclass hierarchy) and shapes (SHACL) file, in any format accepted by rdflib recognized by file extension (e.g. .ttl).  Will supplement ontology selected by --built-version.  Can be given multiple times."
+        "--ontology-graph",
+        action="append",
+        help="Combined ontology (i.e. subclass hierarchy) and shapes (SHACL) file, in any format accepted by rdflib recognized by file extension (e.g. .ttl).  Will supplement ontology selected by --built-version.  Can be given multiple times.",
     )
 
     # Inherit arguments from pyshacl.
     parser.add_argument(
-      '--abort',
-      action='store_true',
-      help='(As with pyshacl CLI) Abort on first invalid data.'
+        "--abort",
+        action="store_true",
+        help="(As with pyshacl CLI) Abort on first invalid data.",
     )
     parser.add_argument(
-      '-w',
-      '--allow-warnings',
-      action='store_true',
-      help='(As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.',
+        "-w",
+        "--allow-warnings",
+        action="store_true",
+        help="(As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.",
     )
     parser.add_argument(
-      "-f",
-      "--format",
-      choices=('human', 'turtle', 'xml', 'json-ld', 'nt', 'n3'),
-      default='human',
-      help="(ALMOST as with pyshacl CLI) Choose an output format. Default is \"human\".  Difference: 'table' not provided."
+        "-f",
+        "--format",
+        choices=("human", "turtle", "xml", "json-ld", "nt", "n3"),
+        default="human",
+        help="(ALMOST as with pyshacl CLI) Choose an output format. Default is \"human\".  Difference: 'table' not provided.",
     )
     parser.add_argument(
-      '-im',
-      '--imports',
-      action='store_true',
-      help='(As with pyshacl CLI) Allow import of sub-graphs defined in statements with owl:imports.',
+        "-im",
+        "--imports",
+        action="store_true",
+        help="(As with pyshacl CLI) Allow import of sub-graphs defined in statements with owl:imports.",
     )
     parser.add_argument(
-      '-i',
-      '--inference',
-      choices=('none', 'rdfs', 'owlrl', 'both'),
-      default='none',
-      help="(As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is \"none\".",
+        "-i",
+        "--inference",
+        choices=("none", "rdfs", "owlrl", "both"),
+        default="none",
+        help='(As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is "none".',
     )
     parser.add_argument(
-      '-o',
-      '--output',
-      dest='output',
-      nargs='?',
-      type=argparse.FileType('x'),
-      help="(ALMOST as with pyshacl CLI) Send output to a file.  If absent, output will be written to stdout.  Difference: If specified, file is expected not to exist.  Clarification: Does NOT influence --format flag's default value of \"human\".  (I.e., any machine-readable serialization format must be specified with --format.)",
-      default=sys.stdout,
+        "-o",
+        "--output",
+        dest="output",
+        nargs="?",
+        type=argparse.FileType("x"),
+        help='(ALMOST as with pyshacl CLI) Send output to a file.  If absent, output will be written to stdout.  Difference: If specified, file is expected not to exist.  Clarification: Does NOT influence --format flag\'s default value of "human".  (I.e., any machine-readable serialization format must be specified with --format.)',
+        default=sys.stdout,
     )
 
     parser.add_argument("in_graph", nargs="+")
@@ -145,25 +147,23 @@ def main() -> None:
     # determination by output file extension.  case_validate will defer
     # to pySHACL behavior, as other CASE tools don't (at the time of
     # this writing) have the value "human" as an output format.
-    validator_kwargs : typing.Dict[str, str] = dict()
+    validator_kwargs: typing.Dict[str, str] = dict()
     if args.format != "human":
-        validator_kwargs['serialize_report_graph'] = args.format
+        validator_kwargs["serialize_report_graph"] = args.format
 
-    validate_result : typing.Tuple[
-      bool,
-      typing.Union[Exception, bytes, str, rdflib.Graph],
-      str
+    validate_result: typing.Tuple[
+        bool, typing.Union[Exception, bytes, str, rdflib.Graph], str
     ]
     validate_result = pyshacl.validate(
-      data_graph,
-      shacl_graph=ontology_graph,
-      ont_graph=ontology_graph,
-      inference=args.inference,
-      abort_on_first=args.abort,
-      allow_warnings=True if args.allow_warnings else False,
-      debug=True if args.debug else False,
-      do_owl_imports=True if args.imports else False,
-      **validator_kwargs
+        data_graph,
+        shacl_graph=ontology_graph,
+        ont_graph=ontology_graph,
+        inference=args.inference,
+        abort_on_first=args.abort,
+        allow_warnings=True if args.allow_warnings else False,
+        debug=True if args.debug else False,
+        do_owl_imports=True if args.imports else False,
+        **validator_kwargs
     )
 
     # Relieve RAM of the data graph after validation has run.
@@ -179,15 +179,22 @@ def main() -> None:
         args.output.write(validation_text)
     else:
         if isinstance(validation_graph, rdflib.Graph):
-            raise NotImplementedError("rdflib.Graph expected not to be created from --format value %r." % args.format)
+            raise NotImplementedError(
+                "rdflib.Graph expected not to be created from --format value %r."
+                % args.format
+            )
         elif isinstance(validation_graph, bytes):
             args.output.write(validation_graph.decode("utf-8"))
         elif isinstance(validation_graph, str):
             args.output.write(validation_graph)
         else:
-            raise NotImplementedError("Unexpected result type returned from validate: %r." % type(validation_graph))
+            raise NotImplementedError(
+                "Unexpected result type returned from validate: %r."
+                % type(validation_graph)
+            )
 
     sys.exit(0 if conforms else 1)
-    
+
+
 if __name__ == "__main__":
     main()

@@ -29,8 +29,12 @@ all: \
   action_inheritance_PASS_validation.ttl \
   action_inheritance_XFAIL_validation.ttl \
   action_result_PASS_validation.ttl \
+  hash_PASS_validation.ttl \
+  hash_XFAIL_validation.ttl \
   location_PASS_validation.ttl \
-  location_XFAIL_validation.ttl
+  location_XFAIL_validation.ttl \
+  relationship_PASS_validation.ttl \
+  relationship_XFAIL_validation.ttl
 
 .PRECIOUS: \
   %_validation.ttl
@@ -52,6 +56,7 @@ all: \
   $(top_srcdir)/case_utils/ontology/__init__.py
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
+	    --allow-warnings \
 	    --debug \
 	    --format turtle \
 	    $< \
@@ -73,8 +78,12 @@ check: \
   action_inheritance_PASS_validation.ttl \
   action_inheritance_XFAIL_validation.ttl \
   action_result_PASS_validation.ttl \
+  hash_PASS_validation.ttl \
+  hash_XFAIL_validation.ttl \
   location_PASS_validation.ttl \
-  location_XFAIL_validation.ttl
+  location_XFAIL_validation.ttl \
+  relationship_PASS_validation.ttl \
+  relationship_XFAIL_validation.ttl
 	source $(tests_srcdir)/venv/bin/activate \
 	  && pytest \
 	    --log-level=DEBUG

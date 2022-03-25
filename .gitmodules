@@ -1,9 +1,6 @@
 [submodule "dependencies/CASE"]
 	path = dependencies/CASE
 	url = https://github.com/casework/CASE.git
-[submodule "dependencies/CASE-Examples-QC"]
-	path = dependencies/CASE-Examples-QC
-	url = https://github.com/ajnelson-nist/CASE-Examples-QC.git
 [submodule "dependencies/rdflib"]
 	path = dependencies/rdflib
 	url = https://github.com/RDFLib/rdflib.git

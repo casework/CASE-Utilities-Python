@@ -2,11 +2,11 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix uco-core: <https://unifiedcyberontology.org/ontology/uco/core#> .
-@prefix uco-observable: <https://unifiedcyberontology.org/ontology/uco/observable#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-kb:file-69751792-9d04-5f5f-8791-99ca3729cd3c
+kb:file-b5e8a943-c556-5964-a618-8f0d000822af
 	a uco-observable:File ;
 	uco-core:hasFacet [
 		a uco-observable:FileFacet ;

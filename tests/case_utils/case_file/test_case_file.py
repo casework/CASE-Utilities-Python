@@ -22,48 +22,48 @@ import case_utils.ontology
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
-IRI_UCO_CORE = "https://unifiedcyberontology.org/ontology/uco/core#"
-IRI_UCO_OBSERVABLE = "https://unifiedcyberontology.org/ontology/uco/observable#"
-IRI_UCO_TYPES = "https://unifiedcyberontology.org/ontology/uco/types#"
-
 NS_RDF = rdflib.RDF
-NS_UCO_CORE = rdflib.Namespace(IRI_UCO_CORE)
-NS_UCO_OBSERVABLE = rdflib.Namespace(IRI_UCO_OBSERVABLE)
-NS_UCO_TYPES = rdflib.Namespace(IRI_UCO_TYPES)
+
+NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
+NS_UCO_OBSERVABLE = rdflib.Namespace(
+    "https://ontology.unifiedcyberontology.org/uco/observable/"
+)
+NS_UCO_TYPES = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/types/")
+
 
 NSDICT = {
-  "uco-core": IRI_UCO_CORE,
-  "uco-observable": IRI_UCO_OBSERVABLE,
-  "uco-types": IRI_UCO_TYPES
+    "uco-core": NS_UCO_CORE,
+    "uco-observable": NS_UCO_OBSERVABLE,
+    "uco-types": NS_UCO_TYPES,
 }
 
 SRCDIR = os.path.dirname(__file__)
 
-def load_graph(
-  filename : str
-) -> rdflib.Graph:
+
+def load_graph(filename: str) -> rdflib.Graph:
     in_graph = rdflib.Graph()
     in_graph.parse(filename)
     # The queries in this test rely on the subclass hierarchy.  Load it.
     case_utils.ontology.load_subclass_hierarchy(in_graph)
     return in_graph
 
+
 @pytest.fixture
 def graph_case_file() -> rdflib.Graph:
     return load_graph(os.path.join(SRCDIR, "sample.txt.ttl"))
+
 
 @pytest.fixture
 def graph_case_file_disable_hashes() -> rdflib.Graph:
     return load_graph(os.path.join(SRCDIR, "sample.txt-disable_hashes.ttl"))
 
-def test_confirm_hashes(
-  graph_case_file : rdflib.Graph
-) -> None:
+
+def test_confirm_hashes(graph_case_file: rdflib.Graph) -> None:
     expected = {
-      "MD5": "098F6BCD4621D373CADE4E832627B4F6",
-      "SHA1": "A94A8FE5CCB19BA61C4C0873D391E987982FBBD3",
-      "SHA256": "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08",
-      "SHA512": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF"
+        "MD5": "098F6BCD4621D373CADE4E832627B4F6",
+        "SHA1": "A94A8FE5CCB19BA61C4C0873D391E987982FBBD3",
+        "SHA256": "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08",
+        "SHA512": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF",
     }
     computed = dict()
 
@@ -99,9 +99,9 @@ WHERE {
 
     assert expected == computed
 
+
 def test_confirm_mtime(
-  graph_case_file : rdflib.Graph,
-  graph_case_file_disable_hashes : rdflib.Graph
+    graph_case_file: rdflib.Graph, graph_case_file_disable_hashes: rdflib.Graph
 ) -> None:
     query_confirm_mtime = """
 SELECT ?nFile
@@ -117,14 +117,20 @@ WHERE {
     .
 }
 """
-    query_object = rdflib.plugins.sparql.prepareQuery(query_confirm_mtime, initNs=NSDICT)
+    query_object = rdflib.plugins.sparql.prepareQuery(
+        query_confirm_mtime, initNs=NSDICT
+    )
 
     n_observable_object = None
     for result in graph_case_file_disable_hashes.query(query_confirm_mtime):
         (n_observable_object,) = result
-    assert not n_observable_object is None, "File object with expected mtime not found in hashless graph."
+    assert (
+        not n_observable_object is None
+    ), "File object with expected mtime not found in hashless graph."
 
     n_observable_object = None
     for result in graph_case_file.query(query_confirm_mtime):
         (n_observable_object,) = result
-    assert not n_observable_object is None, "File object with expected mtime not found in fuller graph."
+    assert (
+        not n_observable_object is None
+    ), "File object with expected mtime not found in fuller graph."

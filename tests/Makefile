@@ -70,6 +70,17 @@ check: \
 	    --ignore case_utils \
 	    --log-level=DEBUG
 
+# TODO - Need to settle on policy for incorporating this and 'format' recipe into CI.
+# https://case.atlassian.net/browse/AC-215
+# https://case.atlassian.net/browse/AC-216
+check-black: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && black \
+	    --check \
+	    $(top_srcdir)/case_utils \
+	    $$PWD
+
 check-case_utils: \
   .venv.done.log
 	$(MAKE) \
@@ -83,10 +94,12 @@ check-isomorphic_diff: \
 	  check
 
 # mypy is called against specific members of the tests directory to avoid descending into the virtual environment.
+# TODO - Fix type signatures in UCO test.
 check-mypy: \
   .venv.done.log
 	source venv/bin/activate \
 	  && mypy \
+	    --exclude case_utils/case_validate/uco_test_examples/test_uco_validation.py \
 	    $(top_srcdir)/case_utils \
 	    case_utils \
 	    hexbinary \
@@ -104,3 +117,13 @@ clean:
 
 download: \
   .venv.done.log
+
+# TODO - Need to settle on policy for incorporating this and 'check-black' recipe into CI.
+# https://case.atlassian.net/browse/AC-215
+# https://case.atlassian.net/browse/AC-216
+format: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && black \
+	    $(top_srcdir)/case_utils \
+	    $$PWD

@@ -21,6 +21,7 @@ import argparse
 
 import rdflib
 
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("out_ttl")
@@ -30,18 +31,15 @@ def main() -> None:
     in_graph = rdflib.Graph()
     out_graph = rdflib.Graph()
 
-    in_ttl : str
+    in_ttl: str
     for in_ttl in args.in_ttl:
         in_graph.parse(in_ttl)
 
-    for triple in in_graph.triples((
-      None,
-      rdflib.RDFS.subClassOf,
-      None
-    )):
+    for triple in in_graph.triples((None, rdflib.RDFS.subClassOf, None)):
         out_graph.add(triple)
 
     out_graph.serialize(args.out_ttl)
+
 
 if __name__ == "__main__":
     main()

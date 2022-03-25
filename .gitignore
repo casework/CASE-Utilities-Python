@@ -1,6 +1,7 @@
 *.done.log
 *.swp
 .DS_Store
+.idea/
 __pycache__
 build/
 case_utils.egg-info/

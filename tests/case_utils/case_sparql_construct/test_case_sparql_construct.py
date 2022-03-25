@@ -17,11 +17,9 @@ import rdflib.plugins.sparql  # type: ignore
 
 import case_utils
 
-def _test_subclass_templates_result(
-  filename : str,
-  expected : typing.Set[str]
-) -> None:
-    computed : typing.Set[str] = set()
+
+def _test_subclass_templates_result(filename: str, expected: typing.Set[str]) -> None:
+    computed: typing.Set[str] = set()
 
     graph = rdflib.Graph()
     graph.parse(filename)
@@ -38,14 +36,10 @@ WHERE {
         computed.add(n_entity.toPython())
     assert expected == computed
 
-def _test_w3_templates_with_blank_nodes_result(
-  filename : str
-) -> None:
-    ground_truth_positive = {
-      ("Alice", "Hacker"),
-      ("Bob", "Hacker")
-    }
-    ground_truth_negative : typing.Set[str] = set()
+
+def _test_w3_templates_with_blank_nodes_result(filename: str) -> None:
+    ground_truth_positive = {("Alice", "Hacker"), ("Bob", "Hacker")}
+    ground_truth_negative: typing.Set[str] = set()
 
     graph = rdflib.Graph()
     graph.parse(filename)
@@ -63,35 +57,27 @@ WHERE {
 }
 """
     for result in graph.query(query_string):
-        (
-          l_given_name,
-          l_family_name
-        ) = result
-        computed.add((
-          l_given_name.toPython(),
-          l_family_name.toPython()
-        ))
+        (l_given_name, l_family_name) = result
+        computed.add((l_given_name.toPython(), l_family_name.toPython()))
     assert computed == ground_truth_positive
+
 
 def test_w3_templates_with_blank_nodes_result_json() -> None:
     _test_w3_templates_with_blank_nodes_result("w3-output.json")
 
+
 def test_w3_templates_with_blank_nodes_result_turtle() -> None:
     _test_w3_templates_with_blank_nodes_result("w3-output.ttl")
 
+
 def test_subclass_templates_result_default_case() -> None:
     _test_subclass_templates_result(
-      "subclass-implicit-any.ttl",
-      {
-        "http://example.org/kb/file-1",
-        "http://example.org/kb/file-2"
-      }
+        "subclass-implicit-any.ttl",
+        {"http://example.org/kb/file-1", "http://example.org/kb/file-2"},
     )
+
 
 def test_subclass_templates_result_no_case() -> None:
     _test_subclass_templates_result(
-      "subclass-explicit-none.ttl",
-      {
-        "http://example.org/kb/file-1"
-      }
+        "subclass-explicit-none.ttl", {"http://example.org/kb/file-1"}
     )

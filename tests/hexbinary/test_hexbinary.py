@@ -65,21 +65,25 @@ n_lowercase2 = rdflib.URIRef("urn:example:lowercase2")
 n_uppercase1 = rdflib.URIRef("urn:example:uppercase1")
 p_predicate = rdflib.URIRef("urn:example:predicate1")
 
+
 def test_sparql_syntax_bind_boolean() -> None:
     """
     This test serves as a syntax reminder for binding boolean values.
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( 1 = 1 AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 @pytest.mark.xfail(reason="hard-coded failure")
 def test_pytest_syntax_xfail() -> None:
@@ -88,15 +92,18 @@ def test_pytest_syntax_xfail() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( 1 = 2 AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 def test_sparql_syntax_integer_coercion() -> None:
     """
@@ -104,15 +111,18 @@ def test_sparql_syntax_integer_coercion() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( 1 = "1"^^xsd:integer AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 def test_sparql_syntax_integer_cast() -> None:
     """
@@ -120,15 +130,18 @@ def test_sparql_syntax_integer_cast() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( 1 = xsd:integer("1") AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 @pytest.mark.xfail
 def test_sparql_cast_custom_type() -> None:
@@ -137,54 +150,66 @@ def test_sparql_cast_custom_type() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( 1 = xsd:integer("1"^^xsd:hexBinaryTypoXXXX) AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 def test_sparql_compare_hexbinary_mixcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinary = "AB"^^xsd:hexBinary AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 def test_sparql_compare_hexbinary_matchcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinary = "AB"^^xsd:hexBinary AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
 
+
 def test_sparql_compare_hexbinarycanonical_matchcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinaryCanonical = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 @pytest.mark.xfail
 def test_sparql_compare_hexbinarycanonical_mixcase() -> None:
@@ -193,15 +218,18 @@ def test_sparql_compare_hexbinarycanonical_mixcase() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinaryCanonical = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 @pytest.mark.xfail
 def test_sparql_compare_hb_hbc_mixcase() -> None:
@@ -210,15 +238,18 @@ def test_sparql_compare_hb_hbc_mixcase() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinary = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 @pytest.mark.xfail
 def test_sparql_compare_hb_hbc_mixcase_cast() -> None:
@@ -227,15 +258,18 @@ def test_sparql_compare_hb_hbc_mixcase_cast() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinary = xsd:hexBinary("AB"^^xsd:hexBinaryCanonical) AS ?lValue )
 }
-"""):
+"""
+    ):
         (l_value,) = result
         confirmed = l_value.toPython()
     assert confirmed
+
 
 def test_rdflib_literal_hexbinary() -> None:
     _logger.debug("l_hb_lowercase = %r." % l_hb_lowercase)
@@ -243,11 +277,12 @@ def test_rdflib_literal_hexbinary() -> None:
     _logger.debug("l_hb_lowercase.toPython() = %r." % l_hb_lowercase.toPython())
     _logger.debug("l_hb_uppercase.toPython() = %r." % l_hb_uppercase.toPython())
 
-    assert l_hb_lowercase            == l_hb_lowercase
+    assert l_hb_lowercase == l_hb_lowercase
     assert l_hb_lowercase.toPython() == l_hb_lowercase.toPython()
 
-    assert l_hb_lowercase            == l_hb_uppercase
+    assert l_hb_lowercase == l_hb_uppercase
     assert l_hb_lowercase.toPython() == l_hb_uppercase.toPython()
+
 
 @pytest.mark.xfail
 def test_rdflib_literal_hexbinarycanonical() -> None:
@@ -256,6 +291,7 @@ def test_rdflib_literal_hexbinarycanonical() -> None:
 
     assert l_hb_uppercase == l_hbc_uppercase
 
+
 @pytest.mark.xfail
 def test_rdflib_literal_topython_hexbinarycanonical() -> None:
     _logger.debug("l_hb_lowercase.toPython() = %r." % l_hb_lowercase.toPython())
@@ -263,107 +299,72 @@ def test_rdflib_literal_topython_hexbinarycanonical() -> None:
 
     assert l_hb_uppercase.toPython() == l_hbc_uppercase.toPython()
 
-def _query_all_value_matches(
-  graph : rdflib.Graph
-) -> typing.Set[str]:
+
+def _query_all_value_matches(graph: rdflib.Graph) -> typing.Set[str]:
     """
     Return set of all node names (as strings) that have a matching value, where
     "matching" is determined by the SPARQL engine's type and data coercions.
     """
     computed = set()
-    for result in graph.query("""\
+    for result in graph.query(
+        """\
 SELECT ?nNode1 ?nNode2
 WHERE {
   ?nNode1 ?p ?lValue .
   ?nNode2 ?p ?lValue .
   FILTER ( ?nNode1 != ?nNode2 )
-}"""):
+}"""
+    ):
         (n_node1, n_node2) = result
         computed.add(n_node1.toPython())
         computed.add(n_node2.toPython())
     return computed
+
 
 def test_graph_repeat() -> None:
     """
     Two nodes are given the same literal value, and are found to match on literal values.
     """
     graph = rdflib.Graph()
-    graph.add((
-      n_lowercase1,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    graph.add((
-      n_lowercase2,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    expected = {
-      "urn:example:lowercase1",
-      "urn:example:lowercase2"
-    }
+    graph.add((n_lowercase1, p_predicate, l_hb_lowercase))
+    graph.add((n_lowercase2, p_predicate, l_hb_lowercase))
+    expected = {"urn:example:lowercase1", "urn:example:lowercase2"}
     computed = _query_all_value_matches(graph)
     assert computed == expected
+
 
 def test_graph_all_hexbinary_literals() -> None:
     """
     Two nodes with the same literal value, and another node with the uppercase of the literal hexBinary value, are found to match on literal values.
     """
     graph = rdflib.Graph()
-    graph.add((
-      n_lowercase1,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    graph.add((
-      n_lowercase2,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    graph.add((
-      n_uppercase1,
-      p_predicate,
-      l_hb_uppercase
-    ))
+    graph.add((n_lowercase1, p_predicate, l_hb_lowercase))
+    graph.add((n_lowercase2, p_predicate, l_hb_lowercase))
+    graph.add((n_uppercase1, p_predicate, l_hb_uppercase))
 
     expected = {
-      "urn:example:lowercase1",
-      "urn:example:lowercase2",
-      "urn:example:uppercase1"
+        "urn:example:lowercase1",
+        "urn:example:lowercase2",
+        "urn:example:uppercase1",
     }
 
     computed = _query_all_value_matches(graph)
     assert computed == expected
 
+
 @pytest.mark.xfail
 def test_graph_hexbinarycanonical() -> None:
     graph = rdflib.Graph()
-    graph.add((
-      n_lowercase1,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    graph.add((
-      n_lowercase2,
-      p_predicate,
-      l_hb_lowercase 
-    ))
-    graph.add((
-      n_uppercase1,
-      p_predicate,
-      l_hb_uppercase
-    ))
-    graph.add((
-      n_canonical1,
-      p_predicate,
-      l_hbc_uppercase
-    ))
+    graph.add((n_lowercase1, p_predicate, l_hb_lowercase))
+    graph.add((n_lowercase2, p_predicate, l_hb_lowercase))
+    graph.add((n_uppercase1, p_predicate, l_hb_uppercase))
+    graph.add((n_canonical1, p_predicate, l_hbc_uppercase))
 
     expected = {
-      "urn:example:canonical1",
-      "urn:example:lowercase1",
-      "urn:example:lowercase2",
-      "urn:example:uppercase1"
+        "urn:example:canonical1",
+        "urn:example:lowercase1",
+        "urn:example:lowercase2",
+        "urn:example:uppercase1",
     }
 
     computed = _query_all_value_matches(graph)

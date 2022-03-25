@@ -2,7 +2,7 @@
     "@context": {
         "kb": "http://example.org/kb/",
         "case-investigation": "https://ontology.caseontology.org/case/investigation/",
-        "uco-core": "https://unifiedcyberontology.org/ontology/uco/core#"
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/"
     },
     "@graph": [
         {

@@ -26,10 +26,9 @@ from .version_info import *
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 def load_subclass_hierarchy(
-  graph : rdflib.Graph,
-  *,
-  built_version : str = "case-"+CURRENT_CASE_VERSION
+    graph: rdflib.Graph, *, built_version: str = "case-" + CURRENT_CASE_VERSION
 ) -> None:
     """
     Adds all ontology rdfs:subClassOf statements from the version referred to by built_version.

@@ -29,24 +29,27 @@ import pyld  # type: ignore
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 def main() -> None:
     with open(args.out_json, "w") as out_fh:
         doc = None
         with open(args.in_json, "r") as in_fh:
             doc = json.load(in_fh)
         assert not doc is None
-        assert isinstance(doc, (dict, list)), "JSON parsed top-level type assumption invalidated"
+        assert isinstance(
+            doc, (dict, list)
+        ), "JSON parsed top-level type assumption invalidated"
 
         # Grab the first occurrence of every key.
         total_context = dict()
-        def _accrue_local_context(
-          doc_object : typing.Dict[str, typing.Any]
-        ) -> None:
+
+        def _accrue_local_context(doc_object: typing.Dict[str, typing.Any]) -> None:
             local_context = doc_object.get("@context", dict())
             for key in local_context.keys():
                 if not key in total_context:
                     # Accrue new key.
                     total_context[key] = local_context[key]
+
         if isinstance(doc, list):
             # Handle rdf-toolkit styled output, where graph is returned in a top-level list.
             for obj in doc:
@@ -73,8 +76,10 @@ def main() -> None:
 
         out_fh.write(json.dumps(compacted, indent=4))
 
+
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("out_json")

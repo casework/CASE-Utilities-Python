@@ -21,14 +21,17 @@ import rdflib  # type: ignore
 
 import case_utils
 
+
 def main() -> None:
     g = rdflib.Graph()
     for in_graph in args.in_graph:
         g.parse(in_graph)
     g.serialize(args.out_graph)
 
+
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("out_graph")
     parser.add_argument("in_graph", nargs="*")

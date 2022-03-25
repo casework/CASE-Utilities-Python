@@ -40,6 +40,7 @@ import case_utils
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true")
@@ -55,25 +56,22 @@ def main() -> None:
     g1.parse(args.in_graph_1)
     g2.parse(args.in_graph_2)
 
-    #_logger.debug("type(g1) = %r.", type(g1))
-    #_logger.debug("type(g2) = %r.", type(g2))
+    # _logger.debug("type(g1) = %r.", type(g1))
+    # _logger.debug("type(g2) = %r.", type(g2))
 
-    #_logger.debug("len(g1) = %d.", len(g1))
-    #_logger.debug("len(g2) = %d.", len(g2))
+    # _logger.debug("len(g1) = %d.", len(g1))
+    # _logger.debug("len(g2) = %d.", len(g2))
 
     i1 = rdflib.compare.to_isomorphic(g1)
     i2 = rdflib.compare.to_isomorphic(g2)
 
-    #_logger.debug("type(i1) = %r.", type(i1))
-    #_logger.debug("type(i2) = %r.", type(i2))
+    # _logger.debug("type(i1) = %r.", type(i1))
+    # _logger.debug("type(i2) = %r.", type(i2))
 
     if i1 == i2:
         sys.exit(0)
 
-    def _report(
-      diff_symbol : str,
-      graph : rdflib.Graph
-    ) -> None:
+    def _report(diff_symbol: str, graph: rdflib.Graph) -> None:
         """
         This function copied in spirit from:
         https://rdflib.readthedocs.io/en/stable/apidocs/rdflib.html#module-rdflib.compare
@@ -83,19 +81,16 @@ def main() -> None:
                 continue
             _logger.debug("%s %s", diff_symbol, line)
 
-    #_report("1", g1)
-    #_report("2", g2)
+    # _report("1", g1)
+    # _report("2", g2)
 
     if args.debug:
-        (
-          in_both, 
-          in_first,
-          in_second
-        ) = rdflib.compare.graph_diff(i1, i2)
+        (in_both, in_first, in_second) = rdflib.compare.graph_diff(i1, i2)
         _report("<", in_first)
         _report(">", in_second)
 
     sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
