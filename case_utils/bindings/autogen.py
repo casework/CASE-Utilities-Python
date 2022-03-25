@@ -147,8 +147,8 @@ import typing
 import rdflib
 
 NS_RDF = rdflib.RDF
-NS_UCO_CORE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/core#")
-NS_UCO_OBSERVABLE = rdflib.Namespace("https://unifiedcyberontology.org/ontology/uco/observable#")
+NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
+NS_UCO_OBSERVABLE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/observable/")
 
 class NodeConstructor(object):
     def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
