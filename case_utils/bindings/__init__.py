@@ -37,9 +37,9 @@ class NodeConstructor(object):
         self,
         graph: rdflib.Graph,
         node_iri: typing.Optional[str] = None,
-        *args,
+        *args: typing.Any,
         type_iris: typing.Set[str] = set(),
-        **kwargs,
+        **kwargs: typing.Any,
     ) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
@@ -97,7 +97,12 @@ class case_UcoObject(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/UcoObject'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/UcoObject"
@@ -123,7 +128,12 @@ class case_Observable(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Observable'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Observable"
@@ -140,7 +150,12 @@ class case_Item(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Item'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Item"}
         else:
@@ -155,7 +170,12 @@ class case_ObservableObject(case_Item, case_Observable):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject"
@@ -172,7 +192,12 @@ class case_Role(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/role/Role'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/role/Role"}
         else:
@@ -187,7 +212,12 @@ class case_Facet(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Facet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Facet"}
         else:
@@ -202,7 +232,12 @@ class case_Address(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Address'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Address"
@@ -219,7 +254,12 @@ class case_NeutralRole(case_Role):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/role/NeutralRole'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/role/NeutralRole"
@@ -236,7 +276,12 @@ class case_FileSystemObject(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FileSystemObject'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemObject"
@@ -253,7 +298,12 @@ class case_Account(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Account'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Account"
@@ -270,7 +320,12 @@ class case_DigitalAddressFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddressFacet"
@@ -287,7 +342,12 @@ class case_DigitalAddress(case_Address):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddress"
@@ -304,7 +364,12 @@ class case_Device(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Device'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Device"
@@ -321,7 +386,12 @@ class case_IdentityAbstraction(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction"
@@ -338,7 +408,12 @@ class case_Compilation(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Compilation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/Compilation"
@@ -355,7 +430,12 @@ class case_Action(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/Action'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/action/Action"}
         else:
@@ -370,7 +450,12 @@ class case_Victim(case_NeutralRole):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/victim/Victim'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/victim/Victim"}
         else:
@@ -385,7 +470,12 @@ class case_Tool(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/Tool'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/tool/Tool"}
         else:
@@ -400,7 +490,12 @@ class case_Pattern(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/pattern/Pattern'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/pattern/Pattern"
@@ -417,7 +512,12 @@ class case_NetworkConnection(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnection"
@@ -434,7 +534,12 @@ class case_Thread(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Thread'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Thread"
@@ -451,7 +556,12 @@ class case_Process(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Process'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Process"
@@ -468,7 +578,12 @@ class case_File(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/File'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/File"
@@ -485,7 +600,12 @@ class case_DigitalAccount(case_Account):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccount"
@@ -502,7 +622,12 @@ class case_MACAddressFacet(case_DigitalAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MACAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MACAddressFacet"
@@ -519,7 +644,12 @@ class case_MACAddress(case_DigitalAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MACAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MACAddress"
@@ -536,7 +666,12 @@ class case_ContactFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactFacet"
@@ -553,7 +688,12 @@ class case_DefinedEffectFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DefinedEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DefinedEffectFacet"
@@ -570,7 +710,12 @@ class case_Message(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Message'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Message"
@@ -587,7 +732,12 @@ class case_Appliance(case_Device):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Appliance'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Appliance"
@@ -604,7 +754,12 @@ class case_Relationship(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Relationship'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/Relationship"
@@ -621,7 +776,12 @@ class case_IPAddressFacet(case_DigitalAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPAddressFacet"
@@ -638,7 +798,12 @@ class case_IPAddress(case_DigitalAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPAddress"
@@ -655,7 +820,12 @@ class case_MarkingModel(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/MarkingModel'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/MarkingModel"
@@ -672,7 +842,12 @@ class case_MarkingDefinitionAbstraction(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction"
@@ -689,7 +864,12 @@ class case_IdentityFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/IdentityFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/IdentityFacet"
@@ -706,7 +886,12 @@ class case_Identity(case_IdentityAbstraction):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/Identity'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/Identity"
@@ -723,7 +908,12 @@ class case_ContextualCompilation(case_Compilation):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/ContextualCompilation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/ContextualCompilation"
@@ -740,7 +930,12 @@ class case_EnclosingCompilation(case_Compilation):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/EnclosingCompilation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/EnclosingCompilation"
@@ -757,7 +952,12 @@ class case_Assertion(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Assertion'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/Assertion"
@@ -774,7 +974,12 @@ class case_ActionLifecycle(case_Action):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"
@@ -791,7 +996,12 @@ class case_VictimTargeting(case_Victim):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/victim/VictimTargeting'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/victim/VictimTargeting"
@@ -808,7 +1018,12 @@ class case_Hash(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/types/Hash'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/types/Hash"}
         else:
@@ -823,7 +1038,12 @@ class case_DictionaryEntry(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry"
@@ -840,7 +1060,12 @@ class case_Dictionary(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/types/Dictionary'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/types/Dictionary"
@@ -857,7 +1082,12 @@ class case_ControlledDictionaryEntry(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionaryEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionaryEntry"
@@ -874,7 +1104,12 @@ class case_ControlledDictionary(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionary'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionary"
@@ -891,7 +1126,12 @@ class case_ToolConfigurationTypeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/ToolConfigurationTypeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/ToolConfigurationTypeFacet"
@@ -908,7 +1148,12 @@ class case_MaliciousTool(case_Tool):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/MaliciousTool'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/MaliciousTool"
@@ -925,7 +1170,12 @@ class case_LibraryType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/LibraryType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/LibraryType"
@@ -942,7 +1192,12 @@ class case_DependencyType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/DependencyType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/DependencyType"
@@ -959,7 +1214,12 @@ class case_DefensiveTool(case_Tool):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/DefensiveTool'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/DefensiveTool"
@@ -976,7 +1236,12 @@ class case_ConfigurationSettingType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/ConfigurationSettingType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/ConfigurationSettingType"
@@ -993,7 +1258,12 @@ class case_CompilerType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/CompilerType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/CompilerType"
@@ -1010,7 +1280,12 @@ class case_BuildUtilityType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/BuildUtilityType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/BuildUtilityType"
@@ -1027,7 +1302,12 @@ class case_BuildInformationType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/BuildInformationType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/BuildInformationType"
@@ -1044,7 +1324,12 @@ class case_BuildFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/BuildFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/BuildFacet"
@@ -1061,7 +1346,12 @@ class case_BuildConfigurationType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/BuildConfigurationType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/BuildConfigurationType"
@@ -1078,7 +1368,12 @@ class case_AnalyticTool(case_Tool):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/tool/AnalyticTool'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/tool/AnalyticTool"
@@ -1095,7 +1390,12 @@ class case_MaliciousRole(case_Role):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/role/MaliciousRole'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/role/MaliciousRole"
@@ -1112,7 +1412,12 @@ class case_BenevolentRole(case_Role):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/role/BenevolentRole'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/role/BenevolentRole"
@@ -1129,7 +1434,12 @@ class case_PatternExpression(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression"
@@ -1146,7 +1456,12 @@ class case_LogicalPattern(case_Pattern):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern"
@@ -1163,7 +1478,12 @@ class case_X509V3ExtensionsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/X509V3ExtensionsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/X509V3ExtensionsFacet"
@@ -1180,7 +1500,12 @@ class case_X509V3Certificate(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/X509V3Certificate'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/X509V3Certificate"
@@ -1197,7 +1522,12 @@ class case_X509CertificateFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/X509CertificateFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/X509CertificateFacet"
@@ -1214,7 +1544,12 @@ class case_X509Certificate(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/X509Certificate'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/X509Certificate"
@@ -1231,7 +1566,12 @@ class case_WirelessNetworkConnectionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnectionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnectionFacet"
@@ -1248,7 +1588,12 @@ class case_WirelessNetworkConnection(case_NetworkConnection):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnection"
@@ -1265,7 +1610,12 @@ class case_WindowsWaitableTime(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsWaitableTime'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsWaitableTime"
@@ -1282,7 +1632,12 @@ class case_WindowsVolumeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsVolumeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsVolumeFacet"
@@ -1299,7 +1654,12 @@ class case_WindowsThreadFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsThreadFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThreadFacet"
@@ -1316,7 +1676,12 @@ class case_WindowsThread(case_Thread):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsThread'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThread"
@@ -1333,7 +1698,12 @@ class case_WindowsTaskFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsTaskFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTaskFacet"
@@ -1350,7 +1720,12 @@ class case_WindowsTask(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsTask'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTask"
@@ -1367,7 +1742,12 @@ class case_WindowsSystemRestore(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsSystemRestore'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsSystemRestore"
@@ -1384,7 +1764,12 @@ class case_WindowsServiceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsServiceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsServiceFacet"
@@ -1401,7 +1786,12 @@ class case_WindowsService(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsService'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsService"
@@ -1418,7 +1808,12 @@ class case_WindowsRegistryValue(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryValue'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryValue"
@@ -1435,7 +1830,12 @@ class case_WindowsRegistryKeyFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKeyFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKeyFacet"
@@ -1452,7 +1852,12 @@ class case_WindowsRegistryKey(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKey'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKey"
@@ -1469,7 +1874,12 @@ class case_WindowsRegistryHiveFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHiveFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHiveFacet"
@@ -1486,7 +1896,12 @@ class case_WindowsRegistryHive(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHive'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHive"
@@ -1503,7 +1918,12 @@ class case_WindowsProcessFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcessFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcessFacet"
@@ -1520,7 +1940,12 @@ class case_WindowsProcess(case_Process):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcess'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcess"
@@ -1537,7 +1962,12 @@ class case_WindowsPrefetchFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetchFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetchFacet"
@@ -1554,7 +1984,12 @@ class case_WindowsPrefetch(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetch'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetch"
@@ -1571,7 +2006,12 @@ class case_WindowsPESection(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPESection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPESection"
@@ -1588,7 +2028,12 @@ class case_WindowsPEOptionalHeader(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEOptionalHeader'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEOptionalHeader"
@@ -1605,7 +2050,12 @@ class case_WindowsPEFileHeader(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEFileHeader'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEFileHeader"
@@ -1622,7 +2072,12 @@ class case_WindowsPEBinaryFileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFileFacet"
@@ -1639,7 +2094,12 @@ class case_WindowsPEBinaryFile(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFile"
@@ -1656,7 +2116,12 @@ class case_WindowsNetworkShare(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsNetworkShare'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsNetworkShare"
@@ -1673,7 +2138,12 @@ class case_WindowsMailslot(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsMailslot'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsMailslot"
@@ -1690,7 +2160,12 @@ class case_WindowsHook(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsHook'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHook"
@@ -1707,7 +2182,12 @@ class case_WindowsHandle(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsHandle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHandle"
@@ -1724,7 +2204,12 @@ class case_WindowsFilemapping(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsFilemapping'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsFilemapping"
@@ -1741,7 +2226,12 @@ class case_WindowsEvent(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsEvent'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsEvent"
@@ -1758,7 +2248,12 @@ class case_WindowsCriticalSection(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsCriticalSection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsCriticalSection"
@@ -1775,7 +2270,12 @@ class case_WindowsComputerSpecificationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecificationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecificationFacet"
@@ -1792,7 +2292,12 @@ class case_WindowsComputerSpecification(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecification'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecification"
@@ -1809,7 +2314,12 @@ class case_WindowsActiveDirectoryAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccountFacet"
@@ -1826,7 +2336,12 @@ class case_WindowsActiveDirectoryAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccount"
@@ -1843,7 +2358,12 @@ class case_WindowsAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccountFacet"
@@ -1860,7 +2380,12 @@ class case_WindowsAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccount"
@@ -1877,7 +2402,12 @@ class case_WikiArticle(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WikiArticle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WikiArticle"
@@ -1894,7 +2424,12 @@ class case_Wiki(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Wiki'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Wiki"
@@ -1911,7 +2446,12 @@ class case_WifiAddressFacet(case_MACAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WifiAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddressFacet"
@@ -1928,7 +2468,12 @@ class case_WifiAddress(case_MACAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WifiAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddress"
@@ -1945,7 +2490,12 @@ class case_WhoisRegistrarInfoType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WhoisRegistrarInfoType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WhoisRegistrarInfoType"
@@ -1962,7 +2512,12 @@ class case_WhoisContactFacet(case_ContactFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet"
@@ -1979,7 +2534,12 @@ class case_WhoIsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WhoIsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WhoIsFacet"
@@ -1996,7 +2556,12 @@ class case_WhoIs(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WhoIs'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WhoIs"
@@ -2013,7 +2578,12 @@ class case_WebPage(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/WebPage'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/WebPage"
@@ -2030,7 +2600,12 @@ class case_VolumeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/VolumeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/VolumeFacet"
@@ -2047,7 +2622,12 @@ class case_Volume(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Volume'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Volume"
@@ -2064,7 +2644,12 @@ class case_ValuesEnumeratedEffectFacet(case_DefinedEffectFacet, case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ValuesEnumeratedEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ValuesEnumeratedEffectFacet"
@@ -2081,7 +2666,12 @@ class case_UserSessionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UserSessionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UserSessionFacet"
@@ -2098,7 +2688,12 @@ class case_UserSession(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UserSession'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UserSession"
@@ -2115,7 +2710,12 @@ class case_UserAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UserAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UserAccountFacet"
@@ -2132,7 +2732,12 @@ class case_UserAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UserAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UserAccount"
@@ -2149,7 +2754,12 @@ class case_URLVisitFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLVisitFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLVisitFacet"
@@ -2166,7 +2776,12 @@ class case_URLVisit(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLVisit'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLVisit"
@@ -2183,7 +2798,12 @@ class case_URLHistoryFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryFacet"
@@ -2200,7 +2820,12 @@ class case_URLHistoryEntry(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryEntry"
@@ -2217,7 +2842,12 @@ class case_URLHistory(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLHistory'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLHistory"
@@ -2234,7 +2864,12 @@ class case_URLFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URLFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URLFacet"
@@ -2251,7 +2886,12 @@ class case_URL(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/URL'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/URL"
@@ -2268,7 +2908,12 @@ class case_UNIXVolumeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXVolumeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXVolumeFacet"
@@ -2285,7 +2930,12 @@ class case_UNIXProcessFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcessFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcessFacet"
@@ -2302,7 +2952,12 @@ class case_UNIXProcess(case_Process):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcess'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcess"
@@ -2319,7 +2974,12 @@ class case_UNIXFilePermissionsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXFilePermissionsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFilePermissionsFacet"
@@ -2336,7 +2996,12 @@ class case_UNIXFile(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXFile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFile"
@@ -2353,7 +3018,12 @@ class case_UNIXAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccountFacet"
@@ -2370,7 +3040,12 @@ class case_UNIXAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccount"
@@ -2387,7 +3062,12 @@ class case_TwitterProfileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TwitterProfileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/TwitterProfileFacet"
@@ -2404,7 +3084,12 @@ class case_Tweet(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Tweet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Tweet"
@@ -2421,7 +3106,12 @@ class case_TriggerType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TriggerType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/TriggerType"
@@ -2438,7 +3128,12 @@ class case_TaskActionType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TaskActionType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/TaskActionType"
@@ -2455,7 +3150,12 @@ class case_TCPConnectionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TCPConnectionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnectionFacet"
@@ -2472,7 +3172,12 @@ class case_TCPConnection(case_NetworkConnection):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TCPConnection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnection"
@@ -2489,7 +3194,12 @@ class case_SymbolicLinkFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLinkFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLinkFacet"
@@ -2506,7 +3216,12 @@ class case_SymbolicLink(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLink'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLink"
@@ -2523,7 +3238,12 @@ class case_StateChangeEffectFacet(case_DefinedEffectFacet, case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/StateChangeEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/StateChangeEffectFacet"
@@ -2540,7 +3260,12 @@ class case_SoftwareFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SoftwareFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SoftwareFacet"
@@ -2557,7 +3282,12 @@ class case_Software(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Software'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Software"
@@ -2574,7 +3304,12 @@ class case_SocketAddress(case_Address):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SocketAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SocketAddress"
@@ -2591,7 +3326,12 @@ class case_Socket(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Socket'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Socket"
@@ -2608,7 +3348,12 @@ class case_Snapshot(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Snapshot'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Snapshot"
@@ -2625,7 +3370,12 @@ class case_ShopListing(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ShopListing'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ShopListing"
@@ -2642,7 +3392,12 @@ class case_SendControlCodeEffectFacet(case_DefinedEffectFacet, case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SendControlCodeEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SendControlCodeEffectFacet"
@@ -2659,7 +3414,12 @@ class case_Semaphore(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Semaphore'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Semaphore"
@@ -2676,7 +3436,12 @@ class case_SecurityAppliance(case_Appliance):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SecurityAppliance'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SecurityAppliance"
@@ -2693,7 +3458,12 @@ class case_SQLiteBlobFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlobFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlobFacet"
@@ -2710,7 +3480,12 @@ class case_SQLiteBlob(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlob'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlob"
@@ -2727,7 +3502,12 @@ class case_SMSMessageFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SMSMessageFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessageFacet"
@@ -2744,7 +3524,12 @@ class case_SMSMessage(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SMSMessage'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessage"
@@ -2761,7 +3546,12 @@ class case_SIPAddressFacet(case_DigitalAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SIPAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddressFacet"
@@ -2778,7 +3568,12 @@ class case_SIPAddress(case_DigitalAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SIPAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddress"
@@ -2795,7 +3590,12 @@ class case_SIMCardFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SIMCardFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SIMCardFacet"
@@ -2812,7 +3612,12 @@ class case_SIMCard(case_Device):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/SIMCard'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/SIMCard"
@@ -2829,7 +3634,12 @@ class case_ReparsePoint(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ReparsePoint'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ReparsePoint"
@@ -2846,7 +3656,12 @@ class case_RasterPictureFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/RasterPictureFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/RasterPictureFacet"
@@ -2863,7 +3678,12 @@ class case_RasterPicture(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/RasterPicture'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/RasterPicture"
@@ -2880,7 +3700,12 @@ class case_PropertyReadEffectFacet(case_DefinedEffectFacet, case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PropertyReadEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PropertyReadEffectFacet"
@@ -2897,7 +3722,12 @@ class case_PropertiesEnumeratedEffectFacet(case_DefinedEffectFacet, case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PropertiesEnumeratedEffectFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PropertiesEnumeratedEffectFacet"
@@ -2914,7 +3744,12 @@ class case_ProfileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ProfileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ProfileFacet"
@@ -2931,7 +3766,12 @@ class case_Profile(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Profile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Profile"
@@ -2948,7 +3788,12 @@ class case_ProcessFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ProcessFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ProcessFacet"
@@ -2965,7 +3810,12 @@ class case_Post(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Post'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Post"
@@ -2982,7 +3832,12 @@ class case_Pipe(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Pipe'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Pipe"
@@ -2999,7 +3854,12 @@ class case_PhoneAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccountFacet"
@@ -3016,7 +3876,12 @@ class case_PhoneAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccount"
@@ -3033,7 +3898,12 @@ class case_PaymentCard(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PaymentCard'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PaymentCard"
@@ -3050,7 +3920,12 @@ class case_PathRelationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PathRelationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PathRelationFacet"
@@ -3067,7 +3942,12 @@ class case_PDFFileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PDFFileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PDFFileFacet"
@@ -3084,7 +3964,12 @@ class case_PDFFile(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/PDFFile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/PDFFile"
@@ -3101,7 +3986,12 @@ class case_OperatingSystemFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystemFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystemFacet"
@@ -3118,7 +4008,12 @@ class case_OperatingSystem(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem"
@@ -3135,7 +4030,12 @@ class case_OnlineServiceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/OnlineServiceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/OnlineServiceFacet"
@@ -3152,7 +4052,12 @@ class case_OnlineService(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/OnlineService'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/OnlineService"
@@ -3169,7 +4074,12 @@ class case_Observation(case_Action):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Observation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Observation"
@@ -3186,7 +4096,12 @@ class case_ObservableRelationship(case_Observable, case_Relationship):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ObservableRelationship'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ObservableRelationship"
@@ -3203,7 +4118,12 @@ class case_ObservablePattern(case_Observable):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern"
@@ -3220,7 +4140,12 @@ class case_ObservableAction(case_Action, case_Observable):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ObservableAction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ObservableAction"
@@ -3237,7 +4162,12 @@ class case_NoteFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NoteFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NoteFacet"
@@ -3254,7 +4184,12 @@ class case_Note(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Note'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Note"
@@ -3271,7 +4206,12 @@ class case_NetworkSubnet(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkSubnet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkSubnet"
@@ -3288,7 +4228,12 @@ class case_NetworkRoute(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkRoute'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkRoute"
@@ -3305,7 +4250,12 @@ class case_NetworkProtocol(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkProtocol'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkProtocol"
@@ -3322,7 +4272,12 @@ class case_NetworkInterfaceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterfaceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterfaceFacet"
@@ -3339,7 +4294,12 @@ class case_NetworkInterface(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterface'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterface"
@@ -3356,7 +4316,12 @@ class case_NetworkFlowFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlowFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlowFacet"
@@ -3373,7 +4338,12 @@ class case_NetworkFlow(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlow'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlow"
@@ -3390,7 +4360,12 @@ class case_NetworkConnectionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnectionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnectionFacet"
@@ -3407,7 +4382,12 @@ class case_NetworkAppliance(case_Appliance):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NetworkAppliance'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NetworkAppliance"
@@ -3424,7 +4404,12 @@ class case_NamedPipe(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NamedPipe'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NamedPipe"
@@ -3441,7 +4426,12 @@ class case_NTFSFilePermissionsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NTFSFilePermissionsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFilePermissionsFacet"
@@ -3458,7 +4448,12 @@ class case_NTFSFileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NTFSFileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFileFacet"
@@ -3475,7 +4470,12 @@ class case_NTFSFile(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/NTFSFile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFile"
@@ -3492,7 +4492,12 @@ class case_MutexFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MutexFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MutexFacet"
@@ -3509,7 +4514,12 @@ class case_Mutex(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Mutex'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Mutex"
@@ -3526,7 +4536,12 @@ class case_MobileDeviceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MobileDeviceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MobileDeviceFacet"
@@ -3543,7 +4558,12 @@ class case_MobileDevice(case_Device):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MobileDevice'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MobileDevice"
@@ -3560,7 +4580,12 @@ class case_MobileAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MobileAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccountFacet"
@@ -3577,7 +4602,12 @@ class case_MobileAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MobileAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccount"
@@ -3594,7 +4624,12 @@ class case_MimePartType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MimePartType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MimePartType"
@@ -3611,7 +4646,12 @@ class case_MftRecordFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MftRecordFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MftRecordFacet"
@@ -3628,7 +4668,12 @@ class case_MessageThreadFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MessageThreadFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MessageThreadFacet"
@@ -3645,7 +4690,12 @@ class case_MessageThread(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MessageThread'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MessageThread"
@@ -3662,7 +4712,12 @@ class case_MessageFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MessageFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MessageFacet"
@@ -3679,7 +4734,12 @@ class case_MemoryFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet"
@@ -3696,7 +4756,12 @@ class case_Memory(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Memory'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Memory"
@@ -3713,7 +4778,12 @@ class case_LibraryFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/LibraryFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/LibraryFacet"
@@ -3730,7 +4800,12 @@ class case_Library(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Library'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Library"
@@ -3747,7 +4822,12 @@ class case_Junction(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Junction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Junction"
@@ -3764,7 +4844,12 @@ class case_InstantMessagingAddressFacet(case_DigitalAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddressFacet"
@@ -3781,7 +4866,12 @@ class case_InstantMessagingAddress(case_DigitalAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddress"
@@ -3798,7 +4888,12 @@ class case_ImageFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ImageFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ImageFacet"
@@ -3815,7 +4910,12 @@ class case_Image(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Image'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Image"
@@ -3832,7 +4932,12 @@ class case_IShowMessageActionType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IShowMessageActionType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IShowMessageActionType"
@@ -3849,7 +4954,12 @@ class case_IPv6AddressFacet(case_IPAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPv6AddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPv6AddressFacet"
@@ -3866,7 +4976,12 @@ class case_IPv6Address(case_IPAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPv6Address'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPv6Address"
@@ -3883,7 +4998,12 @@ class case_IPv4AddressFacet(case_IPAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPv4AddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPv4AddressFacet"
@@ -3900,7 +5020,12 @@ class case_IPv4Address(case_IPAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPv4Address'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPv4Address"
@@ -3917,7 +5042,12 @@ class case_IPNetmask(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IPNetmask'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IPNetmask"
@@ -3934,7 +5064,12 @@ class case_IExecActionType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IExecActionType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IExecActionType"
@@ -3951,7 +5086,12 @@ class case_IComHandlerActionType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/IComHandlerActionType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/IComHandlerActionType"
@@ -3968,7 +5108,12 @@ class case_ICMPConnectionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnectionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnectionFacet"
@@ -3985,7 +5130,12 @@ class case_ICMPConnection(case_NetworkConnection):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnection"
@@ -4002,7 +5152,12 @@ class case_Hostname(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Hostname'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Hostname"
@@ -4019,7 +5174,12 @@ class case_HTTPConnectionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnectionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnectionFacet"
@@ -4036,7 +5196,12 @@ class case_HTTPConnection(case_NetworkConnection):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnection'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnection"
@@ -4053,7 +5218,12 @@ class case_GlobalFlagType(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GlobalFlagType'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GlobalFlagType"
@@ -4070,7 +5240,12 @@ class case_GeoLocationTrackFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrackFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrackFacet"
@@ -4087,7 +5262,12 @@ class case_GeoLocationTrack(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrack'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrack"
@@ -4104,7 +5284,12 @@ class case_GeoLocationLogFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLogFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLogFacet"
@@ -4121,7 +5306,12 @@ class case_GeoLocationLog(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLog'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLog"
@@ -4138,7 +5328,12 @@ class case_GeoLocationEntryFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntryFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntryFacet"
@@ -4155,7 +5350,12 @@ class case_GeoLocationEntry(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntry"
@@ -4172,7 +5372,12 @@ class case_GenericObservableObject(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GenericObservableObject'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GenericObservableObject"
@@ -4189,7 +5394,12 @@ class case_GUI(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/GUI'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/GUI"
@@ -4206,7 +5416,12 @@ class case_FragmentFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FragmentFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FragmentFacet"
@@ -4223,7 +5438,12 @@ class case_ForumPrivateMessage(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ForumPrivateMessage'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ForumPrivateMessage"
@@ -4240,7 +5460,12 @@ class case_ForumPost(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ForumPost'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ForumPost"
@@ -4257,7 +5482,12 @@ class case_FileSystemFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FileSystemFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemFacet"
@@ -4274,7 +5504,12 @@ class case_FileSystem(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FileSystem'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FileSystem"
@@ -4291,7 +5526,12 @@ class case_FilePermissionsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FilePermissionsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FilePermissionsFacet"
@@ -4308,7 +5548,12 @@ class case_FileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/FileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/FileFacet"
@@ -4325,7 +5570,12 @@ class case_ExtractedStringsFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ExtractedStringsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedStringsFacet"
@@ -4342,7 +5592,12 @@ class case_ExtractedString(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ExtractedString'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedString"
@@ -4359,7 +5614,12 @@ class case_ExtInodeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ExtInodeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ExtInodeFacet"
@@ -4376,7 +5636,12 @@ class case_EventLog(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EventLog'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EventLog"
@@ -4393,7 +5658,12 @@ class case_EventFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EventFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EventFacet"
@@ -4410,7 +5680,12 @@ class case_Event(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Event'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Event"
@@ -4427,7 +5702,12 @@ class case_EnvironmentVariable(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EnvironmentVariable'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EnvironmentVariable"
@@ -4444,7 +5724,12 @@ class case_EncryptedStreamFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EncryptedStreamFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EncryptedStreamFacet"
@@ -4461,7 +5746,12 @@ class case_EncodedStreamFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EncodedStreamFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EncodedStreamFacet"
@@ -4478,7 +5768,12 @@ class case_EmailMessageFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailMessageFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessageFacet"
@@ -4495,7 +5790,12 @@ class case_EmailMessage(case_Message):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailMessage'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessage"
@@ -4512,7 +5812,12 @@ class case_EmailAddressFacet(case_DigitalAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddressFacet"
@@ -4529,7 +5834,12 @@ class case_EmailAddress(case_DigitalAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddress"
@@ -4546,7 +5856,12 @@ class case_EmailAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccountFacet"
@@ -4563,7 +5878,12 @@ class case_EmailAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EmailAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccount"
@@ -4580,7 +5900,12 @@ class case_EXIFFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/EXIFFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/EXIFFacet"
@@ -4597,7 +5922,12 @@ class case_DomainNameFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DomainNameFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DomainNameFacet"
@@ -4614,7 +5944,12 @@ class case_DomainName(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DomainName'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DomainName"
@@ -4631,7 +5966,12 @@ class case_DiskPartitionFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DiskPartitionFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartitionFacet"
@@ -4648,7 +5988,12 @@ class case_DiskPartition(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DiskPartition'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartition"
@@ -4665,7 +6010,12 @@ class case_DiskFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DiskFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DiskFacet"
@@ -4682,7 +6032,12 @@ class case_Disk(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Disk'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Disk"
@@ -4699,7 +6054,12 @@ class case_Directory(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Directory'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Directory"
@@ -4716,7 +6076,12 @@ class case_DigitalSignatureInfoFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfoFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfoFacet"
@@ -4733,7 +6098,12 @@ class case_DigitalSignatureInfo(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfo'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfo"
@@ -4750,7 +6120,12 @@ class case_DigitalAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccountFacet"
@@ -4767,7 +6142,12 @@ class case_DeviceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DeviceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DeviceFacet"
@@ -4784,7 +6164,12 @@ class case_DataRangeFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DataRangeFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DataRangeFacet"
@@ -4801,7 +6186,12 @@ class case_DNSRecord(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DNSRecord'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DNSRecord"
@@ -4818,7 +6208,12 @@ class case_DNSCache(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/DNSCache'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/DNSCache"
@@ -4835,7 +6230,12 @@ class case_CredentialDump(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CredentialDump'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CredentialDump"
@@ -4852,7 +6252,12 @@ class case_Credential(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Credential'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Credential"
@@ -4869,7 +6274,12 @@ class case_CookieHistory(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CookieHistory'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CookieHistory"
@@ -4886,7 +6296,12 @@ class case_ContentDataFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
@@ -4912,7 +6327,12 @@ class case_ContentData(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContentData'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContentData"
@@ -4929,7 +6349,12 @@ class case_ContactURL(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactURL'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactURL"
@@ -4946,7 +6371,12 @@ class case_ContactSIP(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactSIP'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactSIP"
@@ -4963,7 +6393,12 @@ class case_ContactProfile(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactProfile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactProfile"
@@ -4980,7 +6415,12 @@ class case_ContactPhone(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactPhone'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactPhone"
@@ -4997,7 +6437,12 @@ class case_ContactMessaging(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactMessaging'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactMessaging"
@@ -5014,7 +6459,12 @@ class case_ContactListFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactListFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactListFacet"
@@ -5031,7 +6481,12 @@ class case_ContactList(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactList'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactList"
@@ -5048,7 +6503,12 @@ class case_ContactEmail(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail"
@@ -5065,7 +6525,12 @@ class case_ContactAffiliation(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactAffiliation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactAffiliation"
@@ -5082,7 +6547,12 @@ class case_ContactAddress(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ContactAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ContactAddress"
@@ -5099,7 +6569,12 @@ class case_Contact(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Contact'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Contact"
@@ -5116,7 +6591,12 @@ class case_ComputerSpecificationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecificationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecificationFacet"
@@ -5133,7 +6613,12 @@ class case_ComputerSpecification(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecification'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecification"
@@ -5150,7 +6635,12 @@ class case_CompressedStreamFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CompressedStreamFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CompressedStreamFacet"
@@ -5167,7 +6657,12 @@ class case_Code(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Code'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Code"
@@ -5184,7 +6679,12 @@ class case_CharacterDeviceNode(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CharacterDeviceNode'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CharacterDeviceNode"
@@ -5201,7 +6701,12 @@ class case_CallFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CallFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CallFacet"
@@ -5218,7 +6723,12 @@ class case_Call(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Call'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Call"
@@ -5235,7 +6745,12 @@ class case_CalendarFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CalendarFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CalendarFacet"
@@ -5252,7 +6767,12 @@ class case_CalendarEntryFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntryFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntryFacet"
@@ -5269,7 +6789,12 @@ class case_CalendarEntry(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntry"
@@ -5286,7 +6811,12 @@ class case_Calendar(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Calendar'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Calendar"
@@ -5303,7 +6833,12 @@ class case_BrowserCookieFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookieFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookieFacet"
@@ -5320,7 +6855,12 @@ class case_BrowserCookie(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookie'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookie"
@@ -5337,7 +6877,12 @@ class case_BrowserBookmarkFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmarkFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmarkFacet"
@@ -5354,7 +6899,12 @@ class case_BrowserBookmark(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmark'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmark"
@@ -5371,7 +6921,12 @@ class case_BotConfiguration(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BotConfiguration'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BotConfiguration"
@@ -5388,7 +6943,12 @@ class case_BluetoothAddressFacet(case_MACAddressFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddressFacet"
@@ -5405,7 +6965,12 @@ class case_BluetoothAddress(case_MACAddress):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddress'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddress"
@@ -5422,7 +6987,12 @@ class case_BlockDeviceNode(case_FileSystemObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/BlockDeviceNode'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/BlockDeviceNode"
@@ -5439,7 +7009,12 @@ class case_AutonomousSystemFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystemFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystemFacet"
@@ -5456,7 +7031,12 @@ class case_AutonomousSystem(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystem'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystem"
@@ -5473,7 +7053,12 @@ class case_AudioFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AudioFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AudioFacet"
@@ -5490,7 +7075,12 @@ class case_Audio(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Audio'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Audio"
@@ -5507,7 +7097,12 @@ class case_AttachmentFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AttachmentFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AttachmentFacet"
@@ -5524,7 +7119,12 @@ class case_ArchiveFileFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFileFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFileFacet"
@@ -5541,7 +7141,12 @@ class case_ArchiveFile(case_File):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFile'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFile"
@@ -5558,7 +7163,12 @@ class case_ApplicationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ApplicationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationFacet"
@@ -5575,7 +7185,12 @@ class case_ApplicationAccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccountFacet"
@@ -5592,7 +7207,12 @@ class case_ApplicationAccount(case_DigitalAccount):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccount'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccount"
@@ -5609,7 +7229,12 @@ class case_Application(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/Application'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Application"
@@ -5626,7 +7251,12 @@ class case_AndroidDeviceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AndroidDeviceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDeviceFacet"
@@ -5643,7 +7273,12 @@ class case_AndroidDevice(case_Device):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AndroidDevice'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDevice"
@@ -5660,7 +7295,12 @@ class case_AlternateDataStreamFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStreamFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStreamFacet"
@@ -5677,7 +7317,12 @@ class case_AlternateDataStream(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream"
@@ -5694,7 +7339,12 @@ class case_AccountFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AccountFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AccountFacet"
@@ -5711,7 +7361,12 @@ class case_AccountAuthenticationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/AccountAuthenticationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/AccountAuthenticationFacet"
@@ -5728,7 +7383,12 @@ class case_ARPCacheEntry(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ARPCacheEntry'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ARPCacheEntry"
@@ -5745,7 +7405,12 @@ class case_ARPCache(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/ARPCache'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/ARPCache"
@@ -5762,7 +7427,12 @@ class case_API(case_ObservableObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/API'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/API"
@@ -5779,7 +7449,12 @@ class case_TermsOfUseMarking(case_MarkingModel):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/TermsOfUseMarking'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/TermsOfUseMarking"
@@ -5796,7 +7471,12 @@ class case_StatementMarking(case_MarkingModel):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/StatementMarking'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/StatementMarking"
@@ -5813,7 +7493,12 @@ class case_ReleaseToMarking(case_MarkingModel):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/ReleaseToMarking'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/ReleaseToMarking"
@@ -5830,7 +7515,12 @@ class case_MarkingDefinition(case_MarkingDefinitionAbstraction):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/MarkingDefinition'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/MarkingDefinition"
@@ -5847,7 +7537,12 @@ class case_LicenseMarking(case_MarkingModel):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/LicenseMarking'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/LicenseMarking"
@@ -5864,7 +7559,12 @@ class case_GranularMarking(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/marking/GranularMarking'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/marking/GranularMarking"
@@ -5881,7 +7581,12 @@ class case_SimpleAddressFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/location/SimpleAddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/location/SimpleAddressFacet"
@@ -5898,7 +7603,12 @@ class case_Location(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/location/Location'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/location/Location"
@@ -5915,7 +7625,12 @@ class case_LatLongCoordinatesFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/location/LatLongCoordinatesFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/location/LatLongCoordinatesFacet"
@@ -5932,7 +7647,12 @@ class case_GPSCoordinatesFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/location/GPSCoordinatesFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/location/GPSCoordinatesFacet"
@@ -5949,7 +7669,12 @@ class case_VisaFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/VisaFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/VisaFacet"
@@ -5966,7 +7691,12 @@ class case_SimpleNameFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/SimpleNameFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/SimpleNameFacet"
@@ -5983,7 +7713,12 @@ class case_RelatedIdentityFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/RelatedIdentityFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/RelatedIdentityFacet"
@@ -6000,7 +7735,12 @@ class case_QualificationFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/QualificationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/QualificationFacet"
@@ -6017,7 +7757,12 @@ class case_PhysicalInfoFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/PhysicalInfoFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/PhysicalInfoFacet"
@@ -6034,7 +7779,12 @@ class case_PersonalDetailsFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/PersonalDetailsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/PersonalDetailsFacet"
@@ -6051,7 +7801,12 @@ class case_Person(case_Identity):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/Person'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/Person"
@@ -6068,7 +7823,12 @@ class case_OrganizationDetailsFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/OrganizationDetailsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/OrganizationDetailsFacet"
@@ -6085,7 +7845,12 @@ class case_Organization(case_Identity):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/Organization'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/Organization"
@@ -6102,7 +7867,12 @@ class case_OccupationFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/OccupationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/OccupationFacet"
@@ -6119,7 +7889,12 @@ class case_NationalityFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/NationalityFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/NationalityFacet"
@@ -6136,7 +7911,12 @@ class case_LanguagesFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/LanguagesFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/LanguagesFacet"
@@ -6153,7 +7933,12 @@ class case_IdentifierFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/IdentifierFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/IdentifierFacet"
@@ -6170,7 +7955,12 @@ class case_EventsFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/EventsFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/EventsFacet"
@@ -6187,7 +7977,12 @@ class case_CountryOfResidenceFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/CountryOfResidenceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/CountryOfResidenceFacet"
@@ -6204,7 +7999,12 @@ class case_BirthInformationFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/BirthInformationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/BirthInformationFacet"
@@ -6221,7 +8021,12 @@ class case_AffiliationFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/AffiliationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/AffiliationFacet"
@@ -6238,7 +8043,12 @@ class case_AddressFacet(case_IdentityFacet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/identity/AddressFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/identity/AddressFacet"
@@ -6255,7 +8065,12 @@ class case_ModusOperandi(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/ModusOperandi'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/ModusOperandi"
@@ -6272,7 +8087,12 @@ class case_Grouping(case_ContextualCompilation):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Grouping'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Grouping"}
         else:
@@ -6287,7 +8107,12 @@ class case_ExternalReference(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/ExternalReference'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference"
@@ -6304,7 +8129,12 @@ class case_ControlledVocabulary(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/ControlledVocabulary'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/ControlledVocabulary"
@@ -6321,7 +8151,12 @@ class case_ConfidenceFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/ConfidenceFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/ConfidenceFacet"
@@ -6338,7 +8173,12 @@ class case_Bundle(case_EnclosingCompilation):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Bundle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Bundle"}
         else:
@@ -6353,7 +8193,12 @@ class case_AttributedName(case_UcoObject):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/AttributedName'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/AttributedName"
@@ -6370,7 +8215,12 @@ class case_Annotation(case_Assertion):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Annotation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/core/Annotation"
@@ -6387,7 +8237,12 @@ class case_ArrayOfAction(NodeConstructor):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction"
@@ -6404,7 +8259,12 @@ class case_ActionPattern(case_Action, case_Pattern):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ActionPattern'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ActionPattern"
@@ -6421,7 +8281,12 @@ class case_ActionFrequencyFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ActionFrequencyFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ActionFrequencyFacet"
@@ -6438,7 +8303,12 @@ class case_ActionEstimationFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ActionEstimationFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ActionEstimationFacet"
@@ -6455,7 +8325,12 @@ class case_ActionArgumentFacet(case_Facet):
     Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/action/ActionArgumentFacet'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/action/ActionArgumentFacet"
@@ -6472,7 +8347,12 @@ class case_VictimActionLifecycle(case_ActionLifecycle):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/VictimActionLifecycle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/VictimActionLifecycle"
@@ -6489,7 +8369,12 @@ class case_SubjectActionLifecycle(case_ActionLifecycle):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle"
@@ -6506,7 +8391,12 @@ class case_Subject(case_Role):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Subject'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Subject"
@@ -6523,7 +8413,12 @@ class case_ProvenanceRecord(case_ContextualCompilation):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/ProvenanceRecord'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/ProvenanceRecord"
@@ -6540,7 +8435,12 @@ class case_Investigator(case_Role):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Investigator'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Investigator"
@@ -6557,7 +8457,12 @@ class case_InvestigativeAction(case_Action):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/InvestigativeAction'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/InvestigativeAction"
@@ -6574,7 +8479,12 @@ class case_Investigation(case_ContextualCompilation):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Investigation'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Investigation"
@@ -6591,7 +8501,12 @@ class case_ExaminerActionLifecylce(case_ActionLifecycle):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/ExaminerActionLifecylce"
@@ -6608,7 +8523,12 @@ class case_Examiner(case_Role):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Examiner'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Examiner"
@@ -6625,7 +8545,12 @@ class case_Authorization(case_UcoObject):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Authorization'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Authorization"
@@ -6642,7 +8567,12 @@ class case_Attorney(case_Role):
     Based on class with IRI 'https://ontology.caseontology.org/case/investigation/Attorney'.
     """
 
-    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(
+        self,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Attorney"
