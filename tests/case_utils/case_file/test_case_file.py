@@ -122,14 +122,14 @@ WHERE {
     )
 
     n_observable_object = None
-    for result in graph_case_file_disable_hashes.query(query_confirm_mtime):
+    for result in graph_case_file_disable_hashes.query(query_object):
         (n_observable_object,) = result
     assert (
         not n_observable_object is None
     ), "File object with expected mtime not found in hashless graph."
 
     n_observable_object = None
-    for result in graph_case_file.query(query_confirm_mtime):
+    for result in graph_case_file.query(query_object):
         (n_observable_object,) = result
     assert (
         not n_observable_object is None
