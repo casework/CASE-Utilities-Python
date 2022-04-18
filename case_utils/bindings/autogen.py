@@ -44,8 +44,8 @@ class CASEPropertyConstructor(object):
         property_iri: str,
         min_count: int = 0,
         max_count: typing.Optional[int] = None,
-        *args,
-        **kwargs
+        *args: typing.Any,
+        **kwargs: typing.Any
     ) -> None:
         self.property_iri: str = property_iri
         self.min_count: int = min_count
@@ -54,7 +54,7 @@ class CASEPropertyConstructor(object):
 
 class CASEClassConstructor(object):
     def __init__(
-        self, class_iri: str, *args, documentation_comment: str = None, **kwargs
+        self, class_iri: str, *args: typing.Any, documentation_comment: typing.Optional[str] = None, **kwargs: typing.Any
     ) -> None:
         self.class_iri: str = class_iri
         self.case_class_name: str = "case_" + class_basename(class_iri)
@@ -86,7 +86,7 @@ class CASEClassConstructor(object):
 
         # Build initializer.
         parts.append(
-            "    def __init__(self, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:"
+            "    def __init__(self, *args: typing.Any, type_iris: typing.Set[str] = set(), **kwargs: typing.Any) -> None:"
         )
         # Add types in initializer.
         if "'" in self.class_iri:
@@ -170,7 +170,7 @@ NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/co
 NS_UCO_OBSERVABLE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/observable/")
 
 class NodeConstructor(object):
-    def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args, type_iris: typing.Set[str] = set(), **kwargs) -> None:
+    def __init__(self, graph: rdflib.Graph, node_iri: typing.Optional[str] = None, *args: typing.Any, type_iris: typing.Set[str] = set(), **kwargs: typing.Any) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
         self._node: typing.Optional[rdflib.IdentifiedNode] = None
