@@ -23,6 +23,7 @@ __init__.py: \
   autogen.py
 	source $(top_srcdir)/tests/venv/bin/activate \
 	  && mypy \
+	    --strict \
 	    autogen.py
 	source $(top_srcdir)/tests/venv/bin/activate \
 	  && python3 autogen.py \
@@ -32,6 +33,7 @@ __init__.py: \
 	    _$@
 	source $(top_srcdir)/tests/venv/bin/activate \
 	  && mypy \
+	    --strict \
 	    _$@
 	mv _$@ $@
 
