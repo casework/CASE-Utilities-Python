@@ -27,19 +27,9 @@ import rdflib  # type: ignore
 
 import case_utils
 import case_utils.bindings
+from case_utils.namespace import *
 
 DEFAULT_PREFIX = "http://example.org/kb/"
-
-NS_RDF = rdflib.RDF
-NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
-NS_UCO_OBSERVABLE = rdflib.Namespace(
-    "https://ontology.unifiedcyberontology.org/uco/observable/"
-)
-NS_UCO_TYPES = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/types/")
-NS_UCO_VOCABULARY = rdflib.Namespace(
-    "https://ontology.unifiedcyberontology.org/uco/vocabulary/"
-)
-NS_XSD = rdflib.XSD
 
 # Shortcut syntax for defining an immutable named tuple is noted here:
 # https://docs.python.org/3/library/typing.html#typing.NamedTuple

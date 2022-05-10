@@ -33,3 +33,14 @@ make check
 git commit -m "Build CASE 0.6.0 monolithic .ttl files" case_utils/ontology/case-0.6.0-subclasses.ttl case_utils/ontology/case-0.6.0.ttl
 git commit -m "Update CASE ontology pointer to version 0.6.0" dependencies/CASE case_utils/ontology/version_info.py
 ```
+
+This project uses [the `pre-commit` tool](https://pre-commit.com/) for linting The easiest way to install it is with `pip`:
+```bash
+pip install pre-commit
+pre-commit --version
+```
+
+The `pre-commit` tool hooks into Git's commit machinery to run a set of linters and static analyzers over each change. To install `pre-commit` into Git's hooks, run:
+```bash
+pre-commit install
+```

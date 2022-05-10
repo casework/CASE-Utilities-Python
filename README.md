@@ -136,3 +136,10 @@ Some `make` targets are defined for this repository:
 * `check` - Run unit tests.
 * `clean` - Remove test build files, but not downloaded files.
 * `download` - Download files sufficiently to run the unit tests offline.  This will *not* include the ontology repositories tracked as submodules.  Note if you do need to work offline, be aware touching the `setup.cfg` file in the project root directory, or `tests/requirements.txt`, will trigger a virtual environment rebuild.
+
+
+## Licensing
+
+This repository is licensed under the Apache 2.0 License.  See [LICENSE](LICENSE).
+
+Portions of this repository contributed by NIST are governed by the [NIST Software Licensing Statement](THIRD_PARTY_LICENSES.md#nist-software-licensing-statement).

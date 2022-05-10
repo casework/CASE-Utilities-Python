@@ -1,5 +1,4 @@
 PyLD
-black
 mypy
 networkx
 pytest

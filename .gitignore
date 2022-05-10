@@ -2,6 +2,7 @@
 *.swp
 .DS_Store
 .idea/
+.venv-pre-commit/
 __pycache__
 build/
 case_utils.egg-info/
