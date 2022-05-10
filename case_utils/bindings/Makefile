@@ -29,9 +29,6 @@ __init__.py: \
 	  && python3 autogen.py \
 	    > _$@
 	source $(top_srcdir)/tests/venv/bin/activate \
-	  && black \
-	    _$@
-	source $(top_srcdir)/tests/venv/bin/activate \
 	  && mypy \
 	    --strict \
 	    _$@
