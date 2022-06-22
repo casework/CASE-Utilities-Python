@@ -1,6 +1,6 @@
 # CASE Python Utilities
 
-This project provides various specialized utilities for producing data in the [CASE](https://caseontology.org/) format.
+This project provides various specialized utilities for producing and analyzing data in the [CASE](https://caseontology.org/) format.
 
 
 ## Disclaimer
@@ -10,12 +10,28 @@ Participation by NIST in the creation of the documentation of mentioned software
 
 ## Installation
 
+This repository can be installed from PyPI or from source.
+
+
+### Installing from PyPI
+
+```bash
+pip install case_utils
+```
+
+Users who wish to install from PyPI should be aware that while CASE's ontology is in its pre-1.0.0 release state, backwards-incompatible ontology changes may occur.  This may manifest as [`case_validate`](#case_validate) reporting data review errors after installing an updated `case_utils` version.  Users may wish to pin `case_utils` within any dependent code bases to be less than the next unreleased SEMVER-minor version.  (E.g. if `case_utils` version `0.8.0` is currently available, a newly adopting project might wish to track `case_utils<0.9.0` among its dependencies.)
+
+
+### Installing from source
+
+Users who wish to install pre-release versions and/or make improvements to the code base should install in this manner. 
+
 1. Clone this repository.
 2. (Optional) Create and activate a virtual environment.
 3. (Optional) Upgrade `pip` with `pip install --upgrade pip`.  (This can speed installation of some dependent packages.)
-4. Run `pip install .`.
+4. Run `pip install $x`, where `$x` is the path to the cloned repository.
 
-Installation is demonstrated in the `.venv.done.log` target of the `tests/` directory's [`Makefile`](tests/Makefile).
+Local installation is demonstrated in the `.venv.done.log` target of the `tests/` directory's [`Makefile`](tests/Makefile).
 
 
 ## Usage

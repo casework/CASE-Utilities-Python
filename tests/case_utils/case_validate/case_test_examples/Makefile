@@ -21,7 +21,7 @@ examples_srcdir := $(case_srcdir)/tests/examples
 
 tests_srcdir := $(top_srcdir)/tests
 
-RDF_TOOLKIT_JAR := $(case_srcdir)/lib/rdf-toolkit.jar
+RDF_TOOLKIT_JAR := $(case_srcdir)/dependencies/UCO/lib/rdf-toolkit.jar
 
 all: \
   investigative_action_PASS_validation.ttl \

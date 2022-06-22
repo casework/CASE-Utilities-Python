@@ -17,6 +17,8 @@ This module provides importable constants for namespaces.
 To use, add "from case_utils.namespace import *".  Namespace variables starting with "NS_" are imported.  As needs are demonstrated in CASE tooling (both in case_utils and from downstream requests), namespaces will also be imported from rdflib for a consistent "NS_*" spelling.
 """
 
+__version__ = "0.1.0"
+
 import rdflib  # type: ignore
 
 NS_SH = rdflib.SH

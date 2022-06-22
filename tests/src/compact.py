@@ -18,11 +18,11 @@ This script requires adherence to the JSON-LD requirement that terms not be empt
 https://www.w3.org/TR/json-ld11/#terms
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
+import json
 import logging
 import os
-import json
 import typing
 
 import pyld  # type: ignore
@@ -35,7 +35,7 @@ def main() -> None:
         doc = None
         with open(args.in_json, "r") as in_fh:
             doc = json.load(in_fh)
-        assert not doc is None
+        assert doc is not None
         assert isinstance(
             doc, (dict, list)
         ), "JSON parsed top-level type assumption invalidated"
@@ -46,7 +46,7 @@ def main() -> None:
         def _accrue_local_context(doc_object: typing.Dict[str, typing.Any]) -> None:
             local_context = doc_object.get("@context", dict())
             for key in local_context.keys():
-                if not key in total_context:
+                if key not in total_context:
                     # Accrue new key.
                     total_context[key] = local_context[key]
 

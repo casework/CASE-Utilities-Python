@@ -11,7 +11,7 @@
 #
 # We would appreciate acknowledgement if the software is used.
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 import importlib.resources
 import logging
@@ -22,7 +22,7 @@ import rdflib
 # Yes, this next import is self-referential (/circular).  But, it does work with importlib.
 import case_utils.ontology
 
-from .version_info import *
+from .version_info import CURRENT_CASE_VERSION
 
 _logger = logging.getLogger(os.path.basename(__file__))
 

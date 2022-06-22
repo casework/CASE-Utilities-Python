@@ -14,8 +14,6 @@
 import pytest
 import rdflib  # type: ignore
 
-import case_utils
-
 PATH_TO_TTL = "/nonexistent/foo.ttl"
 PATH_TO_JSON = "/nonexistent/foo.json"
 PATH_TO_JSONLD = "/nonexistent/foo.jsonld"

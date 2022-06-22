@@ -81,7 +81,7 @@ def test_format_jsonld_output_jsonld() -> None:
     subject_file = "format_jsonld_output_jsonld.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
-    graph = _parse_graph(subject_file, asserted_format)
+    _parse_graph(subject_file, asserted_format)
 
 
 @pytest.mark.xfail(
@@ -107,7 +107,7 @@ def test_format_jsonld_output_unspecified() -> None:
     subject_file = "format_jsonld_output_unspecified.jsonld"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "json-ld"
-    graph = _parse_graph(subject_file, asserted_format)
+    _parse_graph(subject_file, asserted_format)
 
 
 @pytest.mark.xfail(
@@ -124,7 +124,7 @@ def test_format_turtle_output_turtle() -> None:
     subject_file = "format_turtle_output_turtle.ttl"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "turtle"
-    graph = _parse_graph(subject_file, asserted_format)
+    _parse_graph(subject_file, asserted_format)
 
 
 def test_format_turtle_output_txt() -> None:
@@ -138,7 +138,7 @@ def test_format_turtle_output_unspecified() -> None:
     subject_file = "format_turtle_output_unspecified.ttl"
     asserted_format = _guess_format(subject_file)
     assert asserted_format == "turtle"
-    graph = _parse_graph(subject_file, asserted_format)
+    _parse_graph(subject_file, asserted_format)
 
 
 @pytest.mark.xfail(

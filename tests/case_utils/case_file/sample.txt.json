@@ -35,19 +35,19 @@
     },
     "@graph": [
         {
-            "@id": "kb:file-44aa82fe-a733-5892-8daa-7a28378d6afc",
+            "@id": "kb:file-789a91ef-6446-548c-9911-dcc5168f25ea",
             "@type": "uco-observable:File",
             "uco-core:hasFacet": [
                 {
-                    "@id": "_:N86dc036c736c420684afd0e2cdea35e8"
+                    "@id": "_:N9cb3cc2ab59546a3a8409b0a43beb4c3"
                 },
                 {
-                    "@id": "_:N30cc9a3cb8d741c3896d6ff81ae053f6"
+                    "@id": "_:N34067c06b9364c50870f642861cac333"
                 }
             ]
         },
         {
-            "@id": "_:N86dc036c736c420684afd0e2cdea35e8",
+            "@id": "_:N9cb3cc2ab59546a3a8409b0a43beb4c3",
             "@type": "uco-observable:FileFacet",
             "uco-observable:fileName": "sample.txt",
             "uco-observable:modifiedTime": {
@@ -57,26 +57,26 @@
             "uco-observable:sizeInBytes": 4
         },
         {
-            "@id": "_:N30cc9a3cb8d741c3896d6ff81ae053f6",
+            "@id": "_:N34067c06b9364c50870f642861cac333",
             "@type": "uco-observable:ContentDataFacet",
             "uco-observable:hash": [
                 {
-                    "@id": "_:Ncdaad817bed0440cb8df78ea13bca979"
+                    "@id": "_:N8536d3196ade4a33898077091ffe7b37"
                 },
                 {
-                    "@id": "_:Nb29e43af29e74e30af823ba2ac7fc826"
+                    "@id": "_:Nee102c2e670c450b9c7bfe532916631a"
                 },
                 {
-                    "@id": "_:Nad4c18c5ea3a45589ee33d98134f4f6e"
+                    "@id": "_:N874bad97d6e94943a23d04234517307f"
                 },
                 {
-                    "@id": "_:N3a34ed3719864b4fbd9e6da88ae97d54"
+                    "@id": "_:Nb1f22efd766f43768fc83a2183df2396"
                 }
             ],
             "uco-observable:sizeInBytes": 4
         },
         {
-            "@id": "_:Ncdaad817bed0440cb8df78ea13bca979",
+            "@id": "_:N8536d3196ade4a33898077091ffe7b37",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -88,7 +88,7 @@
             }
         },
         {
-            "@id": "_:Nb29e43af29e74e30af823ba2ac7fc826",
+            "@id": "_:Nee102c2e670c450b9c7bfe532916631a",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -100,7 +100,7 @@
             }
         },
         {
-            "@id": "_:Nad4c18c5ea3a45589ee33d98134f4f6e",
+            "@id": "_:N874bad97d6e94943a23d04234517307f",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",
@@ -112,7 +112,7 @@
             }
         },
         {
-            "@id": "_:N3a34ed3719864b4fbd9e6da88ae97d54",
+            "@id": "_:Nb1f22efd766f43768fc83a2183df2396",
             "@type": "uco-types:Hash",
             "uco-types:hashMethod": {
                 "@type": "uco-vocabulary:HashNameVocab",

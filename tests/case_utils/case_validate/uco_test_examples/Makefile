@@ -23,7 +23,7 @@ examples_srcdir := $(uco_srcdir)/tests/examples
 
 tests_srcdir := $(top_srcdir)/tests
 
-RDF_TOOLKIT_JAR := $(case_srcdir)/lib/rdf-toolkit.jar
+RDF_TOOLKIT_JAR := $(uco_srcdir)/lib/rdf-toolkit.jar
 
 all: \
   action_inheritance_PASS_validation.ttl \

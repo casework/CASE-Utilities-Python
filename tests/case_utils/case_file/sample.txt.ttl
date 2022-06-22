@@ -8,7 +8,7 @@
 @prefix uco-vocabulary: <https://ontology.unifiedcyberontology.org/uco/vocabulary/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-kb:file-1080c4cc-7886-5a52-bac1-f6a2b16c0ddb
+kb:file-ace6460a-92a9-58b9-83ea-a18ae87f6e04
 	a uco-observable:File ;
 	uco-core:hasFacet
 		[

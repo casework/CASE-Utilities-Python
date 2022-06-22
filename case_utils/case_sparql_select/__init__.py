@@ -26,11 +26,10 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 import argparse
 import binascii
-import importlib.resources
 import logging
 import os
 import sys
@@ -39,8 +38,10 @@ import pandas as pd  # type: ignore
 import rdflib.plugins.sparql  # type: ignore
 
 import case_utils.ontology
-
-from case_utils.ontology.version_info import *
+from case_utils.ontology.version_info import (
+    CURRENT_CASE_VERSION,
+    built_version_choices_list,
+)
 
 NS_XSD = rdflib.XSD
 

@@ -19,7 +19,7 @@ import pytest
 import rdflib.plugins.sparql  # type: ignore
 
 import case_utils.ontology
-from case_utils.namespace import *
+from case_utils.namespace import NS_UCO_CORE, NS_UCO_OBSERVABLE, NS_UCO_TYPES
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -117,12 +117,12 @@ WHERE {
     for result in graph_case_file_disable_hashes.query(query_object):
         (n_observable_object,) = result
     assert (
-        not n_observable_object is None
+        n_observable_object is not None
     ), "File object with expected mtime not found in hashless graph."
 
     n_observable_object = None
     for result in graph_case_file.query(query_object):
         (n_observable_object,) = result
     assert (
-        not n_observable_object is None
+        n_observable_object is not None
     ), "File object with expected mtime not found in fuller graph."

@@ -15,8 +15,6 @@ import typing
 
 import rdflib.plugins.sparql  # type: ignore
 
-import case_utils
-
 
 def _test_subclass_templates_result(filename: str, expected: typing.Set[str]) -> None:
     computed: typing.Set[str] = set()
@@ -38,8 +36,7 @@ WHERE {
 
 
 def _test_w3_templates_with_blank_nodes_result(filename: str) -> None:
-    ground_truth_positive = {("Alice", "Hacker"), ("Bob", "Hacker")}
-    ground_truth_negative: typing.Set[str] = set()
+    expected = {("Alice", "Hacker"), ("Bob", "Hacker")}
 
     graph = rdflib.Graph()
     graph.parse(filename)
@@ -59,7 +56,7 @@ WHERE {
     for result in graph.query(query_string):
         (l_given_name, l_family_name) = result
         computed.add((l_given_name.toPython(), l_family_name.toPython()))
-    assert computed == ground_truth_positive
+    assert expected == computed
 
 
 def test_w3_templates_with_blank_nodes_result_json() -> None:

@@ -15,7 +15,7 @@
 This script executes a SPARQL CONSTRUCT query, returning a graph of the generated triples.
 """
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 import argparse
 import logging
@@ -26,8 +26,10 @@ import typing
 import rdflib.plugins.sparql  # type: ignore
 
 import case_utils.ontology
-
-from case_utils.ontology.version_info import *
+from case_utils.ontology.version_info import (
+    CURRENT_CASE_VERSION,
+    built_version_choices_list,
+)
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -81,7 +83,7 @@ def main() -> None:
     construct_query_text = None
     with open(args.in_sparql, "r") as in_fh:
         construct_query_text = in_fh.read().strip()
-    assert not construct_query_text is None
+    assert construct_query_text is not None
 
     if "subClassOf" in construct_query_text:
         case_utils.ontology.load_subclass_hierarchy(

@@ -15,10 +15,12 @@
 This module creates a graph object that provides a basic UCO characterization of a single file.  The gathered metadata is among the more "durable" file characteristics, i.e. characteristics that would remain consistent when transferring a file between locations.
 """
 
-__version__ = "0.3.0"
+__version__ = "0.3.2"
 
+import argparse
 import datetime
 import hashlib
+import logging
 import os
 import typing
 import warnings
@@ -27,7 +29,14 @@ import rdflib  # type: ignore
 
 import case_utils
 import case_utils.bindings
-from case_utils.namespace import *
+from case_utils.namespace import (
+    NS_RDF,
+    NS_UCO_CORE,
+    NS_UCO_OBSERVABLE,
+    NS_UCO_TYPES,
+    NS_UCO_VOCABULARY,
+    NS_XSD,
+)
 
 DEFAULT_PREFIX = "http://example.org/kb/"
 
@@ -141,7 +150,7 @@ def create_file_node(
                     sha1obj.update(buf)
                     sha256obj.update(buf)
                     sha512obj.update(buf)
-            if not stashed_error is None:
+            if stashed_error is not None:
                 raise stashed_error
             current_hashdict = HashDict(
                 byte_tally,
@@ -176,7 +185,7 @@ def create_file_node(
 
         # Add confirmed hashes into graph.
         for key in successful_hashdict._fields:
-            if not key in ("md5", "sha1", "sha256", "sha512"):
+            if key not in ("md5", "sha1", "sha256", "sha512"):
                 continue
             hash_constructor = case_utils.bindings.case_Hash(graph)
             content_data_facet_constructor.add_hash(hash_constructor)
@@ -203,10 +212,9 @@ def create_file_node(
 
 
 def main() -> None:
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-prefix", default=DEFAULT_PREFIX)
+    parser.add_argument("--debug", action="store_true")
     parser.add_argument("--disable-hashes", action="store_true")
     parser.add_argument("--disable-mtime", action="store_true")
     parser.add_argument(
@@ -215,6 +223,8 @@ def main() -> None:
     parser.add_argument("out_graph")
     parser.add_argument("in_file")
     args = parser.parse_args()
+
+    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
 
     case_utils.local_uuid.configure()
 

@@ -19,7 +19,7 @@ case_srcdir := $(top_srcdir)/dependencies/CASE
 
 uco_srcdir := $(case_srcdir)/dependencies/UCO
 
-RDF_TOOLKIT_JAR := $(case_srcdir)/lib/rdf-toolkit.jar
+RDF_TOOLKIT_JAR := $(uco_srcdir)/lib/rdf-toolkit.jar
 
 case_version := $(shell python3 version_info.py)
 

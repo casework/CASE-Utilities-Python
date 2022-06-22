@@ -9,7 +9,23 @@
     },
     "@graph": [
         {
-            "@id": "kb:file-1080c4cc-7886-5a52-bac1-f6a2b16c0ddb",
+            "@id": "kb:file-800784de-5c9e-5eb2-b843-0ac51a1bd4b9",
+            "@type": "uco-observable:File",
+            "uco-core:hasFacet": {
+                "@type": "uco-observable:FileFacet",
+                "uco-observable:fileName": "sample.txt",
+                "uco-observable:modifiedTime": {
+                    "@type": "xsd:dateTime",
+                    "@value": "2010-01-02T03:04:56+00:00"
+                },
+                "uco-observable:sizeInBytes": {
+                    "@type": "xsd:integer",
+                    "@value": "4"
+                }
+            }
+        },
+        {
+            "@id": "kb:file-ace6460a-92a9-58b9-83ea-a18ae87f6e04",
             "@type": "uco-observable:File",
             "uco-core:hasFacet": [
                 {
@@ -78,22 +94,6 @@
                     }
                 }
             ]
-        },
-        {
-            "@id": "kb:file-b5e8a943-c556-5964-a618-8f0d000822af",
-            "@type": "uco-observable:File",
-            "uco-core:hasFacet": {
-                "@type": "uco-observable:FileFacet",
-                "uco-observable:fileName": "sample.txt",
-                "uco-observable:modifiedTime": {
-                    "@type": "xsd:dateTime",
-                    "@value": "2010-01-02T03:04:56+00:00"
-                },
-                "uco-observable:sizeInBytes": {
-                    "@type": "xsd:integer",
-                    "@value": "4"
-                }
-            }
         }
     ]
 }

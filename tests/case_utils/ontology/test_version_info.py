@@ -18,8 +18,10 @@ import typing
 import rdflib  # type: ignore
 
 import case_utils.ontology
-
-from case_utils.ontology.version_info import *
+from case_utils.ontology.version_info import (
+    CURRENT_CASE_VERSION,
+    built_version_choices_list,
+)
 
 NS_OWL = rdflib.OWL
 
@@ -30,7 +32,7 @@ def test_built_version_choices_list() -> None:
             continue
         ttl_filename = built_version_choice + ".ttl"
         with importlib.resources.open_text(case_utils.ontology, ttl_filename) as tmp_fh:
-            pass
+            assert tmp_fh
 
 
 def test_case_ontology_version_info_versus_monolithic() -> None:
@@ -49,7 +51,7 @@ def test_case_ontology_version_info_versus_monolithic() -> None:
         )
     ):
         version_info = str(triple[2])
-    assert not version_info is None, "Failed to retrieve owl:versionInfo"
+    assert version_info is not None, "Failed to retrieve owl:versionInfo"
 
     assert (
         CURRENT_CASE_VERSION == version_info
@@ -79,7 +81,7 @@ def test_case_ontology_version_info_versus_submodule() -> None:
         )
     ):
         version_info = str(triple[2])
-    assert not version_info is None, "Failed to retrieve owl:versionInfo"
+    assert version_info is not None, "Failed to retrieve owl:versionInfo"
 
     assert (
         CURRENT_CASE_VERSION == version_info
