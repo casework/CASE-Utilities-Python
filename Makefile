@@ -33,8 +33,6 @@ all: \
 	cd dependencies \
 	  && git diff . \
 	    | cat
-	git submodule init dependencies/rdflib
-	git submodule update dependencies/rdflib
 	test -r dependencies/CASE/ontology/master/case.ttl \
 	  || (git submodule init dependencies/CASE && git submodule update dependencies/CASE)
 	test -r dependencies/CASE/ontology/master/case.ttl

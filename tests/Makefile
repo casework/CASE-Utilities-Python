@@ -46,9 +46,6 @@ all: \
 	  && pip install \
 	    --requirement requirements.txt
 	source venv/bin/activate \
-	  && pip install \
-	    $(top_srcdir)/dependencies/rdflib
-	source venv/bin/activate \
 	  && cd $(top_srcdir) \
 	    && pip install \
 	      --editable \
