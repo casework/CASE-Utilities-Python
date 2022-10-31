@@ -3,8 +3,8 @@ Conforms: False
 Results (1):
 Constraint Violation in ClassConstraintComponent (http://www.w3.org/ns/shacl#ClassConstraintComponent):
 	Severity: sh:Violation
-	Source Shape: [ sh:class core:UcoObject ; sh:minCount Literal("1", datatype=xsd:integer) ; sh:nodeKind sh:BlankNodeOrIRI ; sh:path core:object ]
-	Focus Node: kb:provenance-record-1
-	Value Node: kb:file-1
+	Source Shape: [ sh:class core:UcoObject ; sh:minCount Literal("1", datatype=xsd:integer) ; sh:nodeKind sh:IRI ; sh:path core:object ]
+	Focus Node: kb:provenance-record-d6901cc2-1299-4c5f-a6f3-8cdba136169c
+	Value Node: kb:file-b31c8f5c-cdbf-466d-a88a-034531fc5933
 	Result Path: core:object
 	Message: Value does not have class core:UcoObject

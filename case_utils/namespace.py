@@ -17,12 +17,14 @@ This module provides importable constants for namespaces.
 To use, add "from case_utils.namespace import *".  Namespace variables starting with "NS_" are imported.  As needs are demonstrated in CASE tooling (both in case_utils and from downstream requests), namespaces will also be imported from rdflib for a consistent "NS_*" spelling.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
-import rdflib  # type: ignore
+import rdflib
 
-NS_SH = rdflib.SH
+NS_OWL = rdflib.OWL
 NS_RDF = rdflib.RDF
+NS_RDFS = rdflib.RDFS
+NS_SH = rdflib.SH
 NS_XSD = rdflib.XSD
 
 NS_CASE_INVESTIGATION = rdflib.Namespace(
@@ -31,8 +33,12 @@ NS_CASE_INVESTIGATION = rdflib.Namespace(
 NS_CASE_VOCABULARY = rdflib.Namespace(
     "https://ontology.caseontology.org/case/vocabulary/"
 )
+NS_CO = rdflib.Namespace("http://purl.org/co/")
 NS_UCO_ACTION = rdflib.Namespace(
     "https://ontology.unifiedcyberontology.org/uco/action/"
+)
+NS_UCO_CONFIGURATION = rdflib.Namespace(
+    "https://ontology.unifiedcyberontology.org/uco/configuration/"
 )
 NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/core/")
 NS_UCO_IDENTITY = rdflib.Namespace(

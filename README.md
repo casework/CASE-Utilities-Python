@@ -16,7 +16,7 @@ This repository can be installed from PyPI or from source.
 ### Installing from PyPI
 
 ```bash
-pip install case_utils
+pip install case-utils
 ```
 
 Users who wish to install from PyPI should be aware that while CASE's ontology is in its pre-1.0.0 release state, backwards-incompatible ontology changes may occur.  This may manifest as [`case_validate`](#case_validate) reporting data review errors after installing an updated `case_utils` version.  Users may wish to pin `case_utils` within any dependent code bases to be less than the next unreleased SEMVER-minor version.  (E.g. if `case_utils` version `0.8.0` is currently available, a newly adopting project might wish to track `case_utils<0.9.0` among its dependencies.)
@@ -24,7 +24,7 @@ Users who wish to install from PyPI should be aware that while CASE's ontology i
 
 ### Installing from source
 
-Users who wish to install pre-release versions and/or make improvements to the code base should install in this manner. 
+Users who wish to install pre-release versions and/or make improvements to the code base should install in this manner.
 
 1. Clone this repository.
 2. (Optional) Create and activate a virtual environment.

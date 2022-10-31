@@ -90,6 +90,7 @@ check: \
 
 clean:
 	@$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  clean
 	@rm -f \
@@ -125,5 +126,6 @@ distclean: \
 download: \
   .git_submodule_init.done.log
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  download

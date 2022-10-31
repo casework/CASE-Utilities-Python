@@ -16,7 +16,7 @@ import logging
 import os
 
 import pytest
-import rdflib.plugins.sparql  # type: ignore
+import rdflib.plugins.sparql
 
 import case_utils.ontology
 from case_utils.namespace import NS_UCO_CORE, NS_UCO_OBSERVABLE, NS_UCO_TYPES
@@ -80,7 +80,9 @@ WHERE {
 }
 """
 
-    query_object = rdflib.plugins.sparql.prepareQuery(query_sparql, initNs=NSDICT)
+    query_object = rdflib.plugins.sparql.processor.prepareQuery(
+        query_sparql, initNs=NSDICT
+    )
 
     for result in graph_case_file.query(query_object):
         (l_hash_method, l_hash_value) = result
@@ -109,7 +111,7 @@ WHERE {
     .
 }
 """
-    query_object = rdflib.plugins.sparql.prepareQuery(
+    query_object = rdflib.plugins.sparql.processor.prepareQuery(
         query_confirm_mtime, initNs=NSDICT
     )
 

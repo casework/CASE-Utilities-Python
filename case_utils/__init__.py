@@ -11,6 +11,6 @@
 #
 # We would appreciate acknowledgement if the software is used.
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 from . import local_uuid  # noqa: F401

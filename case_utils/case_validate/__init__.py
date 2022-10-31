@@ -29,7 +29,7 @@ a monolithic file; see case_utils.ontology if interested in further
 details.)
 """
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 import argparse
 import importlib.resources
@@ -39,7 +39,7 @@ import sys
 import typing
 
 import pyshacl  # type: ignore
-import rdflib.util  # type: ignore
+import rdflib.util
 
 import case_utils.ontology
 from case_utils.ontology.version_info import (

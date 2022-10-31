@@ -12,7 +12,7 @@
 # We would appreciate acknowledgement if the software is used.
 
 import pytest
-import rdflib  # type: ignore
+import rdflib
 
 PATH_TO_TTL = "/nonexistent/foo.ttl"
 PATH_TO_JSON = "/nonexistent/foo.json"

@@ -16,7 +16,7 @@ import pathlib
 import typing
 
 import pytest
-import rdflib.plugins.parsers.notation3  # type: ignore
+import rdflib.plugins.parsers.notation3
 
 srcdir = pathlib.Path(__file__).parent
 
@@ -26,7 +26,7 @@ Conforms: True
 """.strip()
 
 
-def _guess_format(basename) -> typing.Optional[str]:
+def _guess_format(basename: str) -> typing.Optional[str]:
     """
     Guess format by file extension.
     """

@@ -51,7 +51,7 @@ import os
 import typing
 
 import pytest
-import rdflib.plugins.sparql  # type: ignore
+import rdflib.plugins.sparql
 
 _logger = logging.getLogger(os.path.basename(__file__))
 

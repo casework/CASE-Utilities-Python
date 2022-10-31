@@ -15,7 +15,7 @@
 This module creates a graph object that provides a basic UCO characterization of a single file.  The gathered metadata is among the more "durable" file characteristics, i.e. characteristics that would remain consistent when transferring a file between locations.
 """
 
-__version__ = "0.3.2"
+__version__ = "0.4.0"
 
 import argparse
 import datetime
@@ -25,7 +25,7 @@ import os
 import typing
 import warnings
 
-import rdflib  # type: ignore
+import rdflib
 
 import case_utils
 import case_utils.bindings
@@ -83,9 +83,11 @@ def create_file_node(
     :returns: The File Observable Object's node.
     :rtype: rdflib.URIRef
     """
+    node_namespace = rdflib.Namespace(node_prefix)
+
     if node_iri is None:
         node_slug = "file-" + case_utils.local_uuid.local_uuid()
-        node_iri = rdflib.Namespace(node_prefix)[node_slug]
+        node_iri = node_namespace[node_slug]
     file_constructor = case_utils.bindings.case_File(graph, node_iri)
     file_facet_constructor = case_utils.bindings.case_FileFacet(graph)
     file_constructor.add_facet(file_facet_constructor)

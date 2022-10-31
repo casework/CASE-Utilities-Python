@@ -18,17 +18,17 @@ import case_utils.local_uuid
 
 def test_local_uuid_deprecation(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("DEMO_UUID_REQUESTING_NONRANDOM", "NONRANDOM_REQUESTED")
-    with pytest.warns(DeprecationWarning):
+    with pytest.warns(FutureWarning):
         case_utils.local_uuid.configure()
 
 
 def test_local_uuid_nondirectory(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("CASE_DEMO_NONRANDOM_UUID_BASE", "/dev/null")
-    with pytest.warns(UserWarning):
+    with pytest.warns(RuntimeWarning):
         case_utils.local_uuid.configure()
 
 
 def test_local_uuid_nonexistent(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("CASE_DEMO_NONRANDOM_UUID_BASE", "/dev/nonexistent")
-    with pytest.warns(UserWarning):
+    with pytest.warns(RuntimeWarning):
         case_utils.local_uuid.configure()

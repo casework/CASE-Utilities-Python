@@ -38,7 +38,7 @@ def configure() -> None:
     if os.getenv("DEMO_UUID_REQUESTING_NONRANDOM") == "NONRANDOM_REQUESTED":
         warnings.warn(
             "Environment variable DEMO_UUID_REQUESTING_NONRANDOM is deprecated.  See case_utils.local_uuid.demo_uuid for usage notes on its replacement, CASE_DEMO_NONRANDOM_UUID_BASE.  Proceeding with random UUIDs.",
-            DeprecationWarning,
+            FutureWarning,
         )
         return
 
@@ -49,12 +49,14 @@ def configure() -> None:
     base_dir_original_path = pathlib.Path(env_base_dir_name)
     if not base_dir_original_path.exists():
         warnings.warn(
-            "Environment variable CASE_DEMO_NONRANDOM_UUID_BASE is expected to refer to an existing directory.  Proceeding with random UUIDs."
+            "Environment variable CASE_DEMO_NONRANDOM_UUID_BASE is expected to refer to an existing directory.  Proceeding with random UUIDs.",
+            RuntimeWarning,
         )
         return
     if not base_dir_original_path.is_dir():
         warnings.warn(
-            "Environment variable CASE_DEMO_NONRANDOM_UUID_BASE is expected to refer to a directory.  Proceeding with random UUIDs."
+            "Environment variable CASE_DEMO_NONRANDOM_UUID_BASE is expected to refer to a directory.  Proceeding with random UUIDs.",
+            RuntimeWarning,
         )
         return
 
@@ -108,9 +110,9 @@ def demo_uuid() -> str:
     """
     This function generates a repeatable UUID, drawing on non-varying elements of the environment and process call for entropy.
 
-    WARNING: This function was developed for use ONLY for reducing (but not eliminating) version-control edits to identifiers in sample data.  It creates UUIDs that are decidedly NOT random, and should remain consistent on repeated calls to the importing script.
+    WARNING: This function was developed for use ONLY for reducing (but not eliminating) version-control edits to identifiers when generating sample data.  It creates UUIDs that are decidedly NOT random, and should remain consistent on repeated calls to the importing script.
 
-    To prevent accidental non-random UUID usage, an environment variable must be set to a string provided by the caller.  The variable's required value is the path to some directory.  The variable's recommended value is the equivalent of the Make variable "top_srcdir" - that is, the root directory of the containing Git repository, some parent of the current process's current working directory.
+    To prevent accidental non-random UUID usage, an environment variable, CASE_DEMO_NONRANDOM_UUID_BASE, must be set to a string provided by the caller.  The variable's required value is the path to some directory.  The variable's recommended value is the equivalent of the Make variable "top_srcdir" - that is, the root directory of the containing Git repository, some parent of the current process's current working directory.
     """
     global DEMO_UUID_BASE
     global DEMO_UUID_COUNTER

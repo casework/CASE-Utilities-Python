@@ -6,10 +6,10 @@
     },
     "@graph": [
         {
-            "@id": "kb:provenance-record-1",
+            "@id": "kb:provenance-record-d6901cc2-1299-4c5f-a6f3-8cdba136169c",
             "@type": "case-investigation:ProvenanceRecord",
             "uco-core:object": {
-                "@id": "kb:file-1"
+                "@id": "kb:file-b31c8f5c-cdbf-466d-a88a-034531fc5933"
             }
         }
     ]

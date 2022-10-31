@@ -61,15 +61,15 @@ kb.json: \
 	mv _$@ $@
 
 kb.ttl: \
-  $(tests_srcdir)/src/glom_graph.py \
   sample.txt.ttl \
   sample.txt-disable_hashes.ttl \
   sample.txt-nocompact.json
 	source $(tests_srcdir)/venv/bin/activate \
-	  && python3 $(tests_srcdir)/src/glom_graph.py \
-	    __$@ \
+	  && rdfpipe \
+	    --output-format turtle \
 	    sample.txt.ttl \
-	    sample.txt-disable_hashes.ttl
+	    sample.txt-disable_hashes.ttl \
+	    > __$@
 	java -jar $(RDF_TOOLKIT_JAR) \
 	  --infer-base-iri \
 	  --inline-blank-nodes \

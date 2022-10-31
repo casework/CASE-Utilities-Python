@@ -15,6 +15,8 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell cd ../.. ; pwd)
 
+PYTHON3 ?= python3
+
 tests_srcdir := $(top_srcdir)/tests
 
 all: \
@@ -51,6 +53,7 @@ all-case_sparql_select: \
 all-case_validate: \
   $(tests_srcdir)/.venv.done.log
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory case_validate
 
 check: \
@@ -86,11 +89,13 @@ check-case_sparql_select: \
 check-case_validate: \
   $(tests_srcdir)/.venv.done.log
 	$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory case_validate \
 	  check
 
 clean:
 	@$(MAKE) \
+	  PYTHON3=$(PYTHON3) \
 	  --directory case_validate \
 	  clean
 	@$(MAKE) \

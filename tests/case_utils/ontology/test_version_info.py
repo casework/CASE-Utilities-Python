@@ -15,7 +15,7 @@ import importlib.resources
 import pathlib
 import typing
 
-import rdflib  # type: ignore
+import rdflib
 
 import case_utils.ontology
 from case_utils.ontology.version_info import (

@@ -9,19 +9,32 @@
     },
     "@graph": [
         {
+            "@id": "kb:content-data-facet-1833f979-1f19-5543-9d82-6cefd144b169",
+            "@type": "uco-observable:ContentDataFacet",
+            "uco-observable:hash": [
+                {
+                    "@id": "kb:hash-24644904-83ea-5911-aea8-be687a9f3caf"
+                },
+                {
+                    "@id": "kb:hash-295bdeb5-7f23-5a3f-8b7f-4bb1191b7c21"
+                },
+                {
+                    "@id": "kb:hash-39127f5c-598b-51d4-a720-2e949f18f85f"
+                },
+                {
+                    "@id": "kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932"
+                }
+            ],
+            "uco-observable:sizeInBytes": {
+                "@type": "xsd:integer",
+                "@value": "4"
+            }
+        },
+        {
             "@id": "kb:file-800784de-5c9e-5eb2-b843-0ac51a1bd4b9",
             "@type": "uco-observable:File",
             "uco-core:hasFacet": {
-                "@type": "uco-observable:FileFacet",
-                "uco-observable:fileName": "sample.txt",
-                "uco-observable:modifiedTime": {
-                    "@type": "xsd:dateTime",
-                    "@value": "2010-01-02T03:04:56+00:00"
-                },
-                "uco-observable:sizeInBytes": {
-                    "@type": "xsd:integer",
-                    "@value": "4"
-                }
+                "@id": "kb:file-facet-ffa3e6bb-dffc-549d-a7c4-ffc5e90ac55d"
             }
         },
         {
@@ -29,71 +42,86 @@
             "@type": "uco-observable:File",
             "uco-core:hasFacet": [
                 {
-                    "@type": "uco-observable:ContentDataFacet",
-                    "uco-observable:hash": [
-                        {
-                            "@type": "uco-types:Hash",
-                            "uco-types:hashMethod": {
-                                "@type": "uco-vocabulary:HashNameVocab",
-                                "@value": "MD5"
-                            },
-                            "uco-types:hashValue": {
-                                "@type": "xsd:hexBinary",
-                                "@value": "098f6bcd4621d373cade4e832627b4f6"
-                            }
-                        },
-                        {
-                            "@type": "uco-types:Hash",
-                            "uco-types:hashMethod": {
-                                "@type": "uco-vocabulary:HashNameVocab",
-                                "@value": "SHA1"
-                            },
-                            "uco-types:hashValue": {
-                                "@type": "xsd:hexBinary",
-                                "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
-                            }
-                        },
-                        {
-                            "@type": "uco-types:Hash",
-                            "uco-types:hashMethod": {
-                                "@type": "uco-vocabulary:HashNameVocab",
-                                "@value": "SHA256"
-                            },
-                            "uco-types:hashValue": {
-                                "@type": "xsd:hexBinary",
-                                "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-                            }
-                        },
-                        {
-                            "@type": "uco-types:Hash",
-                            "uco-types:hashMethod": {
-                                "@type": "uco-vocabulary:HashNameVocab",
-                                "@value": "SHA512"
-                            },
-                            "uco-types:hashValue": {
-                                "@type": "xsd:hexBinary",
-                                "@value": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
-                            }
-                        }
-                    ],
-                    "uco-observable:sizeInBytes": {
-                        "@type": "xsd:integer",
-                        "@value": "4"
-                    }
+                    "@id": "kb:content-data-facet-1833f979-1f19-5543-9d82-6cefd144b169"
                 },
                 {
-                    "@type": "uco-observable:FileFacet",
-                    "uco-observable:fileName": "sample.txt",
-                    "uco-observable:modifiedTime": {
-                        "@type": "xsd:dateTime",
-                        "@value": "2010-01-02T03:04:56+00:00"
-                    },
-                    "uco-observable:sizeInBytes": {
-                        "@type": "xsd:integer",
-                        "@value": "4"
-                    }
+                    "@id": "kb:file-facet-1297a4bd-563b-54c3-ad8a-f67f01ba9b10"
                 }
             ]
+        },
+        {
+            "@id": "kb:file-facet-1297a4bd-563b-54c3-ad8a-f67f01ba9b10",
+            "@type": "uco-observable:FileFacet",
+            "uco-observable:fileName": "sample.txt",
+            "uco-observable:modifiedTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2010-01-02T03:04:56+00:00"
+            },
+            "uco-observable:sizeInBytes": {
+                "@type": "xsd:integer",
+                "@value": "4"
+            }
+        },
+        {
+            "@id": "kb:file-facet-ffa3e6bb-dffc-549d-a7c4-ffc5e90ac55d",
+            "@type": "uco-observable:FileFacet",
+            "uco-observable:fileName": "sample.txt",
+            "uco-observable:modifiedTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2010-01-02T03:04:56+00:00"
+            },
+            "uco-observable:sizeInBytes": {
+                "@type": "xsd:integer",
+                "@value": "4"
+            }
+        },
+        {
+            "@id": "kb:hash-24644904-83ea-5911-aea8-be687a9f3caf",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "MD5"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "098f6bcd4621d373cade4e832627b4f6"
+            }
+        },
+        {
+            "@id": "kb:hash-295bdeb5-7f23-5a3f-8b7f-4bb1191b7c21",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "SHA1"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
+            }
+        },
+        {
+            "@id": "kb:hash-39127f5c-598b-51d4-a720-2e949f18f85f",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "SHA256"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+            }
+        },
+        {
+            "@id": "kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "SHA512"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
+            }
         }
     ]
 }

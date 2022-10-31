@@ -15,7 +15,7 @@
 This script executes a SPARQL CONSTRUCT query, returning a graph of the generated triples.
 """
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 import argparse
 import logging
@@ -23,7 +23,7 @@ import os
 import sys
 import typing
 
-import rdflib.plugins.sparql  # type: ignore
+import rdflib.plugins.sparql
 
 import case_utils.ontology
 from case_utils.ontology.version_info import (
@@ -90,7 +90,7 @@ def main() -> None:
             in_graph, built_version=args.built_version
         )
 
-    construct_query_object = rdflib.plugins.sparql.prepareQuery(
+    construct_query_object = rdflib.plugins.sparql.processor.prepareQuery(
         construct_query_text, initNs=nsdict
     )
 

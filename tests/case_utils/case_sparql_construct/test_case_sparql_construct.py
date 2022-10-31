@@ -13,7 +13,7 @@
 
 import typing
 
-import rdflib.plugins.sparql  # type: ignore
+import rdflib.plugins.sparql
 
 
 def _test_subclass_templates_result(filename: str, expected: typing.Set[str]) -> None:

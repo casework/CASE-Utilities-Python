@@ -15,6 +15,13 @@ SHELL := /bin/bash
 
 top_srcdir := $(shell cd ../../.. ; pwd)
 
+PYTHON3 ?= python3
+
+case_version := $(shell $(PYTHON3) $(top_srcdir)/case_utils/ontology/version_info.py)
+ifeq ($(case_version),)
+$(error Unable to determine CASE version)
+endif
+
 tests_srcdir := $(top_srcdir)/tests
 
 all: \
@@ -57,7 +64,8 @@ check-cli:
 	  --directory cli \
 	  check
 
-check-uco_test_examples:
+check-uco_test_examples: \
+  uco_monolithic.ttl
 	$(MAKE) \
 	  --directory uco_test_examples \
 	  check
@@ -72,3 +80,17 @@ clean:
 	@$(MAKE) \
 	  --directory cli \
 	  clean
+
+# This file is necessary for a UCO unit test that case-utils runs
+# substituting its own monolithic build.
+# It is incorrect to designate this the "UCO" monolithic build due to
+# CASE concepts being present, but using the CASE build here keeps with
+# the spirit of confirming UCO tests continue to pass when using the
+# CASE monolithic build.
+uco_monolithic.ttl: \
+  $(top_srcdir)/case_utils/ontology/version_info.py \
+  $(top_srcdir)/case_utils/ontology/case-$(case_version).ttl
+	rm -f $@
+	cp \
+	  $(top_srcdir)/case_utils/ontology/case-$(case_version).ttl \
+	  $@

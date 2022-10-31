@@ -5,7 +5,7 @@
     },
     "@graph": [
         {
-            "@id": "kb:file-1",
+            "@id": "kb:file-b31c8f5c-cdbf-466d-a88a-034531fc5933",
             "@type": "uco-observable:File"
         }
     ]

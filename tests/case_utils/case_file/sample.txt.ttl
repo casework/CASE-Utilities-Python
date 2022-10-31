@@ -8,41 +8,53 @@
 @prefix uco-vocabulary: <https://ontology.unifiedcyberontology.org/uco/vocabulary/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+kb:content-data-facet-1833f979-1f19-5543-9d82-6cefd144b169
+	a uco-observable:ContentDataFacet ;
+	uco-observable:hash
+		kb:hash-24644904-83ea-5911-aea8-be687a9f3caf ,
+		kb:hash-295bdeb5-7f23-5a3f-8b7f-4bb1191b7c21 ,
+		kb:hash-39127f5c-598b-51d4-a720-2e949f18f85f ,
+		kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932
+		;
+	uco-observable:sizeInBytes "4"^^xsd:integer ;
+	.
+
 kb:file-ace6460a-92a9-58b9-83ea-a18ae87f6e04
 	a uco-observable:File ;
 	uco-core:hasFacet
-		[
-			a uco-observable:ContentDataFacet ;
-			uco-observable:hash
-				[
-					a uco-types:Hash ;
-					uco-types:hashMethod "MD5"^^uco-vocabulary:HashNameVocab ;
-					uco-types:hashValue "098f6bcd4621d373cade4e832627b4f6"^^xsd:hexBinary ;
-				] ,
-				[
-					a uco-types:Hash ;
-					uco-types:hashMethod "SHA1"^^uco-vocabulary:HashNameVocab ;
-					uco-types:hashValue "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"^^xsd:hexBinary ;
-				] ,
-				[
-					a uco-types:Hash ;
-					uco-types:hashMethod "SHA256"^^uco-vocabulary:HashNameVocab ;
-					uco-types:hashValue "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"^^xsd:hexBinary ;
-				] ,
-				[
-					a uco-types:Hash ;
-					uco-types:hashMethod "SHA512"^^uco-vocabulary:HashNameVocab ;
-					uco-types:hashValue "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"^^xsd:hexBinary ;
-				]
-				;
-			uco-observable:sizeInBytes "4"^^xsd:integer ;
-		] ,
-		[
-			a uco-observable:FileFacet ;
-			uco-observable:fileName "sample.txt" ;
-			uco-observable:modifiedTime "2010-01-02T03:04:56+00:00"^^xsd:dateTime ;
-			uco-observable:sizeInBytes "4"^^xsd:integer ;
-		]
+		kb:content-data-facet-1833f979-1f19-5543-9d82-6cefd144b169 ,
+		kb:file-facet-1297a4bd-563b-54c3-ad8a-f67f01ba9b10
 		;
+	.
+
+kb:file-facet-1297a4bd-563b-54c3-ad8a-f67f01ba9b10
+	a uco-observable:FileFacet ;
+	uco-observable:fileName "sample.txt" ;
+	uco-observable:modifiedTime "2010-01-02T03:04:56+00:00"^^xsd:dateTime ;
+	uco-observable:sizeInBytes "4"^^xsd:integer ;
+	.
+
+kb:hash-24644904-83ea-5911-aea8-be687a9f3caf
+	a uco-types:Hash ;
+	uco-types:hashMethod "MD5"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "098f6bcd4621d373cade4e832627b4f6"^^xsd:hexBinary ;
+	.
+
+kb:hash-295bdeb5-7f23-5a3f-8b7f-4bb1191b7c21
+	a uco-types:Hash ;
+	uco-types:hashMethod "SHA1"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"^^xsd:hexBinary ;
+	.
+
+kb:hash-39127f5c-598b-51d4-a720-2e949f18f85f
+	a uco-types:Hash ;
+	uco-types:hashMethod "SHA256"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"^^xsd:hexBinary ;
+	.
+
+kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932
+	a uco-types:Hash ;
+	uco-types:hashMethod "SHA512"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"^^xsd:hexBinary ;
 	.
 
