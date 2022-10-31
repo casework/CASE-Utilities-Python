@@ -30,7 +30,6 @@ import rdflib
 import case_utils
 import case_utils.bindings
 from case_utils.namespace import (
-    NS_RDF,
     NS_UCO_CORE,
     NS_UCO_OBSERVABLE,
     NS_UCO_TYPES,
@@ -58,7 +57,7 @@ def create_file_node(
     node_prefix: str = DEFAULT_PREFIX,
     disable_hashes: bool = False,
     disable_mtime: bool = False,
-) -> case_utils.bindings.case_File:
+) -> case_utils.bindings.UCO_File:
     r"""
     This function characterizes the file at filepath.
 
@@ -88,8 +87,11 @@ def create_file_node(
     if node_iri is None:
         node_slug = "file-" + case_utils.local_uuid.local_uuid()
         node_iri = node_namespace[node_slug]
-    file_constructor = case_utils.bindings.case_File(graph, node_iri)
-    file_facet_constructor = case_utils.bindings.case_FileFacet(graph)
+    file_constructor = case_utils.bindings.UCO_File(graph, node_iri)
+
+    file_facet_slug = "file-facet-" + case_utils.local_uuid.local_uuid()
+    file_facet_iri = node_namespace[file_facet_slug]
+    file_facet_constructor = case_utils.bindings.UCO_FileFacet(graph, file_facet_iri)
     file_constructor.add_facet(file_facet_constructor)
 
     basename = os.path.basename(filepath)
@@ -118,8 +120,13 @@ def create_file_node(
         )
 
     if not disable_hashes:
-        content_data_facet_constructor = case_utils.bindings.case_ContentDataFacet(
-            graph
+        content_data_facet_slug = (
+            "content-data-facet-" + case_utils.local_uuid.local_uuid()
+        )
+        content_data_facet_iri = node_namespace[content_data_facet_slug]
+        content_data_facet_constructor = case_utils.bindings.UCO_ContentDataFacet(
+            graph,
+            content_data_facet_iri,
         )
         file_constructor.add_facet(content_data_facet_constructor)
 
@@ -189,7 +196,9 @@ def create_file_node(
         for key in successful_hashdict._fields:
             if key not in ("md5", "sha1", "sha256", "sha512"):
                 continue
-            hash_constructor = case_utils.bindings.case_Hash(graph)
+            hash_slug = "hash-" + case_utils.local_uuid.local_uuid()
+            hash_iri = node_namespace[hash_slug]
+            hash_constructor = case_utils.bindings.UCO_Hash(graph, hash_iri)
             content_data_facet_constructor.add_hash(hash_constructor)
             graph.add(
                 (
@@ -210,7 +219,6 @@ def create_file_node(
             )
 
     return file_constructor
-
 
 
 def main() -> None:
