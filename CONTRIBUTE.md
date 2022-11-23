@@ -27,10 +27,12 @@ pushd case_utils/ontology
   git add case-0.6.0.ttl  # Assuming CASE 0.6.0 was just released.
   # and/or
   git add uco-0.8.0.ttl   # Assuming UCO 0.8.0 was adopted in CASE 0.6.0.
+
+  git add ontology_and_version_iris.txt
 popd
 make check
 # Assuming `make check` passes:
-git commit -m "Build CASE 0.6.0 monolithic .ttl files" case_utils/ontology/case-0.6.0-subclasses.ttl case_utils/ontology/case-0.6.0.ttl
+git commit -m "Build CASE 0.6.0 monolithic .ttl files" case_utils/ontology/case-0.6.0-subclasses.ttl case_utils/ontology/case-0.6.0.ttl case_utils/ontology/ontology_and_version_iris.txt
 git commit -m "Update CASE ontology pointer to version 0.6.0" dependencies/CASE case_utils/ontology/version_info.py
 ```
 

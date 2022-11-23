@@ -48,7 +48,7 @@ all: \
 	rm -f __$@ _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --allow-warnings \
+	    --allow-infos \
 	    --debug \
 	    --format turtle \
 	    --output __$@ \

@@ -55,11 +55,16 @@ To produce the validation report as a machine-readable graph output, the `--form
 case_validate --format turtle input.json > result.ttl
 ```
 
-To use one or more supplementary ontology files, the `--ontology-graph` flag can be used, more than once if desired, to supplement the selected CASE version:
+To use one or more supplementary ontology or shape files, the `--ontology-graph` flag can be used, more than once if desired, to supplement the selected CASE version:
 
 ```bash
-case_validate --ontology-graph internal_ontology.ttl --ontology-graph experimental_shapes.ttl input.json
+case_validate \
+  --ontology-graph internal_ontology.ttl \
+  --ontology-graph experimental_shapes.ttl \
+  input.json
 ```
+
+This tool uses the `--built-version` flag, described [below](#built-versions).
 
 Other flags are reviewable with `case_validate --help`.
 
@@ -86,6 +91,8 @@ Two commands are provided to generate output from a SPARQL query and one or more
 These commands can be used with any RDF files to run arbitrary SPARQL queries.  They have one additional behavior tailored to CASE: If a path query is used for subclasses, the CASE subclass hierarchy will be loaded to supplement the input graph.  An expected use case of this feature is subclasses of `ObservableObject`.  For instance, if a data graph included an object with only the class `uco-observable:File` specified, the query `?x a/rdfs:subClassOf* uco-observable:ObservableObject` would match `?x` against that object.
 
 Note that prefixes used in the SPARQL queries do not need to be defined in the SPARQL query.  Their mapping will be inherited from their first definition in the input graph files.  However, input graphs are not required to agree on prefix mappings, so there is potential for confusion from input argument order mattering if two input graph files disagree on what a prefix maps to.  If there is concern of ambiguity from inputs, a `PREFIX` statement should be included in the query, such as is shown in [this test query](tests/case_utils/case_sparql_select/subclass.sparql).
+
+These tools use the `--built-version` flag, described [below](#built-versions).
 
 
 #### `case_sparql_construct`
@@ -114,6 +121,15 @@ case_sparql_select output.md input.sparql input.json [input-2.json ...]
 ### `local_uuid`
 
 This [module](case_utils/local_uuid.py) provides a wrapper UUID generator, `local_uuid()`.  Its main purpose is making example data generate consistent identifiers, and intentionally includes mechanisms to make it difficult to activate this mode without awareness of the caller.
+
+
+### Built versions
+
+Several tools in this package include a flag `--built-version`.  This flag tailors the tool's behavior to a certain CASE ontology version; typically, this involves mixing the ontology graph into the data graph for certain necessary knowledge expansion for pattern matching (such as making queries aware of the OWL subclass hierarchy).
+
+If not provided, the tool will assume a default value of the latest ontology version.
+
+If the special value `none` is provided, none of the ontology builds this package ships will be included in the data graph.  The `none` value supports use cases that are wholly independent of CASE, such as running a test in a specialized vocabulary; and also suports use cases where a non-released CASE version is meant to be used, such as a locally revised version of CASE where some concept revisions are being reviewed.
 
 
 ## Development status

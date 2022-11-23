@@ -33,6 +33,8 @@ validation_ttls := \
   co_XFAIL_validation.ttl \
   configuration_setting_PASS_validation.ttl \
   configuration_setting_XFAIL_validation.ttl \
+  database_records_PASS_validation.ttl \
+  database_records_XFAIL_validation.ttl \
   has_facet_inverse_functional_PASS_validation.ttl \
   has_facet_inverse_functional_XFAIL_validation.ttl \
   hash_PASS_validation.ttl \
@@ -76,7 +78,7 @@ all: \
   $(top_srcdir)/case_utils/ontology/__init__.py
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --allow-warnings \
+	    --allow-infos \
 	    --debug \
 	    --format turtle \
 	    $< \

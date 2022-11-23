@@ -26,7 +26,7 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 
 import argparse
 import binascii
@@ -63,7 +63,7 @@ def main() -> None:
         "--built-version",
         choices=tuple(built_version_choices_list),
         default="case-" + CURRENT_CASE_VERSION,
-        help="Ontology version to use to supplement query, such as for subclass querying.  Does not require networking to use.  Default is most recent CASE release.",
+        help="Ontology version to use to supplement query, such as for subclass querying.  Does not require networking to use.  Default is most recent CASE release.  Passing 'none' will mean no pre-built CASE ontology versions accompanying this tool will be included in the analysis.",
     )
     parser.add_argument(
         "--disallow-empty-results",

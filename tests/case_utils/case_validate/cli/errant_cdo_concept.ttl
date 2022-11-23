@@ -1,0 +1,17 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-vocabulary: <https://ontology.unifiedcyberontology.org/uco/vocabulary/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:example:thing-368341b2-1e31-41c0-afbd-b5e0becd5a88>
+	a uco-core:UcoThing ;
+	uco-core:nonExistentProperty1 "test 1 - raises 1 warning."@en ;
+	.
+
+<urn:example:thing-ed85b23b-3136-4be6-b702-1b7eb543f33c>
+	a uco-core:UcoThing ;
+	uco-core:nonExistentProperty2 "test 2 - raises 2 warnings."^^uco-vocabulary:NonExistentVocabulary1 ;
+	.
+

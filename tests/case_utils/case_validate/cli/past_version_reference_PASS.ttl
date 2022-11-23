@@ -1,0 +1,12 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:example:thing-a5ba4c5b-9e12-41e8-b05d-4dfb0dd61ec3>
+	a uco-core:UcoThing ;
+	rdfs:comment "This node maintains a historic reference to 0.9.1 of the UCO namespace.  This must not trigger an undefined-concept warning."@en ;
+	rdfs:seeAlso uco-core:0.9.1 ;
+	.
+

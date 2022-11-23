@@ -24,6 +24,8 @@ tests_srcdir := $(top_srcdir)/tests
 RDF_TOOLKIT_JAR := $(case_srcdir)/lib/rdf-toolkit.jar
 
 files_to_generate := \
+  errant_cdo_concept_PASS.txt \
+  errant_cdo_concept_XFAIL.txt \
   format_human_output_jsonld.jsonld \
   format_human_output_turtle.ttl \
   format_human_output_txt.txt \
@@ -40,8 +42,11 @@ files_to_generate := \
   format_unspecified_output_turtle.ttl \
   format_unspecified_output_txt.txt \
   format_unspecified_output_unspecified.txt \
+  past_version_reference_PASS.txt \
+  past_version_reference_XFAIL.txt \
   split_data_graph_PASS.txt \
-  split_data_graph_XFAIL.txt
+  split_data_graph_XFAIL.txt \
+  thing_metashacl_PASS.txt
 
 all: \
   $(files_to_generate)
@@ -55,6 +60,37 @@ check: \
 clean:
 	@rm -f \
 	  $(files_to_generate)
+
+errant_cdo_concept_PASS.txt: \
+  $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/.ontology.done.log \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/ontology/__init__.py \
+  errant_cdo_concept.ttl
+	rm -f _$@
+	source $(tests_srcdir)/venv/bin/activate \
+	  && case_validate \
+	    --allow-warnings \
+	    --debug \
+	    errant_cdo_concept.ttl \
+	    > _$@
+	mv _$@ $@
+
+errant_cdo_concept_XFAIL.txt: \
+  $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/.ontology.done.log \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/ontology/__init__.py \
+  errant_cdo_concept.ttl
+	rm -f _$@
+	source $(tests_srcdir)/venv/bin/activate \
+	  && case_validate \
+	    errant_cdo_concept.ttl \
+	    --debug \
+	    > _$@ \
+	    ; test 1 -eq $$?
+	test -s _$@
+	mv _$@ $@
 
 format_human_output_%: \
   $(examples_srcdir)/investigative_action_PASS_validation.ttl \
@@ -186,6 +222,36 @@ format_unspecified_output_unspecified.txt: \
 	    > _$@
 	mv _$@ $@
 
+past_version_reference_PASS.txt: \
+  $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/.ontology.done.log \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/ontology/__init__.py \
+  $(top_srcdir)/case_utils/ontology/ontology_and_version_iris.txt \
+  past_version_reference_PASS.ttl
+	rm -f _$@
+	source $(tests_srcdir)/venv/bin/activate \
+	  && case_validate \
+	    past_version_reference_PASS.ttl \
+	    > _$@
+	mv _$@ $@
+
+past_version_reference_XFAIL.txt: \
+  $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/.ontology.done.log \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/ontology/__init__.py \
+  $(top_srcdir)/case_utils/ontology/ontology_and_version_iris.txt \
+  past_version_reference_XFAIL.ttl
+	rm -f _$@
+	source $(tests_srcdir)/venv/bin/activate \
+	  && case_validate \
+	    past_version_reference_XFAIL.ttl \
+	    > _$@ \
+	    ; rc=$$? ; test 1 -eq $$rc
+	test -s _$@
+	mv _$@ $@
+
 split_data_graph_PASS.txt: \
   $(tests_srcdir)/.venv.done.log \
   $(top_srcdir)/.ontology.done.log \
@@ -215,4 +281,19 @@ split_data_graph_XFAIL.txt: \
 	    split_data_graph_1.json \
 	    > _$@ \
 	    ; rc=$$? ; test 1 -eq $$rc
+	test -s _$@
+	mv _$@ $@
+
+thing_metashacl_PASS.txt: \
+  $(tests_srcdir)/.venv.done.log \
+  $(top_srcdir)/.ontology.done.log \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/ontology/__init__.py \
+  thing.ttl
+	rm -f _$@
+	source $(tests_srcdir)/venv/bin/activate \
+	  && case_validate \
+	    --metashacl \
+	    thing.ttl \
+	    > _$@
 	mv _$@ $@

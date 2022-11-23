@@ -29,7 +29,7 @@ a monolithic file; see case_utils.ontology if interested in further
 details.)
 """
 
-__version__ = "0.1.3"
+__version__ = "0.2.0"
 
 import argparse
 import importlib.resources
@@ -37,9 +37,10 @@ import logging
 import os
 import sys
 import typing
+import warnings
 
 import pyshacl  # type: ignore
-import rdflib.util
+import rdflib
 
 import case_utils.ontology
 from case_utils.ontology.version_info import (
@@ -47,7 +48,26 @@ from case_utils.ontology.version_info import (
     built_version_choices_list,
 )
 
+NS_OWL = rdflib.OWL
+NS_RDF = rdflib.RDF
+NS_RDFS = rdflib.RDFS
+
 _logger = logging.getLogger(os.path.basename(__file__))
+
+
+class NonExistentCDOConceptWarning(UserWarning):
+    """
+    This class is used when a concept is encountered in the data graph that is not part of CDO ontologies, according to the --built-version flags and --ontology-graph flags.
+    """
+
+    pass
+
+
+def concept_is_cdo_concept(n_concept: rdflib.URIRef) -> bool:
+    concept_iri = str(n_concept)
+    return concept_iri.startswith(
+        "https://ontology.unifiedcyberontology.org/"
+    ) or concept_iri.startswith("https://ontology.caseontology.org/")
 
 
 def main() -> None:
@@ -72,7 +92,7 @@ def main() -> None:
         "--built-version",
         choices=tuple(built_version_choices_list),
         default="case-" + CURRENT_CASE_VERSION,
-        help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release.",
+        help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release.  Passing 'none' will mean no pre-built CASE ontology versions accompanying this tool will be included in the analysis.",
     )
     parser.add_argument(
         "--ontology-graph",
@@ -87,9 +107,19 @@ def main() -> None:
         help="(As with pyshacl CLI) Abort on first invalid data.",
     )
     parser.add_argument(
+        "--allow-info",
+        "--allow-infos",
+        dest="allow_infos",
+        action="store_true",
+        default=False,
+        help="(As with pyshacl CLI) Shapes marked with severity of Info will not cause result to be invalid.",
+    )
+    parser.add_argument(
         "-w",
+        "--allow-warning",
         "--allow-warnings",
         action="store_true",
+        dest="allow_warnings",
         help="(As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.",
     )
     parser.add_argument(
@@ -111,6 +141,14 @@ def main() -> None:
         choices=("none", "rdfs", "owlrl", "both"),
         default="none",
         help='(As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is "none".',
+    )
+    parser.add_argument(
+        "-m",
+        "--metashacl",
+        dest="metashacl",
+        action="store_true",
+        default=False,
+        help="(As with pyshacl CLI) Validate the SHACL Shapes graph against the shacl-shacl Shapes Graph before validating the Data Graph.",
     )
     parser.add_argument(
         "-o",
@@ -142,6 +180,71 @@ def main() -> None:
             _logger.debug("arg_ontology_graph = %r.", arg_ontology_graph)
             ontology_graph.parse(arg_ontology_graph)
 
+    # Construct set of CDO concepts for data graph concept-existence review.
+    cdo_concepts: typing.Set[rdflib.URIRef] = set()
+
+    for n_structural_class in [
+        NS_OWL.Class,
+        NS_OWL.AnnotationProperty,
+        NS_OWL.DatatypeProperty,
+        NS_OWL.ObjectProperty,
+        NS_RDFS.Datatype,
+    ]:
+        for ontology_triple in ontology_graph.triples(
+            (None, NS_RDF.type, n_structural_class)
+        ):
+            if not isinstance(ontology_triple[0], rdflib.URIRef):
+                continue
+            if concept_is_cdo_concept(ontology_triple[0]):
+                cdo_concepts.add(ontology_triple[0])
+    for n_ontology_predicate in [
+        NS_OWL.backwardCompatibleWith,
+        NS_OWL.imports,
+        NS_OWL.incompatibleWith,
+        NS_OWL.priorVersion,
+        NS_OWL.versionIRI,
+    ]:
+        for ontology_triple in ontology_graph.triples(
+            (None, n_ontology_predicate, None)
+        ):
+            assert isinstance(ontology_triple[0], rdflib.URIRef)
+            assert isinstance(ontology_triple[2], rdflib.URIRef)
+            cdo_concepts.add(ontology_triple[0])
+            cdo_concepts.add(ontology_triple[2])
+    for ontology_triple in ontology_graph.triples((None, NS_RDF.type, NS_OWL.Ontology)):
+        if not isinstance(ontology_triple[0], rdflib.URIRef):
+            continue
+        cdo_concepts.add(ontology_triple[0])
+
+    # Also load historical ontology and version IRIs.
+    ontology_and_version_iris_data = importlib.resources.read_text(
+        case_utils.ontology, "ontology_and_version_iris.txt"
+    )
+    for line in ontology_and_version_iris_data.split("\n"):
+        cleaned_line = line.strip()
+        if cleaned_line == "":
+            continue
+        cdo_concepts.add(rdflib.URIRef(cleaned_line))
+
+    data_cdo_concepts: typing.Set[rdflib.URIRef] = set()
+    for data_triple in data_graph.triples((None, None, None)):
+        for data_triple_member in data_triple:
+            if isinstance(data_triple_member, rdflib.URIRef):
+                if concept_is_cdo_concept(data_triple_member):
+                    data_cdo_concepts.add(data_triple_member)
+            elif isinstance(data_triple_member, rdflib.Literal):
+                if isinstance(data_triple_member.datatype, rdflib.URIRef):
+                    if concept_is_cdo_concept(data_triple_member.datatype):
+                        data_cdo_concepts.add(data_triple_member.datatype)
+
+    undefined_cdo_concepts = data_cdo_concepts - cdo_concepts
+    for undefined_cdo_concept in sorted(undefined_cdo_concepts):
+        warnings.warn(undefined_cdo_concept, NonExistentCDOConceptWarning)
+    undefined_cdo_concepts_message = (
+        "There were %d concepts with CDO IRIs in the data graph that are not in the ontology graph."
+        % len(undefined_cdo_concepts)
+    )
+
     # Determine output format.
     # pySHACL's determination of output formatting is handled solely
     # through the -f flag.  Other CASE CLI tools handle format
@@ -160,7 +263,9 @@ def main() -> None:
         shacl_graph=ontology_graph,
         ont_graph=ontology_graph,
         inference=args.inference,
+        meta_shacl=args.metashacl,
         abort_on_first=args.abort,
+        allow_infos=True if args.allow_infos else False,
         allow_warnings=True if args.allow_warnings else False,
         debug=True if args.debug else False,
         do_owl_imports=True if args.imports else False,
@@ -193,6 +298,13 @@ def main() -> None:
                 "Unexpected result type returned from validate: %r."
                 % type(validation_graph)
             )
+
+    if len(undefined_cdo_concepts) > 0:
+        warnings.warn(undefined_cdo_concepts_message)
+        if not args.allow_warnings:
+            undefined_cdo_concepts_alleviation_message = "The data graph is SHACL-conformant with the CDO ontologies, but nonexistent-concept references raise Warnings with this tool.  Please either correct the concept names in the data graph; use the --ontology-graph flag to pass a corrected CDO ontology file, also using --built-version none; or, use the --allow-warnings flag."
+            warnings.warn(undefined_cdo_concepts_alleviation_message)
+            conforms = False
 
     sys.exit(0 if conforms else 1)
 
