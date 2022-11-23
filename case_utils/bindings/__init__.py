@@ -1370,6 +1370,30 @@ class UCO_Assertion(UCO_UcoObject):
         super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
 
 
+class UCO_AnalyticResultFacet(UCO_Facet):
+    """
+    An analytic result facet is a grouping of characteristics unique to the results of an analysis action.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResultFacet'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResultFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
 class UCO_ActionLifecycle(UCO_Action):
     """
     An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles.
@@ -3736,6 +3760,54 @@ class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/observable/Tablet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_TableFieldFacet(UCO_Facet):
+    """
+    A database record facet contains properties associated with a specific table record value from a database.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TableFieldFacet'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/observable/TableFieldFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_TableField(UCO_ObservableObject):
+    """
+    A database table field and its associated value contained within a relational database.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/TableField'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/observable/TableField"
             }
         else:
             _type_iris = type_iris
@@ -9761,6 +9833,102 @@ class UCO_Configuration(UCO_UcoObject):
         if len(type_iris) == 0:
             _type_iris = {
                 "https://ontology.unifiedcyberontology.org/uco/configuration/Configuration"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
+    """
+    An artifact classification result facet is a grouping of characteristics unique to the results of an artifact classification analysis action.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassificationResultFacet'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassificationResultFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
+    """
+    An artifact classification is a single specific assertion that a particular class of a classification taxonomy applies to something.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassification'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassification"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_AnalyticResult(UCO_Assertion):
+    """
+    An analytic result is a characterization of the understanding resulting from an analysis action.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResult'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResult"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class UCO_Analysis(UCO_Action):
+    """
+    An analysis is an action of detailed examination of something in order to understand its nature, context or essential features.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/analysis/Analysis'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/analysis/Analysis"
             }
         else:
             _type_iris = type_iris
