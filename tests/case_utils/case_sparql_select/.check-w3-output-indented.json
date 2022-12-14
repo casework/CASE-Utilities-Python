@@ -1,0 +1,10 @@
+{
+    "?name":{
+        "0":"Johnny Lee Outlaw",
+        "1":"Peter Goodguy"
+    },
+    "?mbox":{
+        "0":"mailto:jlow@example.com",
+        "1":"mailto:peter@example.org"
+    }
+}

@@ -1,0 +1,23 @@
+Validation Report
+Conforms: True
+Results (1):
+Validation Result in SPARQLConstraintComponent (http://www.w3.org/ns/shacl#SPARQLConstraintComponent):
+	Severity: sh:Info
+	Source Shape: core:UcoThing-identifier-regex-shape
+	Focus Node: <urn:example:thing-1>
+	Value Node: <urn:example:thing-1>
+	Source Constraint: [ rdf:type sh:SPARQLConstraint ; rdfs:seeAlso <https://datatracker.ietf.org/doc/html/rfc4122#section-4.1.3> ; sh:message Literal("UcoThings are suggested to end with a UUID.", lang=en) ; sh:select Literal("
+			PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+			SELECT $this
+			WHERE {
+			        $this a/rdfs:subClassOf* uco-core:UcoThing .
+			        FILTER (
+			                ! REGEX (
+			                        STR($this),
+			                        "[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$",
+			                        "i"
+			                )
+			        )
+			}
+		") ]
+	Message: UcoThings are suggested to end with a UUID.

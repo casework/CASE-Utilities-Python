@@ -29,7 +29,7 @@ a monolithic file; see case_utils.ontology if interested in further
 details.)
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 import argparse
 import importlib.resources
@@ -51,6 +51,7 @@ from case_utils.ontology.version_info import (
 NS_OWL = rdflib.OWL
 NS_RDF = rdflib.RDF
 NS_RDFS = rdflib.RDFS
+NS_SH = rdflib.SH
 
 _logger = logging.getLogger(os.path.basename(__file__))
 
@@ -189,6 +190,9 @@ def main() -> None:
         NS_OWL.DatatypeProperty,
         NS_OWL.ObjectProperty,
         NS_RDFS.Datatype,
+        NS_SH.NodeShape,
+        NS_SH.PropertyShape,
+        NS_SH.Shape,
     ]:
         for ontology_triple in ontology_graph.triples(
             (None, NS_RDF.type, n_structural_class)

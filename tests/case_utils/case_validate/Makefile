@@ -27,14 +27,17 @@ tests_srcdir := $(top_srcdir)/tests
 all: \
   all-cli \
   all-case_test_examples \
-  all-uco_test_examples
+  all-uco_test_examples \
+  all-shape_disabling
 
 .PHONY: \
   all-case_test_examples \
   all-cli \
+  all-shape_disabling \
   all-uco_test_examples \
   check-case_test_examples \
   check-cli \
+  check-shape_disabling \
   check-uco_test_examples
 
 all-case_test_examples:
@@ -45,6 +48,10 @@ all-cli:
 	$(MAKE) \
 	  --directory cli
 
+all-shape_disabling:
+	$(MAKE) \
+	  --directory shape_disabling
+
 all-uco_test_examples:
 	$(MAKE) \
 	  --directory uco_test_examples
@@ -52,7 +59,8 @@ all-uco_test_examples:
 check: \
   check-cli \
   check-case_test_examples \
-  check-uco_test_examples
+  check-uco_test_examples \
+  check-shape_disabling
 
 check-case_test_examples:
 	$(MAKE) \
@@ -64,6 +72,11 @@ check-cli:
 	  --directory cli \
 	  check
 
+check-shape_disabling:
+	$(MAKE) \
+	  --directory shape_disabling \
+	  check
+
 check-uco_test_examples: \
   uco_monolithic.ttl
 	$(MAKE) \
@@ -71,6 +84,9 @@ check-uco_test_examples: \
 	  check
 
 clean:
+	@$(MAKE) \
+	  --directory shape_disabling \
+	  clean
 	@$(MAKE) \
 	  --directory case_test_examples \
 	  clean

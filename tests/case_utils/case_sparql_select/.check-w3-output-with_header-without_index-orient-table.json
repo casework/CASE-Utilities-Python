@@ -1,0 +1,1 @@
+{"schema":{"fields":[{"name":"?name","type":"string"},{"name":"?mbox","type":"string"}],"pandas_version":"1.4.0"},"data":[{"?name":"Johnny Lee Outlaw","?mbox":"mailto:jlow@example.com"},{"?name":"Peter Goodguy","?mbox":"mailto:peter@example.org"}]}

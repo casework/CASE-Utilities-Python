@@ -1,0 +1,1 @@
+{"schema":{"fields":[{"name":"index","type":"integer"},{"name":"?name","type":"string"},{"name":"?mbox","type":"string"}],"primaryKey":["index"],"pandas_version":"1.4.0"},"data":[{"index":0,"?name":"Johnny Lee Outlaw","?mbox":"mailto:jlow@example.com"},{"index":1,"?name":"Peter Goodguy","?mbox":"mailto:peter@example.org"}]}

@@ -65,6 +65,7 @@ check: \
 	  && pytest \
 	    --ignore case_file \
 	    --ignore case_sparql_construct \
+	    --ignore case_sparql_select \
 	    --ignore case_validate \
 	    --log-level=DEBUG
 
