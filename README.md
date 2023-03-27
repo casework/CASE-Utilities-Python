@@ -66,8 +66,31 @@ case_validate \
 
 This tool uses the `--built-version` flag, described [below](#built-versions).
 
-Other flags are reviewable with `case_validate --help`.
+Other flags are reviewable with `case_validate --help` which are listed below:
 
+```shell
+positional arguments:
+  in_graph
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           Output additional runtime messages.
+  --built-version {none,case-0.5.0,case-0.6.0,case-0.7.0,case-0.7.1,case-1.0.0}
+                        Monolithic aggregation of CASE ontology files at certain versions. Does not require networking to use. Default is most recent CASE release.
+  --ontology-graph ONTOLOGY_GRAPH
+                        Combined ontology (i.e. subclass hierarchy) and shapes (SHACL) file, in any format accepted by rdflib recognized by file extension (e.g. .ttl). Will supplement ontology selected by
+                        --built-version. Can be given multiple times.
+  --abort               (As with pyshacl CLI) Abort on first invalid data.
+  -w, --allow-warnings  (As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.
+  -f {human,turtle,xml,json-ld,nt,n3}, --format {human,turtle,xml,json-ld,nt,n3}
+                        (ALMOST as with pyshacl CLI) Choose an output format. Default is "human". Difference: 'table' not provided.
+  -im, --imports        (As with pyshacl CLI) Allow import of sub-graphs defined in statements with owl:imports.
+  -i {none,rdfs,owlrl,both}, --inference {none,rdfs,owlrl,both}
+                        (As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is "none".
+  -o [OUTPUT], --output [OUTPUT]
+                        (ALMOST as with pyshacl CLI) Send output to a file. If absent, output will be written to stdout. Difference: If specified, file is expected not to exist. Clarification: Does NOT influence
+                        --format flag's default value of "human". (I.e., any machine-readable serialization format must be specified with --format.)
+```
 
 ### `case_file`
 
