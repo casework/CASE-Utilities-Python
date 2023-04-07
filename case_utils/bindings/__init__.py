@@ -3910,6 +3910,30 @@ class UCO_SymbolicLink(UCO_FileSystemObject):
         super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
 
 
+class UCO_StorageMediumFacet(UCO_Facet):
+    """
+    A storage medium facet is a grouping of characteristics unique to a the storage capabilities of a piece of equipment or a mechanism designed to serve a special purpose or perform a special function.
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/observable/StorageMediumFacet'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {
+                "https://ontology.unifiedcyberontology.org/uco/observable/StorageMediumFacet"
+            }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
 class UCO_StorageMedium(UCO_Device):
     """
     A storage medium is any digital storage device that applies electromagnetic or optical surfaces, or depends solely on electronic circuits as solid state storage, for storing digital data. Examples include HDD (PATA), SATA, SSD, Optical, Memory_Card, Tape, etc
