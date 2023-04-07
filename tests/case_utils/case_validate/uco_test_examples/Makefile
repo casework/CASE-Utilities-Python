@@ -43,6 +43,7 @@ validation_ttls := \
   location_XFAIL_validation.ttl \
   message_thread_PASS_validation.ttl \
   message_thread_XFAIL_validation.ttl \
+  observable_creation_time_PASS_validation.ttl \
   owl_axiom_PASS_validation.ttl \
   owl_axiom_XFAIL_validation.ttl \
   owl_properties_PASS_validation.ttl \
@@ -78,7 +79,7 @@ all: \
   $(top_srcdir)/case_utils/ontology/__init__.py
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --allow-infos \
+	    --allow-warnings \
 	    --debug \
 	    --format turtle \
 	    $< \

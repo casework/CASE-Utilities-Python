@@ -30,6 +30,8 @@ WHERE {
 }
 """
     for result in graph.query(query_string):
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.URIRef)
         n_entity = result[0]
         computed.add(n_entity.toPython())
     assert expected == computed
@@ -54,7 +56,11 @@ WHERE {
 }
 """
     for result in graph.query(query_string):
-        (l_given_name, l_family_name) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        assert isinstance(result[1], rdflib.term.Literal)
+        l_given_name = result[0]
+        l_family_name = result[1]
         computed.add((l_given_name.toPython(), l_family_name.toPython()))
     assert expected == computed
 

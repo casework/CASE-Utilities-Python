@@ -26,7 +26,7 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 import argparse
 import binascii
@@ -86,26 +86,27 @@ def graph_and_query_to_data_frame(
     select_query_object = rdflib.plugins.sparql.processor.prepareQuery(
         select_query_text, initNs=nsdict
     )
-    for (row_no, row) in enumerate(_graph.query(select_query_object)):
+    for row_no, row in enumerate(_graph.query(select_query_object)):
+        assert isinstance(row, rdflib.query.ResultRow)
         tally = row_no + 1
         record = []
-        for (column_no, column) in enumerate(row):
+        for column_no, column in enumerate(row):
             if column is None:
                 column_value = ""
-            elif (
-                isinstance(column, rdflib.term.Literal)
-                and column.datatype == NS_XSD.hexBinary
-            ):
-                # Use hexlify to convert xsd:hexBinary to ASCII.
-                # The render to ASCII is in support of this script rendering results for website viewing.
-                # .decode() is because hexlify returns bytes.
-                column_value = binascii.hexlify(column.toPython()).decode()
+            elif isinstance(column, rdflib.term.Literal):
+                if column.datatype == NS_XSD.hexBinary:
+                    # Use hexlify to convert xsd:hexBinary to ASCII.
+                    # The render to ASCII is in support of this script rendering results for website viewing.
+                    # .decode() is because hexlify returns bytes.
+                    column_value = binascii.hexlify(column.toPython()).decode()
+                else:
+                    column_value = column.toPython()
             elif isinstance(column, rdflib.URIRef):
                 if use_prefixes:
                     column_value = graph.namespace_manager.qname(column.toPython())
                 else:
                     column_value = column.toPython()
-            else:
+            elif isinstance(column, rdflib.BNode):
                 column_value = column.toPython()
             if row_no == 0:
                 _logger.debug("row[0]column[%d] = %r." % (column_no, column_value))

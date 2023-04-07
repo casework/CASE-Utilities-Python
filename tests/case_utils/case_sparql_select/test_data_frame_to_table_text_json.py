@@ -36,9 +36,9 @@ DATA_FRAME = case_utils.case_sparql_select.graph_and_query_to_data_frame(
 )
 
 
-def make_data_frame_to_json_table_text_parameters() -> typing.Iterator[
-    typing.Tuple[str, str, bool, bool]
-]:
+def make_data_frame_to_json_table_text_parameters() -> (
+    typing.Iterator[typing.Tuple[str, str, bool, bool]]
+):
     for use_header in [False, True]:
         for use_index in [False, True]:
             for output_mode in ["csv", "html", "json", "md", "tsv"]:

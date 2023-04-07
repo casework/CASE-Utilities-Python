@@ -15,7 +15,7 @@
 This library is a wrapper for uuid, provided to generate repeatable UUIDs if requested.
 """
 
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 import logging
 import os
@@ -33,6 +33,9 @@ _logger = logging.getLogger(pathlib.Path(__file__).name)
 
 
 def configure() -> None:
+    """
+    This function is part of setting up demo_uuid() to generate non-random UUIDs.  See demo_uuid() documentation for further setup notes.
+    """
     global DEMO_UUID_BASE
 
     if os.getenv("DEMO_UUID_REQUESTING_NONRANDOM") == "NONRANDOM_REQUESTED":
@@ -112,7 +115,10 @@ def demo_uuid() -> str:
 
     WARNING: This function was developed for use ONLY for reducing (but not eliminating) version-control edits to identifiers when generating sample data.  It creates UUIDs that are decidedly NOT random, and should remain consistent on repeated calls to the importing script.
 
-    To prevent accidental non-random UUID usage, an environment variable, CASE_DEMO_NONRANDOM_UUID_BASE, must be set to a string provided by the caller.  The variable's required value is the path to some directory.  The variable's recommended value is the equivalent of the Make variable "top_srcdir" - that is, the root directory of the containing Git repository, some parent of the current process's current working directory.
+    To prevent accidental non-random UUID usage, two setup steps need to be done before calling this function:
+
+    * An environment variable, CASE_DEMO_NONRANDOM_UUID_BASE, must be set to a string provided by the caller.  The variable's required value is the path to some directory.  The variable's recommended value is the equivalent of the Make variable "top_srcdir" - that is, the root directory of the containing Git repository, some parent of the current process's current working directory.
+    * The configure() function in this module must be called.
     """
     global DEMO_UUID_BASE
     global DEMO_UUID_COUNTER

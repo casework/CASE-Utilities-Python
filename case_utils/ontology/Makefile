@@ -29,8 +29,16 @@ all: \
 .PRECIOUS: \
   case-$(case_version).ttl
 
+$(case_srcdir)/.venv.done.log: \
+  $(top_srcdir)/.git_submodule_init.done.log
+	$(MAKE) \
+	  --directory $(case_srcdir) \
+	    .venv.done.log
+	touch -c $@
+	test -r $@
+
 case-$(case_version).ttl: \
-  $(top_srcdir)/.git_submodule_init.done.log \
+  $(case_srcdir)/.venv.done.log \
   $(RDF_TOOLKIT_JAR)
 	$(MAKE) \
 	  --directory $(case_srcdir)/tests \
@@ -47,10 +55,7 @@ case-$(case_version)-subclasses.ttl: \
 	# release is being made, that step will have been skipped.
 	# This recursive Make call guarantees the virtual environment is
 	# set up.
-	$(MAKE) \
-	  --directory $(case_srcdir)/tests \
-	    .venv.done.log
-	source $(case_srcdir)/tests/venv/bin/activate \
+	source $(case_srcdir)/venv/bin/activate \
 	  && python3 src/subclasses_ttl.py \
 	  __$@ \
 	 $<
@@ -70,11 +75,7 @@ clean:
 ontology_and_version_iris.txt: \
   src/ontology_and_version_iris.py \
   case-$(case_version)-subclasses.ttl
-	# Guarantee venv is built.  (Same rationale as in the subclasses.ttl recipe.)
-	$(MAKE) \
-	  --directory $(case_srcdir)/tests \
-	    .venv.done.log
-	source $(case_srcdir)/tests/venv/bin/activate \
+	source $(case_srcdir)/venv/bin/activate \
 	  && python3 src/ontology_and_version_iris.py \
 	    _$@ \
 	    case-*.ttl

@@ -1,6 +1,0 @@
-PyLD
-mypy
-networkx
-pytest
-python-dateutil
-types-python-dateutil

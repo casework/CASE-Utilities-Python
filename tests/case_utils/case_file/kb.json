@@ -23,6 +23,12 @@
                 },
                 {
                     "@id": "kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932"
+                },
+                {
+                    "@id": "kb:hash-720759b8-9544-5dab-ab12-003372b17a4e"
+                },
+                {
+                    "@id": "kb:hash-b02ebdb3-edf7-5fbf-8088-3d064e316b93"
                 }
             ],
             "uco-observable:sizeInBytes": {
@@ -121,6 +127,30 @@
             "uco-types:hashValue": {
                 "@type": "xsd:hexBinary",
                 "@value": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
+            }
+        },
+        {
+            "@id": "kb:hash-720759b8-9544-5dab-ab12-003372b17a4e",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "SHA3-512"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14"
+            }
+        },
+        {
+            "@id": "kb:hash-b02ebdb3-edf7-5fbf-8088-3d064e316b93",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": {
+                "@type": "uco-vocabulary:HashNameVocab",
+                "@value": "SHA3-256"
+            },
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80"
             }
         }
     ]

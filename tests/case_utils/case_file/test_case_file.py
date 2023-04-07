@@ -56,6 +56,8 @@ def test_confirm_hashes(graph_case_file: rdflib.Graph) -> None:
         "SHA1": "A94A8FE5CCB19BA61C4C0873D391E987982FBBD3",
         "SHA256": "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08",
         "SHA512": "EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF",
+        "SHA3-256": "36F028580BB02CC8272A9A020F4200E346E276AE664E45EE80745574E2F5AB80",
+        "SHA3-512": "9ECE086E9BAC491FAC5C1D1046CA11D737B92A2B2EBD93F005D7B710110C0A678288166E7FBE796883A4F2E9B3CA9F484F521D0CE464345CC1AEC96779149C14",
     }
     computed = dict()
 
@@ -85,7 +87,11 @@ WHERE {
     )
 
     for result in graph_case_file.query(query_object):
-        (l_hash_method, l_hash_value) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        assert isinstance(result[1], rdflib.Literal)
+        l_hash_method = result[0]
+        l_hash_value = result[1]
         # .toPython() with the non-XSD datatype returns the original Literal object again.  Hence, str().
         hash_method = str(l_hash_method)
         hash_value = binascii.hexlify(l_hash_value.toPython()).decode().upper()
@@ -117,6 +123,7 @@ WHERE {
 
     n_observable_object = None
     for result in graph_case_file_disable_hashes.query(query_object):
+        assert isinstance(result, rdflib.query.ResultRow)
         (n_observable_object,) = result
     assert (
         n_observable_object is not None
@@ -124,6 +131,7 @@ WHERE {
 
     n_observable_object = None
     for result in graph_case_file.query(query_object):
+        assert isinstance(result, rdflib.query.ResultRow)
         (n_observable_object,) = result
     assert (
         n_observable_object is not None

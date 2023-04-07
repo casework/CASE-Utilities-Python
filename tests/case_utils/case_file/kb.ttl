@@ -14,7 +14,9 @@ kb:content-data-facet-1833f979-1f19-5543-9d82-6cefd144b169
 		kb:hash-24644904-83ea-5911-aea8-be687a9f3caf ,
 		kb:hash-295bdeb5-7f23-5a3f-8b7f-4bb1191b7c21 ,
 		kb:hash-39127f5c-598b-51d4-a720-2e949f18f85f ,
-		kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932
+		kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932 ,
+		kb:hash-720759b8-9544-5dab-ab12-003372b17a4e ,
+		kb:hash-b02ebdb3-edf7-5fbf-8088-3d064e316b93
 		;
 	uco-observable:sizeInBytes "4"^^xsd:integer ;
 	.
@@ -68,5 +70,17 @@ kb:hash-49e81fee-c6b3-5f5f-af8b-0746d32e4932
 	a uco-types:Hash ;
 	uco-types:hashMethod "SHA512"^^uco-vocabulary:HashNameVocab ;
 	uco-types:hashValue "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"^^xsd:hexBinary ;
+	.
+
+kb:hash-720759b8-9544-5dab-ab12-003372b17a4e
+	a uco-types:Hash ;
+	uco-types:hashMethod "SHA3-512"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14"^^xsd:hexBinary ;
+	.
+
+kb:hash-b02ebdb3-edf7-5fbf-8088-3d064e316b93
+	a uco-types:Hash ;
+	uco-types:hashMethod "SHA3-256"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashValue "36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80"^^xsd:hexBinary ;
 	.
 

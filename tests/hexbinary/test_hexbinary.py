@@ -80,7 +80,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -100,7 +102,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -119,7 +123,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -138,7 +144,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -158,7 +166,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -174,7 +184,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -190,7 +202,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -206,7 +220,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -226,7 +242,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -246,7 +264,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -266,7 +286,9 @@ WHERE {
 }
 """
     ):
-        (l_value,) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.Literal)
+        l_value = result[0]
         confirmed = l_value.toPython()
     assert confirmed
 
@@ -315,7 +337,11 @@ WHERE {
   FILTER ( ?nNode1 != ?nNode2 )
 }"""
     ):
-        (n_node1, n_node2) = result
+        assert isinstance(result, rdflib.query.ResultRow)
+        assert isinstance(result[0], rdflib.URIRef)
+        assert isinstance(result[1], rdflib.URIRef)
+        n_node1 = result[0]
+        n_node2 = result[1]
         computed.add(n_node1.toPython())
         computed.add(n_node2.toPython())
     return computed
