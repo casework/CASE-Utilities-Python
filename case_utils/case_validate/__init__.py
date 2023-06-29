@@ -60,8 +60,17 @@ class NonExistentCDOConceptWarning(UserWarning):
     """
     This class is used when a concept is encountered in the data graph that is not part of CDO ontologies, according to the --built-version flags and --ontology-graph flags.
     """
-
     pass
+
+class ValidationResult:
+    """
+    This class is used to represent the result of a validation.
+    """
+    Conforms: bool
+    UndefinedConcepts: typing.Set[rdflib.URIRef]
+    Graph: rdflib.Graph
+    ValidationText: str
+    
 
 
 def concept_is_cdo_concept(n_concept: rdflib.URIRef) -> bool:
@@ -71,99 +80,13 @@ def concept_is_cdo_concept(n_concept: rdflib.URIRef) -> bool:
     ) or concept_iri.startswith("https://ontology.caseontology.org/")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="CASE wrapper to pySHACL command line tool."
-    )
-
-    # Configure debug logging before running parse_args, because there
-    # could be an error raised before the construction of the argument
-    # parser.
-    logging.basicConfig(
-        level=logging.DEBUG
-        if ("--debug" in sys.argv or "-d" in sys.argv)
-        else logging.INFO
-    )
-
-    # Add arguments specific to case_validate.
-    parser.add_argument(
-        "-d", "--debug", action="store_true", help="Output additional runtime messages."
-    )
-    parser.add_argument(
-        "--built-version",
-        choices=tuple(built_version_choices_list),
-        default="case-" + CURRENT_CASE_VERSION,
-        help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release.  Passing 'none' will mean no pre-built CASE ontology versions accompanying this tool will be included in the analysis.",
-    )
-    parser.add_argument(
-        "--ontology-graph",
-        action="append",
-        help="Combined ontology (i.e. subclass hierarchy) and shapes (SHACL) file, in any format accepted by rdflib recognized by file extension (e.g. .ttl).  Will supplement ontology selected by --built-version.  Can be given multiple times.",
-    )
-
-    # Inherit arguments from pyshacl.
-    parser.add_argument(
-        "--abort",
-        action="store_true",
-        help="(As with pyshacl CLI) Abort on first invalid data.",
-    )
-    parser.add_argument(
-        "--allow-info",
-        "--allow-infos",
-        dest="allow_infos",
-        action="store_true",
-        default=False,
-        help="(As with pyshacl CLI) Shapes marked with severity of Info will not cause result to be invalid.",
-    )
-    parser.add_argument(
-        "-w",
-        "--allow-warning",
-        "--allow-warnings",
-        action="store_true",
-        dest="allow_warnings",
-        help="(As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.",
-    )
-    parser.add_argument(
-        "-f",
-        "--format",
-        choices=("human", "turtle", "xml", "json-ld", "nt", "n3"),
-        default="human",
-        help="(ALMOST as with pyshacl CLI) Choose an output format. Default is \"human\".  Difference: 'table' not provided.",
-    )
-    parser.add_argument(
-        "-im",
-        "--imports",
-        action="store_true",
-        help="(As with pyshacl CLI) Allow import of sub-graphs defined in statements with owl:imports.",
-    )
-    parser.add_argument(
-        "-i",
-        "--inference",
-        choices=("none", "rdfs", "owlrl", "both"),
-        default="none",
-        help='(As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is "none".',
-    )
-    parser.add_argument(
-        "-m",
-        "--metashacl",
-        dest="metashacl",
-        action="store_true",
-        default=False,
-        help="(As with pyshacl CLI) Validate the SHACL Shapes graph against the shacl-shacl Shapes Graph before validating the Data Graph.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        dest="output",
-        nargs="?",
-        type=argparse.FileType("x"),
-        help='(ALMOST as with pyshacl CLI) Send output to a file.  If absent, output will be written to stdout.  Difference: If specified, file is expected not to exist.  Clarification: Does NOT influence --format flag\'s default value of "human".  (I.e., any machine-readable serialization format must be specified with --format.)',
-        default=sys.stdout,
-    )
-
-    parser.add_argument("in_graph", nargs="+")
-
-    args = parser.parse_args()
+def validate(args: argparse.Namespace) -> ValidationResult:
+    """
+    Validate a data graph against a shapes graph.
+    :param args: Arguments parsed by argparse.
+    :return: ValidationResult the result from the validation
+    """
+    conforms: bool = True
 
     data_graph = rdflib.Graph()
     for in_graph in args.in_graph:
@@ -279,30 +202,6 @@ def main() -> None:
     # Relieve RAM of the data graph after validation has run.
     del data_graph
 
-    conforms = validate_result[0]
-    validation_graph = validate_result[1]
-    validation_text = validate_result[2]
-
-    # NOTE: The output logistics code is adapted from pySHACL's file
-    # pyshacl/cli.py.  This section should be monitored for code drift.
-    if args.format == "human":
-        args.output.write(validation_text)
-    else:
-        if isinstance(validation_graph, rdflib.Graph):
-            raise NotImplementedError(
-                "rdflib.Graph expected not to be created from --format value %r."
-                % args.format
-            )
-        elif isinstance(validation_graph, bytes):
-            args.output.write(validation_graph.decode("utf-8"))
-        elif isinstance(validation_graph, str):
-            args.output.write(validation_graph)
-        else:
-            raise NotImplementedError(
-                "Unexpected result type returned from validate: %r."
-                % type(validation_graph)
-            )
-
     if len(undefined_cdo_concepts) > 0:
         warnings.warn(undefined_cdo_concepts_message)
         if not args.allow_warnings:
@@ -310,7 +209,133 @@ def main() -> None:
             warnings.warn(undefined_cdo_concepts_alleviation_message)
             conforms = False
 
-    sys.exit(0 if conforms else 1)
+    # Return validation result.
+    result = ValidationResult()
+    result.UndefinedConcepts = undefined_cdo_concepts
+    result.Conforms = validate_result[0] and conforms
+    result.Graph = validate_result[1]
+    result.ValidationText = validate_result[2]
+
+    return result
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="CASE wrapper to pySHACL command line tool."
+    )
+
+    # Configure debug logging before running parse_args, because there
+    # could be an error raised before the construction of the argument
+    # parser.
+    logging.basicConfig(
+        level=logging.DEBUG
+        if ("--debug" in sys.argv or "-d" in sys.argv)
+        else logging.INFO
+    )
+
+    # Add arguments specific to case_validate.
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="Output additional runtime messages."
+    )
+    parser.add_argument(
+        "--built-version",
+        choices=tuple(built_version_choices_list),
+        default="case-" + CURRENT_CASE_VERSION,
+        help="Monolithic aggregation of CASE ontology files at certain versions.  Does not require networking to use.  Default is most recent CASE release.  Passing 'none' will mean no pre-built CASE ontology versions accompanying this tool will be included in the analysis.",
+    )
+    parser.add_argument(
+        "--ontology-graph",
+        action="append",
+        help="Combined ontology (i.e. subclass hierarchy) and shapes (SHACL) file, in any format accepted by rdflib recognized by file extension (e.g. .ttl).  Will supplement ontology selected by --built-version.  Can be given multiple times.",
+    )
+
+    # Inherit arguments from pyshacl.
+    parser.add_argument(
+        "--abort",
+        action="store_true",
+        help="(As with pyshacl CLI) Abort on first invalid data.",
+    )
+    parser.add_argument(
+        "--allow-info",
+        "--allow-infos",
+        dest="allow_infos",
+        action="store_true",
+        default=False,
+        help="(As with pyshacl CLI) Shapes marked with severity of Info will not cause result to be invalid.",
+    )
+    parser.add_argument(
+        "-w",
+        "--allow-warning",
+        "--allow-warnings",
+        action="store_true",
+        dest="allow_warnings",
+        help="(As with pyshacl CLI) Shapes marked with severity of Warning or Info will not cause result to be invalid.",
+    )
+    parser.add_argument(
+        "-f",
+        "--format",
+        choices=("human", "turtle", "xml", "json-ld", "nt", "n3"),
+        default="human",
+        help="(ALMOST as with pyshacl CLI) Choose an output format. Default is \"human\".  Difference: 'table' not provided.",
+    )
+    parser.add_argument(
+        "-im",
+        "--imports",
+        action="store_true",
+        help="(As with pyshacl CLI) Allow import of sub-graphs defined in statements with owl:imports.",
+    )
+    parser.add_argument(
+        "-i",
+        "--inference",
+        choices=("none", "rdfs", "owlrl", "both"),
+        default="none",
+        help='(As with pyshacl CLI) Choose a type of inferencing to run against the Data Graph before validating. Default is "none".',
+    )
+    parser.add_argument(
+        "-m",
+        "--metashacl",
+        dest="metashacl",
+        action="store_true",
+        default=False,
+        help="(As with pyshacl CLI) Validate the SHACL Shapes graph against the shacl-shacl Shapes Graph before validating the Data Graph.",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        nargs="?",
+        type=argparse.FileType("x"),
+        help='(ALMOST as with pyshacl CLI) Send output to a file.  If absent, output will be written to stdout.  Difference: If specified, file is expected not to exist.  Clarification: Does NOT influence --format flag\'s default value of "human".  (I.e., any machine-readable serialization format must be specified with --format.)',
+        default=sys.stdout,
+    )
+
+    parser.add_argument("in_graph", nargs="+")
+
+    args: argparse.Namespace = parser.parse_args()
+
+    validate_result: ValidationResult = validate(args)
+
+    # NOTE: The output logistics code is adapted from pySHACL's file
+    # pyshacl/cli.py.  This section should be monitored for code drift.
+    if args.format == "human":
+        args.output.write(validate_result.ValidationText)
+    else:
+        if isinstance(validate_result.Graph, rdflib.Graph):
+            raise NotImplementedError(
+                "rdflib.Graph expected not to be created from --format value %r."
+                % args.format
+            )
+        elif isinstance(validate_result.Graph, bytes):
+            args.output.write(validate_result.Graph.decode("utf-8"))
+        elif isinstance(validate_result.Graph, str):
+            args.output.write(validate_result.Graph)
+        else:
+            raise NotImplementedError(
+                "Unexpected result type returned from validate: %r."
+                % type(validate_result.Graph)
+            )
+
+    sys.exit(0 if validate_result.Conforms else 1)
 
 
 if __name__ == "__main__":
