@@ -71,7 +71,7 @@ class ValidationResult:
 
     Conforms: bool
     UndefinedConcepts: typing.Set[rdflib.URIRef]
-    Graph: any
+    Graph: typing.Any
     ValidationText: str
 
 
