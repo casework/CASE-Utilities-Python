@@ -60,17 +60,19 @@ class NonExistentCDOConceptWarning(UserWarning):
     """
     This class is used when a concept is encountered in the data graph that is not part of CDO ontologies, according to the --built-version flags and --ontology-graph flags.
     """
+
     pass
+
 
 class ValidationResult:
     """
     This class is used to represent the result of a validation.
     """
+
     Conforms: bool
     UndefinedConcepts: typing.Set[rdflib.URIRef]
     Graph: rdflib.Graph
     ValidationText: str
-    
 
 
 def concept_is_cdo_concept(n_concept: rdflib.URIRef) -> bool:
