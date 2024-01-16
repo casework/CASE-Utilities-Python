@@ -41,23 +41,23 @@ class NodeConstructor(object):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
         self._node: typing.Optional[rdflib.URIRef] = None
         self._node_iri = node_iri
-        self._type_iris: typing.Set[str] = type_iris
-        for type_iri in sorted(self.type_iris):
-            self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+        self._n_types: typing.Set[rdflib.URIRef] = n_types
+        for n_type in sorted(self.n_types):
+            self.graph.add((self.node, NS_RDF.type, n_type))
 
-    def add_type_iri(self, type_iri: str) -> None:
+    def add_type(self, n_type: rdflib.URIRef) -> None:
         """
         Add additional RDF type to graph node.
         """
-        self.type_iris.add(type_iri)
-        self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+        self.n_types.add(n_type)
+        self.graph.add((self.node, NS_RDF.type, n_type))
 
     @property
     def graph(self) -> rdflib.Graph:
@@ -82,12 +82,12 @@ class NodeConstructor(object):
         self._node_iri = value
 
     @property
-    def type_iris(self) -> typing.Set[str]:
-        return self._type_iris
+    def n_types(self) -> typing.Set[rdflib.URIRef]:
+        return self._n_types
 
     def add_to_graph(self, graph: rdflib.Graph) -> None:
-        for type_iri in sorted(self.type_iris):
-            graph.add((self.node, rdflib.RDF.type, rdflib.URIRef(type_iri)))
+        for n_type in sorted(self.n_types):
+            graph.add((self.node, rdflib.RDF.type, n_type))
 
 
 class UCO_UcoThing(NodeConstructor):
@@ -102,14 +102,18 @@ class UCO_UcoThing(NodeConstructor):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/UcoThing"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/UcoThing"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UcoObject(UCO_UcoThing):
@@ -124,16 +128,18 @@ class UCO_UcoObject(UCO_UcoThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/UcoObject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/UcoObject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
         self._facets: typing.List[UCO_Facet] = []
 
     def add_facet(self, facet: UCO_Facet) -> None:
@@ -157,16 +163,18 @@ class UCO_Observable(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Observable"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Observable"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Item(UCO_UcoObject):
@@ -181,14 +189,18 @@ class UCO_Item(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Item"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Item"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableObject(UCO_Item, UCO_Observable):
@@ -203,16 +215,18 @@ class UCO_ObservableObject(UCO_Item, UCO_Observable):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UcoInherentCharacterizationThing(UCO_UcoThing):
@@ -227,16 +241,18 @@ class UCO_UcoInherentCharacterizationThing(UCO_UcoThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/UcoInherentCharacterizationThing"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/UcoInherentCharacterizationThing"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Device(UCO_ObservableObject):
@@ -251,16 +267,18 @@ class UCO_Device(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Device"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Device"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Role(UCO_UcoObject):
@@ -275,14 +293,18 @@ class UCO_Role(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/role/Role"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/role/Role"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Facet(UCO_UcoInherentCharacterizationThing):
@@ -297,14 +319,18 @@ class UCO_Facet(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Facet"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Facet"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Address(UCO_ObservableObject):
@@ -319,16 +345,18 @@ class UCO_Address(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Address"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Address"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileDevice(UCO_Device):
@@ -343,16 +371,18 @@ class UCO_MobileDevice(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MobileDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MobileDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NeutralRole(UCO_Role):
@@ -367,16 +397,18 @@ class UCO_NeutralRole(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/role/NeutralRole"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/role/NeutralRole"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Collection(NodeConstructor):
@@ -391,14 +423,14 @@ class CO_Collection(NodeConstructor):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"http://purl.org/co/Collection"}
+        if len(n_types) == 0:
+            _n_types = {rdflib.term.URIRef("http://purl.org/co/Collection")}
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystemObject(UCO_ObservableObject):
@@ -413,16 +445,18 @@ class UCO_FileSystemObject(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemObject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemObject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Account(UCO_ObservableObject):
@@ -437,16 +471,18 @@ class UCO_Account(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Account"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Account"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAddressFacet(UCO_Facet):
@@ -461,16 +497,18 @@ class UCO_DigitalAddressFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAddress(UCO_Address):
@@ -485,16 +523,18 @@ class UCO_DigitalAddress(UCO_Address):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SmartDevice(UCO_Device):
@@ -509,16 +549,18 @@ class UCO_SmartDevice(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SmartDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SmartDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobilePhone(UCO_MobileDevice):
@@ -533,16 +575,18 @@ class UCO_MobilePhone(UCO_MobileDevice):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MobilePhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MobilePhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Computer(UCO_Device):
@@ -557,16 +601,18 @@ class UCO_Computer(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Computer"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Computer"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentityAbstraction(UCO_UcoObject):
@@ -581,16 +627,18 @@ class UCO_IdentityAbstraction(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Compilation(UCO_UcoObject):
@@ -605,16 +653,18 @@ class UCO_Compilation(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/Compilation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Compilation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Action(UCO_UcoObject):
@@ -629,14 +679,18 @@ class UCO_Action(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/action/Action"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/Action"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Victim(UCO_NeutralRole):
@@ -651,14 +705,18 @@ class UCO_Victim(UCO_NeutralRole):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/victim/Victim"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/victim/Victim"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Item(NodeConstructor):
@@ -673,14 +731,14 @@ class CO_Item(NodeConstructor):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"http://purl.org/co/Item"}
+        if len(n_types) == 0:
+            _n_types = {rdflib.term.URIRef("http://purl.org/co/Item")}
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Bag(CO_Collection):
@@ -695,14 +753,14 @@ class CO_Bag(CO_Collection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"http://purl.org/co/Bag"}
+        if len(n_types) == 0:
+            _n_types = {rdflib.term.URIRef("http://purl.org/co/Bag")}
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DictionaryEntry(UCO_UcoInherentCharacterizationThing):
@@ -717,16 +775,18 @@ class UCO_DictionaryEntry(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Dictionary(UCO_UcoInherentCharacterizationThing):
@@ -741,16 +801,18 @@ class UCO_Dictionary(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/types/Dictionary"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/Dictionary"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tool(UCO_UcoObject):
@@ -765,14 +827,18 @@ class UCO_Tool(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/tool/Tool"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/Tool"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Pattern(UCO_UcoObject):
@@ -787,16 +853,18 @@ class UCO_Pattern(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/pattern/Pattern"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/pattern/Pattern"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkConnection(UCO_ObservableObject):
@@ -811,16 +879,18 @@ class UCO_NetworkConnection(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProcessThread(UCO_ObservableObject):
@@ -835,16 +905,18 @@ class UCO_ProcessThread(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ProcessThread"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ProcessThread"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Process(UCO_ObservableObject):
@@ -859,16 +931,18 @@ class UCO_Process(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Process"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Process"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_File(UCO_FileSystemObject):
@@ -883,16 +957,18 @@ class UCO_File(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/File"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/File"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAccount(UCO_Account):
@@ -907,16 +983,18 @@ class UCO_DigitalAccount(UCO_Account):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MACAddressFacet(UCO_DigitalAddressFacet):
@@ -931,16 +1009,18 @@ class UCO_MACAddressFacet(UCO_DigitalAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MACAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MACAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MACAddress(UCO_DigitalAddress):
@@ -955,16 +1035,18 @@ class UCO_MACAddress(UCO_DigitalAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MACAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MACAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactFacet(UCO_Facet):
@@ -979,16 +1061,18 @@ class UCO_ContactFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DefinedEffectFacet(UCO_Facet):
@@ -1003,16 +1087,18 @@ class UCO_DefinedEffectFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DefinedEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DefinedEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Message(UCO_ObservableObject):
@@ -1027,16 +1113,18 @@ class UCO_Message(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Message"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Message"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Appliance(UCO_Device):
@@ -1051,16 +1139,18 @@ class UCO_Appliance(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Appliance"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Appliance"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Relationship(UCO_UcoObject):
@@ -1075,16 +1165,18 @@ class UCO_Relationship(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/Relationship"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Relationship"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPAddressFacet(UCO_DigitalAddressFacet):
@@ -1099,16 +1191,18 @@ class UCO_IPAddressFacet(UCO_DigitalAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPAddress(UCO_DigitalAddress):
@@ -1123,16 +1217,18 @@ class UCO_IPAddress(UCO_DigitalAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SmartPhone(UCO_Computer, UCO_MobilePhone, UCO_SmartDevice):
@@ -1147,16 +1243,18 @@ class UCO_SmartPhone(UCO_Computer, UCO_MobilePhone, UCO_SmartDevice):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SmartPhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SmartPhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AppleDevice(UCO_Device):
@@ -1171,16 +1269,18 @@ class UCO_AppleDevice(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AppleDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AppleDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Software(UCO_ObservableObject):
@@ -1195,16 +1295,18 @@ class UCO_Software(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Software"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Software"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidDevice(UCO_Device):
@@ -1219,16 +1321,18 @@ class UCO_AndroidDevice(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingModel(UCO_UcoInherentCharacterizationThing):
@@ -1243,16 +1347,18 @@ class UCO_MarkingModel(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/MarkingModel"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/MarkingModel"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingDefinitionAbstraction(UCO_UcoObject):
@@ -1267,16 +1373,18 @@ class UCO_MarkingDefinitionAbstraction(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentityFacet(UCO_Facet):
@@ -1291,16 +1399,18 @@ class UCO_IdentityFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/IdentityFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/IdentityFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Identity(UCO_IdentityAbstraction):
@@ -1315,16 +1425,18 @@ class UCO_Identity(UCO_IdentityAbstraction):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/Identity"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/Identity"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContextualCompilation(UCO_Compilation):
@@ -1339,16 +1451,18 @@ class UCO_ContextualCompilation(UCO_Compilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/ContextualCompilation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/ContextualCompilation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EnclosingCompilation(UCO_Compilation):
@@ -1363,16 +1477,18 @@ class UCO_EnclosingCompilation(UCO_Compilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/EnclosingCompilation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/EnclosingCompilation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Assertion(UCO_UcoObject):
@@ -1387,16 +1503,18 @@ class UCO_Assertion(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/Assertion"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Assertion"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticResultFacet(UCO_Facet):
@@ -1411,16 +1529,18 @@ class UCO_AnalyticResultFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResultFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResultFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionLifecycle(UCO_Action):
@@ -1435,16 +1555,18 @@ class UCO_ActionLifecycle(UCO_Action):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VictimTargeting(UCO_Victim):
@@ -1459,16 +1581,18 @@ class UCO_VictimTargeting(UCO_Victim):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/victim/VictimTargeting"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/victim/VictimTargeting"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ThreadItem(CO_Item, UCO_UcoThing):
@@ -1483,16 +1607,18 @@ class UCO_ThreadItem(CO_Item, UCO_UcoThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/types/ThreadItem"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/ThreadItem"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Thread(CO_Bag, UCO_UcoThing):
@@ -1507,14 +1633,18 @@ class UCO_Thread(CO_Bag, UCO_UcoThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/types/Thread"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/Thread"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Hash(UCO_UcoInherentCharacterizationThing):
@@ -1529,14 +1659,18 @@ class UCO_Hash(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/types/Hash"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/Hash"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledDictionaryEntry(UCO_DictionaryEntry):
@@ -1551,16 +1685,18 @@ class UCO_ControlledDictionaryEntry(UCO_DictionaryEntry):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionaryEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionaryEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledDictionary(UCO_Dictionary):
@@ -1575,16 +1711,18 @@ class UCO_ControlledDictionary(UCO_Dictionary):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionary"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/types/ControlledDictionary"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MaliciousTool(UCO_Tool):
@@ -1599,16 +1737,18 @@ class UCO_MaliciousTool(UCO_Tool):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/MaliciousTool"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/MaliciousTool"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LibraryType(UCO_UcoInherentCharacterizationThing):
@@ -1623,16 +1763,18 @@ class UCO_LibraryType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/LibraryType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/LibraryType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DefensiveTool(UCO_Tool):
@@ -1647,16 +1789,18 @@ class UCO_DefensiveTool(UCO_Tool):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/DefensiveTool"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/DefensiveTool"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfiguredTool(UCO_Tool):
@@ -1671,16 +1815,18 @@ class UCO_ConfiguredTool(UCO_Tool):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/ConfiguredTool"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/ConfiguredTool"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CompilerType(UCO_UcoInherentCharacterizationThing):
@@ -1695,16 +1841,18 @@ class UCO_CompilerType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/CompilerType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/CompilerType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildUtilityType(UCO_UcoInherentCharacterizationThing):
@@ -1719,16 +1867,18 @@ class UCO_BuildUtilityType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/BuildUtilityType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/BuildUtilityType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildInformationType(UCO_UcoInherentCharacterizationThing):
@@ -1743,16 +1893,18 @@ class UCO_BuildInformationType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/BuildInformationType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/BuildInformationType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildFacet(UCO_Facet):
@@ -1767,16 +1919,18 @@ class UCO_BuildFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/BuildFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/BuildFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticTool(UCO_Tool):
@@ -1791,16 +1945,18 @@ class UCO_AnalyticTool(UCO_Tool):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/tool/AnalyticTool"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/tool/AnalyticTool"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MaliciousRole(UCO_Role):
@@ -1815,16 +1971,18 @@ class UCO_MaliciousRole(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/role/MaliciousRole"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/role/MaliciousRole"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BenevolentRole(UCO_Role):
@@ -1839,16 +1997,18 @@ class UCO_BenevolentRole(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/role/BenevolentRole"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/role/BenevolentRole"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PatternExpression(UCO_UcoInherentCharacterizationThing):
@@ -1863,16 +2023,18 @@ class UCO_PatternExpression(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LogicalPattern(UCO_Pattern):
@@ -1887,16 +2049,18 @@ class UCO_LogicalPattern(UCO_Pattern):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509V3ExtensionsFacet(UCO_Facet):
@@ -1911,16 +2075,18 @@ class UCO_X509V3ExtensionsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/X509V3ExtensionsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/X509V3ExtensionsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509V3Certificate(UCO_ObservableObject):
@@ -1935,16 +2101,18 @@ class UCO_X509V3Certificate(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/X509V3Certificate"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/X509V3Certificate"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509CertificateFacet(UCO_Facet):
@@ -1959,16 +2127,18 @@ class UCO_X509CertificateFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/X509CertificateFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/X509CertificateFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509Certificate(UCO_ObservableObject):
@@ -1983,16 +2153,18 @@ class UCO_X509Certificate(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/X509Certificate"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/X509Certificate"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WriteBlocker(UCO_Device):
@@ -2007,16 +2179,18 @@ class UCO_WriteBlocker(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WriteBlocker"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WriteBlocker"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WirelessNetworkConnectionFacet(UCO_Facet):
@@ -2031,16 +2205,18 @@ class UCO_WirelessNetworkConnectionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnectionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnectionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WirelessNetworkConnection(UCO_NetworkConnection):
@@ -2055,16 +2231,18 @@ class UCO_WirelessNetworkConnection(UCO_NetworkConnection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WirelessNetworkConnection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsWaitableTime(UCO_ObservableObject):
@@ -2079,16 +2257,18 @@ class UCO_WindowsWaitableTime(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsWaitableTime"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsWaitableTime"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsVolumeFacet(UCO_Facet):
@@ -2103,16 +2283,18 @@ class UCO_WindowsVolumeFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsVolumeFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsVolumeFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsThreadFacet(UCO_Facet):
@@ -2127,16 +2309,18 @@ class UCO_WindowsThreadFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThreadFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThreadFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsThread(UCO_ProcessThread):
@@ -2151,16 +2335,18 @@ class UCO_WindowsThread(UCO_ProcessThread):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThread"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsThread"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsTaskFacet(UCO_Facet):
@@ -2175,16 +2361,18 @@ class UCO_WindowsTaskFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTaskFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTaskFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsTask(UCO_ObservableObject):
@@ -2199,16 +2387,18 @@ class UCO_WindowsTask(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTask"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsTask"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsSystemRestore(UCO_ObservableObject):
@@ -2223,16 +2413,18 @@ class UCO_WindowsSystemRestore(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsSystemRestore"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsSystemRestore"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsServiceFacet(UCO_Facet):
@@ -2247,16 +2439,18 @@ class UCO_WindowsServiceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsServiceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsServiceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsService(UCO_ObservableObject):
@@ -2271,16 +2465,18 @@ class UCO_WindowsService(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsService"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsService"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryValue(UCO_UcoInherentCharacterizationThing):
@@ -2295,16 +2491,18 @@ class UCO_WindowsRegistryValue(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryValue"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryValue"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryKeyFacet(UCO_Facet):
@@ -2319,16 +2517,18 @@ class UCO_WindowsRegistryKeyFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKeyFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKeyFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryKey(UCO_ObservableObject):
@@ -2343,16 +2543,18 @@ class UCO_WindowsRegistryKey(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKey"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryKey"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryHiveFacet(UCO_Facet):
@@ -2367,16 +2569,18 @@ class UCO_WindowsRegistryHiveFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHiveFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHiveFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryHive(UCO_ObservableObject):
@@ -2391,16 +2595,18 @@ class UCO_WindowsRegistryHive(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHive"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsRegistryHive"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsProcessFacet(UCO_Facet):
@@ -2415,16 +2621,18 @@ class UCO_WindowsProcessFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcessFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcessFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsProcess(UCO_Process):
@@ -2439,16 +2647,18 @@ class UCO_WindowsProcess(UCO_Process):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcess"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsProcess"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPrefetchFacet(UCO_Facet):
@@ -2463,16 +2673,18 @@ class UCO_WindowsPrefetchFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetchFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetchFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPrefetch(UCO_ObservableObject):
@@ -2487,16 +2699,18 @@ class UCO_WindowsPrefetch(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetch"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPrefetch"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPESection(UCO_UcoInherentCharacterizationThing):
@@ -2511,16 +2725,18 @@ class UCO_WindowsPESection(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPESection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPESection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEOptionalHeader(UCO_UcoInherentCharacterizationThing):
@@ -2535,16 +2751,18 @@ class UCO_WindowsPEOptionalHeader(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEOptionalHeader"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEOptionalHeader"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEFileHeader(UCO_UcoInherentCharacterizationThing):
@@ -2559,16 +2777,18 @@ class UCO_WindowsPEFileHeader(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEFileHeader"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEFileHeader"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEBinaryFileFacet(UCO_Facet):
@@ -2583,16 +2803,18 @@ class UCO_WindowsPEBinaryFileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEBinaryFile(UCO_File):
@@ -2607,16 +2829,18 @@ class UCO_WindowsPEBinaryFile(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsPEBinaryFile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsNetworkShare(UCO_ObservableObject):
@@ -2631,16 +2855,18 @@ class UCO_WindowsNetworkShare(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsNetworkShare"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsNetworkShare"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsMailslot(UCO_ObservableObject):
@@ -2655,16 +2881,18 @@ class UCO_WindowsMailslot(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsMailslot"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsMailslot"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsHook(UCO_ObservableObject):
@@ -2679,16 +2907,18 @@ class UCO_WindowsHook(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHook"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHook"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsHandle(UCO_ObservableObject):
@@ -2703,16 +2933,18 @@ class UCO_WindowsHandle(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHandle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsHandle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsFilemapping(UCO_ObservableObject):
@@ -2727,16 +2959,18 @@ class UCO_WindowsFilemapping(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsFilemapping"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsFilemapping"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsEvent(UCO_ObservableObject):
@@ -2751,16 +2985,18 @@ class UCO_WindowsEvent(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsEvent"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsEvent"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsCriticalSection(UCO_ObservableObject):
@@ -2775,16 +3011,18 @@ class UCO_WindowsCriticalSection(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsCriticalSection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsCriticalSection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsComputerSpecificationFacet(UCO_Facet):
@@ -2799,16 +3037,18 @@ class UCO_WindowsComputerSpecificationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecificationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecificationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsComputerSpecification(UCO_ObservableObject):
@@ -2823,16 +3063,18 @@ class UCO_WindowsComputerSpecification(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecification"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsComputerSpecification"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsActiveDirectoryAccountFacet(UCO_Facet):
@@ -2847,16 +3089,18 @@ class UCO_WindowsActiveDirectoryAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsActiveDirectoryAccount(UCO_DigitalAccount):
@@ -2871,16 +3115,18 @@ class UCO_WindowsActiveDirectoryAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsActiveDirectoryAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsAccountFacet(UCO_Facet):
@@ -2895,16 +3141,18 @@ class UCO_WindowsAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsAccount(UCO_DigitalAccount):
@@ -2919,16 +3167,18 @@ class UCO_WindowsAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WindowsAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WikiArticle(UCO_ObservableObject):
@@ -2943,16 +3193,18 @@ class UCO_WikiArticle(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WikiArticle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WikiArticle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Wiki(UCO_ObservableObject):
@@ -2967,16 +3219,18 @@ class UCO_Wiki(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Wiki"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Wiki"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WifiAddressFacet(UCO_MACAddressFacet):
@@ -2991,16 +3245,18 @@ class UCO_WifiAddressFacet(UCO_MACAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WifiAddress(UCO_MACAddress):
@@ -3015,16 +3271,18 @@ class UCO_WifiAddress(UCO_MACAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WifiAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoisRegistrarInfoType(UCO_UcoInherentCharacterizationThing):
@@ -3039,16 +3297,18 @@ class UCO_WhoisRegistrarInfoType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WhoisRegistrarInfoType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WhoisRegistrarInfoType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoisContactFacet(UCO_ContactFacet):
@@ -3063,16 +3323,18 @@ class UCO_WhoisContactFacet(UCO_ContactFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoIsFacet(UCO_Facet):
@@ -3087,16 +3349,18 @@ class UCO_WhoIsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WhoIsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WhoIsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoIs(UCO_ObservableObject):
@@ -3111,16 +3375,18 @@ class UCO_WhoIs(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WhoIs"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WhoIs"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WebPage(UCO_ObservableObject):
@@ -3135,16 +3401,18 @@ class UCO_WebPage(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WebPage"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WebPage"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WearableDevice(UCO_SmartDevice):
@@ -3159,16 +3427,18 @@ class UCO_WearableDevice(UCO_SmartDevice):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/WearableDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/WearableDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VolumeFacet(UCO_Facet):
@@ -3183,16 +3453,18 @@ class UCO_VolumeFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/VolumeFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/VolumeFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Volume(UCO_ObservableObject):
@@ -3207,16 +3479,18 @@ class UCO_Volume(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Volume"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Volume"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ValuesEnumeratedEffectFacet(UCO_DefinedEffectFacet):
@@ -3231,16 +3505,18 @@ class UCO_ValuesEnumeratedEffectFacet(UCO_DefinedEffectFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ValuesEnumeratedEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ValuesEnumeratedEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserSessionFacet(UCO_Facet):
@@ -3255,16 +3531,18 @@ class UCO_UserSessionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UserSessionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UserSessionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserSession(UCO_ObservableObject):
@@ -3279,16 +3557,18 @@ class UCO_UserSession(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UserSession"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UserSession"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserAccountFacet(UCO_Facet):
@@ -3303,16 +3583,18 @@ class UCO_UserAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UserAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UserAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserAccount(UCO_DigitalAccount):
@@ -3327,16 +3609,18 @@ class UCO_UserAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UserAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UserAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLVisitFacet(UCO_Facet):
@@ -3351,16 +3635,18 @@ class UCO_URLVisitFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLVisitFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLVisitFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLVisit(UCO_ObservableObject):
@@ -3375,16 +3661,18 @@ class UCO_URLVisit(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLVisit"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLVisit"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistoryFacet(UCO_Facet):
@@ -3399,16 +3687,18 @@ class UCO_URLHistoryFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistoryEntry(UCO_UcoInherentCharacterizationThing):
@@ -3423,16 +3713,18 @@ class UCO_URLHistoryEntry(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLHistoryEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistory(UCO_ObservableObject):
@@ -3447,16 +3739,18 @@ class UCO_URLHistory(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLHistory"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLHistory"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLFacet(UCO_Facet):
@@ -3471,16 +3765,18 @@ class UCO_URLFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URLFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URLFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URL(UCO_ObservableObject):
@@ -3495,16 +3791,18 @@ class UCO_URL(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/URL"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/URL"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXVolumeFacet(UCO_Facet):
@@ -3519,16 +3817,18 @@ class UCO_UNIXVolumeFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXVolumeFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXVolumeFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXProcessFacet(UCO_Facet):
@@ -3543,16 +3843,18 @@ class UCO_UNIXProcessFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcessFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcessFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXProcess(UCO_Process):
@@ -3567,16 +3869,18 @@ class UCO_UNIXProcess(UCO_Process):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcess"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXProcess"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXFilePermissionsFacet(UCO_Facet):
@@ -3591,16 +3895,18 @@ class UCO_UNIXFilePermissionsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFilePermissionsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFilePermissionsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXFile(UCO_File):
@@ -3615,16 +3921,18 @@ class UCO_UNIXFile(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXFile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXAccountFacet(UCO_Facet):
@@ -3639,16 +3947,18 @@ class UCO_UNIXAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXAccount(UCO_DigitalAccount):
@@ -3663,16 +3973,18 @@ class UCO_UNIXAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/UNIXAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TwitterProfileFacet(UCO_Facet):
@@ -3687,16 +3999,18 @@ class UCO_TwitterProfileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TwitterProfileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TwitterProfileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tweet(UCO_Message):
@@ -3711,16 +4025,18 @@ class UCO_Tweet(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Tweet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Tweet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TriggerType(UCO_UcoInherentCharacterizationThing):
@@ -3735,16 +4051,18 @@ class UCO_TriggerType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TriggerType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TriggerType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TaskActionType(UCO_UcoInherentCharacterizationThing):
@@ -3759,16 +4077,18 @@ class UCO_TaskActionType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TaskActionType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TaskActionType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
@@ -3783,16 +4103,18 @@ class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Tablet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Tablet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TableFieldFacet(UCO_Facet):
@@ -3807,16 +4129,18 @@ class UCO_TableFieldFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TableFieldFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TableFieldFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TableField(UCO_ObservableObject):
@@ -3831,16 +4155,18 @@ class UCO_TableField(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TableField"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TableField"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TCPConnectionFacet(UCO_Facet):
@@ -3855,16 +4181,18 @@ class UCO_TCPConnectionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnectionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnectionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TCPConnection(UCO_NetworkConnection):
@@ -3879,16 +4207,18 @@ class UCO_TCPConnection(UCO_NetworkConnection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/TCPConnection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SymbolicLinkFacet(UCO_Facet):
@@ -3903,16 +4233,18 @@ class UCO_SymbolicLinkFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLinkFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLinkFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SymbolicLink(UCO_FileSystemObject):
@@ -3927,16 +4259,18 @@ class UCO_SymbolicLink(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLink"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SymbolicLink"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StorageMediumFacet(UCO_Facet):
@@ -3951,16 +4285,18 @@ class UCO_StorageMediumFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/StorageMediumFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/StorageMediumFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StorageMedium(UCO_Device):
@@ -3975,16 +4311,18 @@ class UCO_StorageMedium(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/StorageMedium"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/StorageMedium"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StateChangeEffectFacet(UCO_DefinedEffectFacet):
@@ -3999,16 +4337,18 @@ class UCO_StateChangeEffectFacet(UCO_DefinedEffectFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/StateChangeEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/StateChangeEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SoftwareFacet(UCO_Facet):
@@ -4023,16 +4363,18 @@ class UCO_SoftwareFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SoftwareFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SoftwareFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SocketAddress(UCO_Address):
@@ -4047,16 +4389,18 @@ class UCO_SocketAddress(UCO_Address):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SocketAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SocketAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Socket(UCO_FileSystemObject):
@@ -4071,16 +4415,18 @@ class UCO_Socket(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Socket"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Socket"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Snapshot(UCO_FileSystemObject):
@@ -4095,16 +4441,18 @@ class UCO_Snapshot(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Snapshot"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Snapshot"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ShopListing(UCO_ObservableObject):
@@ -4119,16 +4467,18 @@ class UCO_ShopListing(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ShopListing"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ShopListing"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Server(UCO_Computer):
@@ -4143,16 +4493,18 @@ class UCO_Server(UCO_Computer):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Server"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Server"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SendControlCodeEffectFacet(UCO_DefinedEffectFacet):
@@ -4167,16 +4519,18 @@ class UCO_SendControlCodeEffectFacet(UCO_DefinedEffectFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SendControlCodeEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SendControlCodeEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Semaphore(UCO_ObservableObject):
@@ -4191,16 +4545,18 @@ class UCO_Semaphore(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Semaphore"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Semaphore"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SecurityAppliance(UCO_Appliance):
@@ -4215,16 +4571,18 @@ class UCO_SecurityAppliance(UCO_Appliance):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SecurityAppliance"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SecurityAppliance"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SQLiteBlobFacet(UCO_Facet):
@@ -4239,16 +4597,18 @@ class UCO_SQLiteBlobFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlobFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlobFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SQLiteBlob(UCO_ObservableObject):
@@ -4263,16 +4623,18 @@ class UCO_SQLiteBlob(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlob"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SQLiteBlob"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SMSMessageFacet(UCO_Facet):
@@ -4287,16 +4649,18 @@ class UCO_SMSMessageFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessageFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessageFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SMSMessage(UCO_Message):
@@ -4311,16 +4675,18 @@ class UCO_SMSMessage(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessage"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SMSMessage"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIPAddressFacet(UCO_DigitalAddressFacet):
@@ -4335,16 +4701,18 @@ class UCO_SIPAddressFacet(UCO_DigitalAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIPAddress(UCO_DigitalAddress):
@@ -4359,16 +4727,18 @@ class UCO_SIPAddress(UCO_DigitalAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SIPAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIMCardFacet(UCO_Facet):
@@ -4383,16 +4753,18 @@ class UCO_SIMCardFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SIMCardFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SIMCardFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIMCard(UCO_Device):
@@ -4407,16 +4779,18 @@ class UCO_SIMCard(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/SIMCard"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/SIMCard"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ReparsePoint(UCO_FileSystemObject):
@@ -4431,16 +4805,18 @@ class UCO_ReparsePoint(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ReparsePoint"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ReparsePoint"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RecoveredObjectFacet(UCO_Facet):
@@ -4455,16 +4831,18 @@ class UCO_RecoveredObjectFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/RecoveredObjectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/RecoveredObjectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RecoveredObject(UCO_ObservableObject):
@@ -4479,16 +4857,18 @@ class UCO_RecoveredObject(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/RecoveredObject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/RecoveredObject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RasterPictureFacet(UCO_Facet):
@@ -4503,16 +4883,18 @@ class UCO_RasterPictureFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/RasterPictureFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/RasterPictureFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RasterPicture(UCO_File):
@@ -4527,16 +4909,18 @@ class UCO_RasterPicture(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/RasterPicture"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/RasterPicture"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProtocolConverter(UCO_Device):
@@ -4551,16 +4935,18 @@ class UCO_ProtocolConverter(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ProtocolConverter"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ProtocolConverter"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PropertyReadEffectFacet(UCO_DefinedEffectFacet):
@@ -4575,16 +4961,18 @@ class UCO_PropertyReadEffectFacet(UCO_DefinedEffectFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PropertyReadEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PropertyReadEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PropertiesEnumeratedEffectFacet(UCO_DefinedEffectFacet, UCO_Facet):
@@ -4599,16 +4987,18 @@ class UCO_PropertiesEnumeratedEffectFacet(UCO_DefinedEffectFacet, UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PropertiesEnumeratedEffectFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PropertiesEnumeratedEffectFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProfileFacet(UCO_Facet):
@@ -4623,16 +5013,18 @@ class UCO_ProfileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ProfileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ProfileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Profile(UCO_ObservableObject):
@@ -4647,16 +5039,18 @@ class UCO_Profile(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Profile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Profile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProcessFacet(UCO_Facet):
@@ -4671,16 +5065,18 @@ class UCO_ProcessFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ProcessFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ProcessFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Post(UCO_Message):
@@ -4695,16 +5091,18 @@ class UCO_Post(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Post"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Post"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Pipe(UCO_ObservableObject):
@@ -4719,16 +5117,18 @@ class UCO_Pipe(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Pipe"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Pipe"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhoneAccountFacet(UCO_Facet):
@@ -4743,16 +5143,18 @@ class UCO_PhoneAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhoneAccount(UCO_DigitalAccount):
@@ -4767,16 +5169,18 @@ class UCO_PhoneAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PhoneAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PaymentCard(UCO_ObservableObject):
@@ -4791,16 +5195,18 @@ class UCO_PaymentCard(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PaymentCard"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PaymentCard"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PathRelationFacet(UCO_Facet):
@@ -4815,16 +5221,18 @@ class UCO_PathRelationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PathRelationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PathRelationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PDFFileFacet(UCO_Facet):
@@ -4839,16 +5247,18 @@ class UCO_PDFFileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PDFFileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PDFFileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PDFFile(UCO_File):
@@ -4863,16 +5273,18 @@ class UCO_PDFFile(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/PDFFile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/PDFFile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OperatingSystemFacet(UCO_Facet):
@@ -4887,16 +5299,18 @@ class UCO_OperatingSystemFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystemFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystemFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OperatingSystem(UCO_ObservableObject):
@@ -4911,16 +5325,18 @@ class UCO_OperatingSystem(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OnlineServiceFacet(UCO_Facet):
@@ -4935,16 +5351,18 @@ class UCO_OnlineServiceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/OnlineServiceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/OnlineServiceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OnlineService(UCO_ObservableObject):
@@ -4959,16 +5377,18 @@ class UCO_OnlineService(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/OnlineService"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/OnlineService"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Observation(UCO_Action):
@@ -4983,16 +5403,18 @@ class UCO_Observation(UCO_Action):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Observation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Observation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableRelationship(UCO_Observable, UCO_Relationship):
@@ -5007,16 +5429,18 @@ class UCO_ObservableRelationship(UCO_Observable, UCO_Relationship):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ObservableRelationship"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ObservableRelationship"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservablePattern(UCO_Observable):
@@ -5031,16 +5455,18 @@ class UCO_ObservablePattern(UCO_Observable):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableAction(UCO_Action, UCO_Observable):
@@ -5055,16 +5481,18 @@ class UCO_ObservableAction(UCO_Action, UCO_Observable):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ObservableAction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ObservableAction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NoteFacet(UCO_Facet):
@@ -5079,16 +5507,18 @@ class UCO_NoteFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NoteFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NoteFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Note(UCO_ObservableObject):
@@ -5103,16 +5533,18 @@ class UCO_Note(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Note"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Note"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkSubnet(UCO_ObservableObject):
@@ -5127,16 +5559,18 @@ class UCO_NetworkSubnet(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkSubnet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkSubnet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkRoute(UCO_ObservableObject):
@@ -5151,16 +5585,18 @@ class UCO_NetworkRoute(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkRoute"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkRoute"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkProtocol(UCO_ObservableObject):
@@ -5175,16 +5611,18 @@ class UCO_NetworkProtocol(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkProtocol"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkProtocol"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkInterfaceFacet(UCO_Facet):
@@ -5199,16 +5637,18 @@ class UCO_NetworkInterfaceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterfaceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterfaceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkInterface(UCO_ObservableObject):
@@ -5223,16 +5663,18 @@ class UCO_NetworkInterface(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterface"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkInterface"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkFlowFacet(UCO_Facet):
@@ -5247,16 +5689,18 @@ class UCO_NetworkFlowFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlowFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlowFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkFlow(UCO_ObservableObject):
@@ -5271,16 +5715,18 @@ class UCO_NetworkFlow(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlow"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkFlow"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkConnectionFacet(UCO_Facet):
@@ -5295,16 +5741,18 @@ class UCO_NetworkConnectionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnectionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkConnectionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkAppliance(UCO_Appliance):
@@ -5319,16 +5767,18 @@ class UCO_NetworkAppliance(UCO_Appliance):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NetworkAppliance"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NetworkAppliance"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NamedPipe(UCO_FileSystemObject):
@@ -5343,16 +5793,18 @@ class UCO_NamedPipe(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NamedPipe"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NamedPipe"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFilePermissionsFacet(UCO_Facet):
@@ -5367,16 +5819,18 @@ class UCO_NTFSFilePermissionsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFilePermissionsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFilePermissionsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFileFacet(UCO_Facet):
@@ -5391,16 +5845,18 @@ class UCO_NTFSFileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFile(UCO_File):
@@ -5415,16 +5871,18 @@ class UCO_NTFSFile(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/NTFSFile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MutexFacet(UCO_Facet):
@@ -5439,16 +5897,18 @@ class UCO_MutexFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MutexFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MutexFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Mutex(UCO_ObservableObject):
@@ -5463,16 +5923,18 @@ class UCO_Mutex(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Mutex"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Mutex"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileDeviceFacet(UCO_Facet):
@@ -5487,16 +5949,18 @@ class UCO_MobileDeviceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MobileDeviceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MobileDeviceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileAccountFacet(UCO_Facet):
@@ -5511,16 +5975,18 @@ class UCO_MobileAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileAccount(UCO_DigitalAccount):
@@ -5535,16 +6001,18 @@ class UCO_MobileAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MobileAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MimePartType(UCO_UcoInherentCharacterizationThing):
@@ -5559,16 +6027,18 @@ class UCO_MimePartType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MimePartType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MimePartType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MftRecordFacet(UCO_Facet):
@@ -5583,16 +6053,18 @@ class UCO_MftRecordFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MftRecordFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MftRecordFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageThreadFacet(UCO_Facet):
@@ -5607,16 +6079,18 @@ class UCO_MessageThreadFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MessageThreadFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MessageThreadFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageThread(UCO_ObservableObject):
@@ -5631,16 +6105,18 @@ class UCO_MessageThread(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MessageThread"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MessageThread"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageFacet(UCO_Facet):
@@ -5655,16 +6131,18 @@ class UCO_MessageFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MessageFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MessageFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MemoryFacet(UCO_Facet):
@@ -5679,16 +6157,18 @@ class UCO_MemoryFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Memory(UCO_ObservableObject):
@@ -5703,16 +6183,18 @@ class UCO_Memory(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Memory"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Memory"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LibraryFacet(UCO_Facet):
@@ -5727,16 +6209,18 @@ class UCO_LibraryFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/LibraryFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/LibraryFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Library(UCO_ObservableObject):
@@ -5751,16 +6235,18 @@ class UCO_Library(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Library"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Library"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Laptop(UCO_Computer):
@@ -5775,16 +6261,18 @@ class UCO_Laptop(UCO_Computer):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Laptop"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Laptop"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Junction(UCO_FileSystemObject):
@@ -5799,16 +6287,18 @@ class UCO_Junction(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Junction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Junction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_InstantMessagingAddressFacet(UCO_DigitalAddressFacet):
@@ -5823,16 +6313,18 @@ class UCO_InstantMessagingAddressFacet(UCO_DigitalAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_InstantMessagingAddress(UCO_DigitalAddress):
@@ -5847,16 +6339,18 @@ class UCO_InstantMessagingAddress(UCO_DigitalAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/InstantMessagingAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ImageFacet(UCO_Facet):
@@ -5871,16 +6365,18 @@ class UCO_ImageFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ImageFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ImageFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Image(UCO_ObservableObject):
@@ -5895,16 +6391,18 @@ class UCO_Image(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Image"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Image"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IShowMessageActionType(UCO_UcoInherentCharacterizationThing):
@@ -5919,16 +6417,18 @@ class UCO_IShowMessageActionType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IShowMessageActionType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IShowMessageActionType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv6AddressFacet(UCO_IPAddressFacet):
@@ -5943,16 +6443,18 @@ class UCO_IPv6AddressFacet(UCO_IPAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPv6AddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPv6AddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv6Address(UCO_IPAddress):
@@ -5967,16 +6469,18 @@ class UCO_IPv6Address(UCO_IPAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPv6Address"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPv6Address"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv4AddressFacet(UCO_IPAddressFacet):
@@ -5991,16 +6495,18 @@ class UCO_IPv4AddressFacet(UCO_IPAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPv4AddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPv4AddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv4Address(UCO_IPAddress):
@@ -6015,16 +6521,18 @@ class UCO_IPv4Address(UCO_IPAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPv4Address"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPv4Address"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPhone(UCO_AppleDevice, UCO_SmartPhone):
@@ -6039,16 +6547,18 @@ class UCO_IPhone(UCO_AppleDevice, UCO_SmartPhone):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPNetmask(UCO_ObservableObject):
@@ -6063,16 +6573,18 @@ class UCO_IPNetmask(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IPNetmask"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IPNetmask"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IExecActionType(UCO_UcoInherentCharacterizationThing):
@@ -6087,16 +6599,18 @@ class UCO_IExecActionType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IExecActionType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IExecActionType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IComHandlerActionType(UCO_UcoInherentCharacterizationThing):
@@ -6111,16 +6625,18 @@ class UCO_IComHandlerActionType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/IComHandlerActionType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/IComHandlerActionType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ICMPConnectionFacet(UCO_Facet):
@@ -6135,16 +6651,18 @@ class UCO_ICMPConnectionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnectionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnectionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ICMPConnection(UCO_NetworkConnection):
@@ -6159,16 +6677,18 @@ class UCO_ICMPConnection(UCO_NetworkConnection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ICMPConnection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Hostname(UCO_ObservableObject):
@@ -6183,16 +6703,18 @@ class UCO_Hostname(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Hostname"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Hostname"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_HTTPConnectionFacet(UCO_Facet):
@@ -6207,16 +6729,18 @@ class UCO_HTTPConnectionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnectionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnectionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_HTTPConnection(UCO_NetworkConnection):
@@ -6231,16 +6755,18 @@ class UCO_HTTPConnection(UCO_NetworkConnection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnection"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/HTTPConnection"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GlobalFlagType(UCO_UcoInherentCharacterizationThing):
@@ -6255,16 +6781,18 @@ class UCO_GlobalFlagType(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GlobalFlagType"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GlobalFlagType"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationTrackFacet(UCO_Facet):
@@ -6279,16 +6807,18 @@ class UCO_GeoLocationTrackFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrackFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrackFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationTrack(UCO_ObservableObject):
@@ -6303,16 +6833,18 @@ class UCO_GeoLocationTrack(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrack"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationTrack"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationLogFacet(UCO_Facet):
@@ -6327,16 +6859,18 @@ class UCO_GeoLocationLogFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLogFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLogFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationLog(UCO_ObservableObject):
@@ -6351,16 +6885,18 @@ class UCO_GeoLocationLog(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLog"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationLog"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationEntryFacet(UCO_Facet):
@@ -6375,16 +6911,18 @@ class UCO_GeoLocationEntryFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntryFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntryFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationEntry(UCO_ObservableObject):
@@ -6399,16 +6937,18 @@ class UCO_GeoLocationEntry(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GeoLocationEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GenericObservableObject(UCO_ObservableObject):
@@ -6423,16 +6963,18 @@ class UCO_GenericObservableObject(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GenericObservableObject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GenericObservableObject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GamingConsole(UCO_Device):
@@ -6447,16 +6989,18 @@ class UCO_GamingConsole(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GamingConsole"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GamingConsole"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GUI(UCO_ObservableObject):
@@ -6471,16 +7015,18 @@ class UCO_GUI(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/GUI"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/GUI"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FragmentFacet(UCO_Facet):
@@ -6495,16 +7041,18 @@ class UCO_FragmentFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FragmentFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FragmentFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ForumPrivateMessage(UCO_Message):
@@ -6519,16 +7067,18 @@ class UCO_ForumPrivateMessage(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ForumPrivateMessage"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ForumPrivateMessage"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ForumPost(UCO_Message):
@@ -6543,16 +7093,18 @@ class UCO_ForumPost(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ForumPost"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ForumPost"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystemFacet(UCO_Facet):
@@ -6567,16 +7119,18 @@ class UCO_FileSystemFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FileSystemFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystem(UCO_ObservableObject):
@@ -6591,16 +7145,18 @@ class UCO_FileSystem(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FileSystem"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FileSystem"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FilePermissionsFacet(UCO_Facet):
@@ -6615,16 +7171,18 @@ class UCO_FilePermissionsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FilePermissionsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FilePermissionsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileFacet(UCO_Facet):
@@ -6639,16 +7197,18 @@ class UCO_FileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/FileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/FileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtractedStringsFacet(UCO_Facet):
@@ -6663,16 +7223,18 @@ class UCO_ExtractedStringsFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedStringsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedStringsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtractedString(UCO_UcoInherentCharacterizationThing):
@@ -6687,16 +7249,18 @@ class UCO_ExtractedString(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedString"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ExtractedString"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtInodeFacet(UCO_Facet):
@@ -6711,16 +7275,18 @@ class UCO_ExtInodeFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ExtInodeFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ExtInodeFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventRecordFacet(UCO_Facet):
@@ -6735,16 +7301,18 @@ class UCO_EventRecordFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EventRecordFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EventRecordFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventRecord(UCO_ObservableObject):
@@ -6759,16 +7327,18 @@ class UCO_EventRecord(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EventRecord"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EventRecord"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventLog(UCO_ObservableObject):
@@ -6783,16 +7353,18 @@ class UCO_EventLog(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EventLog"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EventLog"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EnvironmentVariable(UCO_UcoInherentCharacterizationThing):
@@ -6807,16 +7379,18 @@ class UCO_EnvironmentVariable(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EnvironmentVariable"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EnvironmentVariable"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EncryptedStreamFacet(UCO_Facet):
@@ -6831,16 +7405,18 @@ class UCO_EncryptedStreamFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EncryptedStreamFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EncryptedStreamFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EncodedStreamFacet(UCO_Facet):
@@ -6855,16 +7431,18 @@ class UCO_EncodedStreamFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EncodedStreamFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EncodedStreamFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmbeddedDevice(UCO_Device):
@@ -6879,16 +7457,18 @@ class UCO_EmbeddedDevice(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmbeddedDevice"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmbeddedDevice"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailMessageFacet(UCO_Facet):
@@ -6903,16 +7483,18 @@ class UCO_EmailMessageFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessageFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessageFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailMessage(UCO_Message):
@@ -6927,16 +7509,18 @@ class UCO_EmailMessage(UCO_Message):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessage"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailMessage"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAddressFacet(UCO_DigitalAddressFacet):
@@ -6951,16 +7535,18 @@ class UCO_EmailAddressFacet(UCO_DigitalAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAddress(UCO_DigitalAddress):
@@ -6975,16 +7561,18 @@ class UCO_EmailAddress(UCO_DigitalAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAccountFacet(UCO_Facet):
@@ -6999,16 +7587,18 @@ class UCO_EmailAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAccount(UCO_DigitalAccount):
@@ -7023,16 +7613,18 @@ class UCO_EmailAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EmailAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EXIFFacet(UCO_Facet):
@@ -7047,16 +7639,18 @@ class UCO_EXIFFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/EXIFFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/EXIFFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Drone(UCO_MobileDevice):
@@ -7071,16 +7665,18 @@ class UCO_Drone(UCO_MobileDevice):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Drone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Drone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DomainNameFacet(UCO_Facet):
@@ -7095,16 +7691,18 @@ class UCO_DomainNameFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DomainNameFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DomainNameFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DomainName(UCO_ObservableObject):
@@ -7119,16 +7717,18 @@ class UCO_DomainName(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DomainName"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DomainName"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskPartitionFacet(UCO_Facet):
@@ -7143,16 +7743,18 @@ class UCO_DiskPartitionFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartitionFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartitionFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskPartition(UCO_ObservableObject):
@@ -7167,16 +7769,18 @@ class UCO_DiskPartition(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartition"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DiskPartition"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskFacet(UCO_Facet):
@@ -7191,16 +7795,18 @@ class UCO_DiskFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DiskFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DiskFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Disk(UCO_ObservableObject):
@@ -7215,16 +7821,18 @@ class UCO_Disk(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Disk"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Disk"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Directory(UCO_FileSystemObject):
@@ -7239,16 +7847,18 @@ class UCO_Directory(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Directory"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Directory"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalSignatureInfoFacet(UCO_Facet):
@@ -7263,16 +7873,18 @@ class UCO_DigitalSignatureInfoFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfoFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfoFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalSignatureInfo(UCO_ObservableObject):
@@ -7287,16 +7899,18 @@ class UCO_DigitalSignatureInfo(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfo"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalSignatureInfo"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalCamera(UCO_Device):
@@ -7311,16 +7925,18 @@ class UCO_DigitalCamera(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalCamera"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalCamera"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAccountFacet(UCO_Facet):
@@ -7335,16 +7951,18 @@ class UCO_DigitalAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DigitalAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DeviceFacet(UCO_Facet):
@@ -7359,16 +7977,18 @@ class UCO_DeviceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DeviceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DeviceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DataRangeFacet(UCO_Facet):
@@ -7383,16 +8003,18 @@ class UCO_DataRangeFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DataRangeFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DataRangeFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DNSRecord(UCO_ObservableObject):
@@ -7407,16 +8029,18 @@ class UCO_DNSRecord(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DNSRecord"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DNSRecord"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DNSCache(UCO_ObservableObject):
@@ -7431,16 +8055,18 @@ class UCO_DNSCache(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/DNSCache"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/DNSCache"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CredentialDump(UCO_ObservableObject):
@@ -7455,16 +8081,18 @@ class UCO_CredentialDump(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CredentialDump"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CredentialDump"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Credential(UCO_ObservableObject):
@@ -7479,16 +8107,18 @@ class UCO_Credential(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Credential"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Credential"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CookieHistory(UCO_ObservableObject):
@@ -7503,16 +8133,18 @@ class UCO_CookieHistory(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CookieHistory"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CookieHistory"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContentDataFacet(UCO_Facet):
@@ -7527,16 +8159,18 @@ class UCO_ContentDataFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
         self._hashes: typing.List[UCO_Hash] = []
 
     def add_hash(self, hash: UCO_Hash) -> None:
@@ -7560,16 +8194,18 @@ class UCO_ContentData(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContentData"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContentData"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactURL(UCO_UcoInherentCharacterizationThing):
@@ -7584,16 +8220,18 @@ class UCO_ContactURL(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactURL"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactURL"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactSIP(UCO_UcoInherentCharacterizationThing):
@@ -7608,16 +8246,18 @@ class UCO_ContactSIP(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactSIP"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactSIP"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactProfile(UCO_UcoInherentCharacterizationThing):
@@ -7632,16 +8272,18 @@ class UCO_ContactProfile(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactProfile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactProfile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactPhone(UCO_UcoInherentCharacterizationThing):
@@ -7656,16 +8298,18 @@ class UCO_ContactPhone(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactPhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactPhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactMessaging(UCO_UcoInherentCharacterizationThing):
@@ -7680,16 +8324,18 @@ class UCO_ContactMessaging(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactMessaging"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactMessaging"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactListFacet(UCO_Facet):
@@ -7704,16 +8350,18 @@ class UCO_ContactListFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactListFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactListFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactList(UCO_ObservableObject):
@@ -7728,16 +8376,18 @@ class UCO_ContactList(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactList"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactList"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactEmail(UCO_UcoInherentCharacterizationThing):
@@ -7752,16 +8402,18 @@ class UCO_ContactEmail(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactAffiliation(UCO_UcoInherentCharacterizationThing):
@@ -7776,16 +8428,18 @@ class UCO_ContactAffiliation(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactAffiliation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactAffiliation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactAddress(UCO_UcoInherentCharacterizationThing):
@@ -7800,16 +8454,18 @@ class UCO_ContactAddress(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ContactAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ContactAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Contact(UCO_ObservableObject):
@@ -7824,16 +8480,18 @@ class UCO_Contact(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Contact"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Contact"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfiguredSoftware(UCO_Software):
@@ -7848,16 +8506,18 @@ class UCO_ConfiguredSoftware(UCO_Software):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ConfiguredSoftware"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ConfiguredSoftware"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ComputerSpecificationFacet(UCO_Facet):
@@ -7872,16 +8532,18 @@ class UCO_ComputerSpecificationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecificationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecificationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ComputerSpecification(UCO_ObservableObject):
@@ -7896,16 +8558,18 @@ class UCO_ComputerSpecification(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecification"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ComputerSpecification"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CompressedStreamFacet(UCO_Facet):
@@ -7920,16 +8584,18 @@ class UCO_CompressedStreamFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CompressedStreamFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CompressedStreamFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Code(UCO_ObservableObject):
@@ -7944,16 +8610,18 @@ class UCO_Code(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Code"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Code"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CharacterDeviceNode(UCO_FileSystemObject):
@@ -7968,16 +8636,18 @@ class UCO_CharacterDeviceNode(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CharacterDeviceNode"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CharacterDeviceNode"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CellSiteFacet(UCO_Facet):
@@ -7992,16 +8662,18 @@ class UCO_CellSiteFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CellSiteFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CellSiteFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CellSite(UCO_ObservableObject):
@@ -8014,16 +8686,18 @@ class UCO_CellSite(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CellSite"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CellSite"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CapturedTelecommunicationsInformationFacet(UCO_Facet):
@@ -8038,16 +8712,18 @@ class UCO_CapturedTelecommunicationsInformationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CapturedTelecommunicationsInformationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CapturedTelecommunicationsInformationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CapturedTelecommunicationsInformation(UCO_ObservableObject):
@@ -8060,16 +8736,18 @@ class UCO_CapturedTelecommunicationsInformation(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CapturedTelecommunicationsInformation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CapturedTelecommunicationsInformation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CallFacet(UCO_Facet):
@@ -8084,16 +8762,18 @@ class UCO_CallFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CallFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CallFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Call(UCO_ObservableObject):
@@ -8108,16 +8788,18 @@ class UCO_Call(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Call"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Call"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarFacet(UCO_Facet):
@@ -8132,16 +8814,18 @@ class UCO_CalendarFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CalendarFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CalendarFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarEntryFacet(UCO_Facet):
@@ -8156,16 +8840,18 @@ class UCO_CalendarEntryFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntryFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntryFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarEntry(UCO_ObservableObject):
@@ -8180,16 +8866,18 @@ class UCO_CalendarEntry(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/CalendarEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Calendar(UCO_ObservableObject):
@@ -8204,16 +8892,18 @@ class UCO_Calendar(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Calendar"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Calendar"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserCookieFacet(UCO_Facet):
@@ -8228,16 +8918,18 @@ class UCO_BrowserCookieFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookieFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookieFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserCookie(UCO_ObservableObject):
@@ -8252,16 +8944,18 @@ class UCO_BrowserCookie(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookie"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BrowserCookie"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserBookmarkFacet(UCO_Facet):
@@ -8276,16 +8970,18 @@ class UCO_BrowserBookmarkFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmarkFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmarkFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserBookmark(UCO_ObservableObject):
@@ -8300,16 +8996,18 @@ class UCO_BrowserBookmark(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmark"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BrowserBookmark"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BotConfiguration(UCO_ObservableObject):
@@ -8324,16 +9022,18 @@ class UCO_BotConfiguration(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BotConfiguration"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BotConfiguration"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BluetoothAddressFacet(UCO_MACAddressFacet):
@@ -8348,16 +9048,18 @@ class UCO_BluetoothAddressFacet(UCO_MACAddressFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BluetoothAddress(UCO_MACAddress):
@@ -8372,16 +9074,18 @@ class UCO_BluetoothAddress(UCO_MACAddress):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddress"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BluetoothAddress"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BlockDeviceNode(UCO_FileSystemObject):
@@ -8396,16 +9100,18 @@ class UCO_BlockDeviceNode(UCO_FileSystemObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BlockDeviceNode"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BlockDeviceNode"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BlackberryPhone(UCO_SmartPhone):
@@ -8420,16 +9126,18 @@ class UCO_BlackberryPhone(UCO_SmartPhone):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/BlackberryPhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/BlackberryPhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AutonomousSystemFacet(UCO_Facet):
@@ -8444,16 +9152,18 @@ class UCO_AutonomousSystemFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystemFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystemFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AutonomousSystem(UCO_ObservableObject):
@@ -8468,16 +9178,18 @@ class UCO_AutonomousSystem(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystem"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AutonomousSystem"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AudioFacet(UCO_Facet):
@@ -8492,16 +9204,18 @@ class UCO_AudioFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AudioFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AudioFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Audio(UCO_ObservableObject):
@@ -8516,16 +9230,18 @@ class UCO_Audio(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Audio"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Audio"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArchiveFileFacet(UCO_Facet):
@@ -8540,16 +9256,18 @@ class UCO_ArchiveFileFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFileFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFileFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArchiveFile(UCO_File):
@@ -8564,16 +9282,18 @@ class UCO_ArchiveFile(UCO_File):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFile"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ArchiveFile"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationVersion(UCO_UcoInherentCharacterizationThing):
@@ -8588,16 +9308,18 @@ class UCO_ApplicationVersion(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationVersion"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationVersion"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationFacet(UCO_Facet):
@@ -8612,16 +9334,18 @@ class UCO_ApplicationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationAccountFacet(UCO_Facet):
@@ -8636,16 +9360,18 @@ class UCO_ApplicationAccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationAccount(UCO_DigitalAccount):
@@ -8660,16 +9386,18 @@ class UCO_ApplicationAccount(UCO_DigitalAccount):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccount"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ApplicationAccount"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Application(UCO_ObservableObject):
@@ -8684,16 +9412,18 @@ class UCO_Application(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Application"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Application"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AntennaFacet(UCO_Facet):
@@ -8708,16 +9438,18 @@ class UCO_AntennaFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AntennaFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AntennaFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidPhone(UCO_AndroidDevice, UCO_SmartPhone):
@@ -8732,16 +9464,18 @@ class UCO_AndroidPhone(UCO_AndroidDevice, UCO_SmartPhone):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AndroidPhone"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AndroidPhone"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidDeviceFacet(UCO_Facet):
@@ -8756,16 +9490,18 @@ class UCO_AndroidDeviceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDeviceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AndroidDeviceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AlternateDataStreamFacet(UCO_Facet):
@@ -8780,16 +9516,18 @@ class UCO_AlternateDataStreamFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStreamFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStreamFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AlternateDataStream(UCO_ObservableObject):
@@ -8804,16 +9542,18 @@ class UCO_AlternateDataStream(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Adaptor(UCO_Device):
@@ -8828,16 +9568,18 @@ class UCO_Adaptor(UCO_Device):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/Adaptor"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/Adaptor"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AccountFacet(UCO_Facet):
@@ -8852,16 +9594,18 @@ class UCO_AccountFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AccountFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AccountFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AccountAuthenticationFacet(UCO_Facet):
@@ -8876,16 +9620,18 @@ class UCO_AccountAuthenticationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/AccountAuthenticationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/AccountAuthenticationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ARPCacheEntry(UCO_ObservableObject):
@@ -8900,16 +9646,18 @@ class UCO_ARPCacheEntry(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ARPCacheEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ARPCacheEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ARPCache(UCO_ObservableObject):
@@ -8924,16 +9672,18 @@ class UCO_ARPCache(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/ARPCache"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/ARPCache"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_API(UCO_ObservableObject):
@@ -8948,16 +9698,18 @@ class UCO_API(UCO_ObservableObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/observable/API"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/observable/API"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TermsOfUseMarking(UCO_MarkingModel):
@@ -8972,16 +9724,18 @@ class UCO_TermsOfUseMarking(UCO_MarkingModel):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/TermsOfUseMarking"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/TermsOfUseMarking"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StatementMarking(UCO_MarkingModel):
@@ -8996,16 +9750,18 @@ class UCO_StatementMarking(UCO_MarkingModel):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/StatementMarking"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/StatementMarking"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ReleaseToMarking(UCO_MarkingModel):
@@ -9020,16 +9776,18 @@ class UCO_ReleaseToMarking(UCO_MarkingModel):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/ReleaseToMarking"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/ReleaseToMarking"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingDefinition(UCO_MarkingDefinitionAbstraction):
@@ -9044,16 +9802,18 @@ class UCO_MarkingDefinition(UCO_MarkingDefinitionAbstraction):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/MarkingDefinition"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/MarkingDefinition"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LicenseMarking(UCO_MarkingModel):
@@ -9068,16 +9828,18 @@ class UCO_LicenseMarking(UCO_MarkingModel):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/LicenseMarking"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/LicenseMarking"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GranularMarking(UCO_UcoInherentCharacterizationThing):
@@ -9092,16 +9854,18 @@ class UCO_GranularMarking(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/marking/GranularMarking"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/marking/GranularMarking"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SimpleAddressFacet(UCO_Facet):
@@ -9116,16 +9880,18 @@ class UCO_SimpleAddressFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/location/SimpleAddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/location/SimpleAddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Location(UCO_UcoObject):
@@ -9140,16 +9906,18 @@ class UCO_Location(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/location/Location"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/location/Location"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LatLongCoordinatesFacet(UCO_Facet):
@@ -9164,16 +9932,18 @@ class UCO_LatLongCoordinatesFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/location/LatLongCoordinatesFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/location/LatLongCoordinatesFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GPSCoordinatesFacet(UCO_Facet):
@@ -9188,16 +9958,18 @@ class UCO_GPSCoordinatesFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/location/GPSCoordinatesFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/location/GPSCoordinatesFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VisaFacet(UCO_IdentityFacet):
@@ -9212,16 +9984,18 @@ class UCO_VisaFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/VisaFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/VisaFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SimpleNameFacet(UCO_IdentityFacet):
@@ -9236,16 +10010,18 @@ class UCO_SimpleNameFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/SimpleNameFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/SimpleNameFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RelatedIdentityFacet(UCO_IdentityFacet):
@@ -9260,16 +10036,18 @@ class UCO_RelatedIdentityFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/RelatedIdentityFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/RelatedIdentityFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_QualificationFacet(UCO_IdentityFacet):
@@ -9284,16 +10062,18 @@ class UCO_QualificationFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/QualificationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/QualificationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhysicalInfoFacet(UCO_IdentityFacet):
@@ -9308,16 +10088,18 @@ class UCO_PhysicalInfoFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/PhysicalInfoFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/PhysicalInfoFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PersonalDetailsFacet(UCO_IdentityFacet):
@@ -9332,16 +10114,18 @@ class UCO_PersonalDetailsFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/PersonalDetailsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/PersonalDetailsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Person(UCO_Identity):
@@ -9356,16 +10140,18 @@ class UCO_Person(UCO_Identity):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/Person"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OrganizationDetailsFacet(UCO_IdentityFacet):
@@ -9380,16 +10166,18 @@ class UCO_OrganizationDetailsFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/OrganizationDetailsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/OrganizationDetailsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Organization(UCO_Identity):
@@ -9404,16 +10192,18 @@ class UCO_Organization(UCO_Identity):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/Organization"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/Organization"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OccupationFacet(UCO_IdentityFacet):
@@ -9428,16 +10218,18 @@ class UCO_OccupationFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/OccupationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/OccupationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NationalityFacet(UCO_IdentityFacet):
@@ -9452,16 +10244,18 @@ class UCO_NationalityFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/NationalityFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/NationalityFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LanguagesFacet(UCO_IdentityFacet):
@@ -9476,16 +10270,18 @@ class UCO_LanguagesFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/LanguagesFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/LanguagesFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentifierFacet(UCO_IdentityFacet):
@@ -9500,16 +10296,18 @@ class UCO_IdentifierFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/IdentifierFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/IdentifierFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventsFacet(UCO_IdentityFacet):
@@ -9524,16 +10322,18 @@ class UCO_EventsFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/EventsFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/EventsFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CountryOfResidenceFacet(UCO_IdentityFacet):
@@ -9548,16 +10348,18 @@ class UCO_CountryOfResidenceFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/CountryOfResidenceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/CountryOfResidenceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BirthInformationFacet(UCO_IdentityFacet):
@@ -9572,16 +10374,18 @@ class UCO_BirthInformationFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/BirthInformationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/BirthInformationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AffiliationFacet(UCO_IdentityFacet):
@@ -9596,16 +10400,18 @@ class UCO_AffiliationFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/AffiliationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/AffiliationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AddressFacet(UCO_IdentityFacet):
@@ -9620,16 +10426,18 @@ class UCO_AddressFacet(UCO_IdentityFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/identity/AddressFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/identity/AddressFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ModusOperandi(UCO_UcoObject):
@@ -9644,16 +10452,18 @@ class UCO_ModusOperandi(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/ModusOperandi"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/ModusOperandi"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Grouping(UCO_ContextualCompilation):
@@ -9668,14 +10478,18 @@ class UCO_Grouping(UCO_ContextualCompilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Grouping"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Grouping"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
@@ -9690,16 +10504,18 @@ class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledVocabulary(UCO_UcoObject):
@@ -9714,16 +10530,18 @@ class UCO_ControlledVocabulary(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/ControlledVocabulary"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/ControlledVocabulary"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfidenceFacet(UCO_Facet):
@@ -9738,16 +10556,18 @@ class UCO_ConfidenceFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/ConfidenceFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/ConfidenceFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Bundle(UCO_EnclosingCompilation):
@@ -9762,14 +10582,18 @@ class UCO_Bundle(UCO_EnclosingCompilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"https://ontology.unifiedcyberontology.org/uco/core/Bundle"}
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Bundle"
+                )
+            }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AttributedName(UCO_UcoObject):
@@ -9784,16 +10608,18 @@ class UCO_AttributedName(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/AttributedName"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/AttributedName"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Annotation(UCO_Assertion):
@@ -9808,16 +10634,18 @@ class UCO_Annotation(UCO_Assertion):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/core/Annotation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Annotation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Dependency(UCO_UcoInherentCharacterizationThing):
@@ -9832,16 +10660,18 @@ class UCO_Dependency(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/configuration/Dependency"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/configuration/Dependency"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfigurationEntry(UCO_UcoInherentCharacterizationThing):
@@ -9856,16 +10686,18 @@ class UCO_ConfigurationEntry(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/configuration/ConfigurationEntry"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/configuration/ConfigurationEntry"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Configuration(UCO_UcoObject):
@@ -9880,16 +10712,18 @@ class UCO_Configuration(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/configuration/Configuration"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/configuration/Configuration"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
@@ -9904,16 +10738,18 @@ class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassificationResultFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassificationResultFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
@@ -9928,16 +10764,18 @@ class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassification"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/analysis/ArtifactClassification"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticResult(UCO_Assertion):
@@ -9952,16 +10790,18 @@ class UCO_AnalyticResult(UCO_Assertion):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResult"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/analysis/AnalyticResult"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Analysis(UCO_Action):
@@ -9976,16 +10816,18 @@ class UCO_Analysis(UCO_Action):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/analysis/Analysis"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/analysis/Analysis"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArrayOfAction(UCO_UcoInherentCharacterizationThing):
@@ -10000,16 +10842,18 @@ class UCO_ArrayOfAction(UCO_UcoInherentCharacterizationThing):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionPattern(UCO_Action, UCO_Pattern):
@@ -10024,16 +10868,18 @@ class UCO_ActionPattern(UCO_Action, UCO_Pattern):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ActionPattern"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ActionPattern"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionFrequencyFacet(UCO_Facet):
@@ -10048,16 +10894,18 @@ class UCO_ActionFrequencyFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ActionFrequencyFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ActionFrequencyFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionEstimationFacet(UCO_Facet):
@@ -10072,16 +10920,18 @@ class UCO_ActionEstimationFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ActionEstimationFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ActionEstimationFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionArgumentFacet(UCO_Facet):
@@ -10096,16 +10946,18 @@ class UCO_ActionArgumentFacet(UCO_Facet):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.unifiedcyberontology.org/uco/action/ActionArgumentFacet"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/action/ActionArgumentFacet"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_VictimActionLifecycle(UCO_ActionLifecycle):
@@ -10120,16 +10972,18 @@ class CASE_VictimActionLifecycle(UCO_ActionLifecycle):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/VictimActionLifecycle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/VictimActionLifecycle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_SubjectActionLifecycle(UCO_ActionLifecycle):
@@ -10144,16 +10998,18 @@ class CASE_SubjectActionLifecycle(UCO_ActionLifecycle):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/SubjectActionLifecycle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Subject(UCO_Role):
@@ -10168,16 +11024,18 @@ class CASE_Subject(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Subject"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Subject"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_ProvenanceRecord(UCO_ContextualCompilation):
@@ -10192,16 +11050,18 @@ class CASE_ProvenanceRecord(UCO_ContextualCompilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/ProvenanceRecord"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/ProvenanceRecord"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Investigator(UCO_Role):
@@ -10216,16 +11076,18 @@ class CASE_Investigator(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Investigator"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Investigator"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_InvestigativeAction(UCO_Action):
@@ -10240,16 +11102,18 @@ class CASE_InvestigativeAction(UCO_Action):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/InvestigativeAction"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/InvestigativeAction"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Investigation(UCO_ContextualCompilation):
@@ -10264,16 +11128,18 @@ class CASE_Investigation(UCO_ContextualCompilation):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Investigation"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Investigation"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_ExaminerActionLifecycle(UCO_ActionLifecycle):
@@ -10288,16 +11154,18 @@ class CASE_ExaminerActionLifecycle(UCO_ActionLifecycle):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/ExaminerActionLifecycle"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/ExaminerActionLifecycle"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Examiner(UCO_Role):
@@ -10312,16 +11180,18 @@ class CASE_Examiner(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Examiner"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Examiner"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Authorization(UCO_UcoObject):
@@ -10336,16 +11206,18 @@ class CASE_Authorization(UCO_UcoObject):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Authorization"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Authorization"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Attorney(UCO_Role):
@@ -10360,16 +11232,18 @@ class CASE_Attorney(UCO_Role):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {
-                "https://ontology.caseontology.org/case/investigation/Attorney"
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.caseontology.org/case/investigation/Attorney"
+                )
             }
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Set(CO_Collection):
@@ -10384,14 +11258,14 @@ class CO_Set(CO_Collection):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"http://purl.org/co/Set"}
+        if len(n_types) == 0:
+            _n_types = {rdflib.term.URIRef("http://purl.org/co/Set")}
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
 
 
 class CO_ListItem(CO_Item):
@@ -10406,11 +11280,11 @@ class CO_ListItem(CO_Item):
         graph: rdflib.Graph,
         node_iri: str,
         *args: typing.Any,
-        type_iris: typing.Set[str] = set(),
+        n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
-        if len(type_iris) == 0:
-            _type_iris = {"http://purl.org/co/ListItem"}
+        if len(n_types) == 0:
+            _n_types = {rdflib.term.URIRef("http://purl.org/co/ListItem")}
         else:
-            _type_iris = type_iris
-        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+            _n_types = n_types
+        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
