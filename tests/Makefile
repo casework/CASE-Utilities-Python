@@ -49,7 +49,7 @@ all: \
 	  && cd $(top_srcdir) \
 	    && pip install \
 	      --editable \
-	      .[testing]
+	      .[build,testing]
 	touch $@
 
 all-case_utils: \
