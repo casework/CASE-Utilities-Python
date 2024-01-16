@@ -39,47 +39,35 @@ class NodeConstructor(object):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
     ) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
-        self._node: typing.Optional[rdflib.URIRef] = None
-        self._node_iri = node_iri
+        self._n_node = n_node
         self._n_types: typing.Set[rdflib.URIRef] = n_types
         for n_type in sorted(self.n_types):
-            self.graph.add((self.node, NS_RDF.type, n_type))
+            self.graph.add((self.n_node, NS_RDF.type, n_type))
 
     def add_type(self, n_type: rdflib.URIRef) -> None:
         """
         Add additional RDF type to graph node.
         """
         self.n_types.add(n_type)
-        self.graph.add((self.node, NS_RDF.type, n_type))
+        self.graph.add((self.n_node, NS_RDF.type, n_type))
 
     @property
     def graph(self) -> rdflib.Graph:
         return self._graph
 
     @property
-    def node(self) -> rdflib.URIRef:
+    def n_node(self) -> rdflib.URIRef:
         """
-        Set on first access.
+        The individual this NodeConstructor supports.
         """
-        if self._node is None:
-            self._node = rdflib.URIRef(self.node_iri)
-        return self._node
-
-    @property
-    def node_iri(self) -> str:
-        return self._node_iri
-
-    @node_iri.setter
-    def node_iri(self, value: str) -> None:
-        assert isinstance(value, str)
-        self._node_iri = value
+        return self._n_node
 
     @property
     def n_types(self) -> typing.Set[rdflib.URIRef]:
@@ -87,7 +75,7 @@ class NodeConstructor(object):
 
     def add_to_graph(self, graph: rdflib.Graph) -> None:
         for n_type in sorted(self.n_types):
-            graph.add((self.node, rdflib.RDF.type, n_type))
+            graph.add((self.n_node, rdflib.RDF.type, n_type))
 
 
 class UCO_UcoThing(NodeConstructor):
@@ -100,7 +88,7 @@ class UCO_UcoThing(NodeConstructor):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -113,7 +101,7 @@ class UCO_UcoThing(NodeConstructor):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UcoObject(UCO_UcoThing):
@@ -126,7 +114,7 @@ class UCO_UcoObject(UCO_UcoThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -139,12 +127,12 @@ class UCO_UcoObject(UCO_UcoThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
         self._facets: typing.List[UCO_Facet] = []
 
     def add_facet(self, facet: UCO_Facet) -> None:
         self.facets.append(facet)
-        self.graph.add((self.node, NS_UCO_CORE.hasFacet, facet.node))
+        self.graph.add((self.n_node, NS_UCO_CORE.hasFacet, facet.n_node))
 
     @property
     def facets(self) -> typing.List[UCO_Facet]:
@@ -161,7 +149,7 @@ class UCO_Observable(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -174,7 +162,7 @@ class UCO_Observable(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Item(UCO_UcoObject):
@@ -187,7 +175,7 @@ class UCO_Item(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -200,7 +188,7 @@ class UCO_Item(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableObject(UCO_Item, UCO_Observable):
@@ -213,7 +201,7 @@ class UCO_ObservableObject(UCO_Item, UCO_Observable):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -226,7 +214,7 @@ class UCO_ObservableObject(UCO_Item, UCO_Observable):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UcoInherentCharacterizationThing(UCO_UcoThing):
@@ -239,7 +227,7 @@ class UCO_UcoInherentCharacterizationThing(UCO_UcoThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -252,7 +240,7 @@ class UCO_UcoInherentCharacterizationThing(UCO_UcoThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Device(UCO_ObservableObject):
@@ -265,7 +253,7 @@ class UCO_Device(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -278,7 +266,7 @@ class UCO_Device(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Role(UCO_UcoObject):
@@ -291,7 +279,7 @@ class UCO_Role(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -304,7 +292,7 @@ class UCO_Role(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Facet(UCO_UcoInherentCharacterizationThing):
@@ -317,7 +305,7 @@ class UCO_Facet(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -330,7 +318,7 @@ class UCO_Facet(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Address(UCO_ObservableObject):
@@ -343,7 +331,7 @@ class UCO_Address(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -356,7 +344,7 @@ class UCO_Address(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileDevice(UCO_Device):
@@ -369,7 +357,7 @@ class UCO_MobileDevice(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -382,7 +370,7 @@ class UCO_MobileDevice(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NeutralRole(UCO_Role):
@@ -395,7 +383,7 @@ class UCO_NeutralRole(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -408,7 +396,7 @@ class UCO_NeutralRole(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Collection(NodeConstructor):
@@ -421,7 +409,7 @@ class CO_Collection(NodeConstructor):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -430,7 +418,7 @@ class CO_Collection(NodeConstructor):
             _n_types = {rdflib.term.URIRef("http://purl.org/co/Collection")}
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystemObject(UCO_ObservableObject):
@@ -443,7 +431,7 @@ class UCO_FileSystemObject(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -456,7 +444,7 @@ class UCO_FileSystemObject(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Account(UCO_ObservableObject):
@@ -469,7 +457,7 @@ class UCO_Account(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -482,7 +470,7 @@ class UCO_Account(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAddressFacet(UCO_Facet):
@@ -495,7 +483,7 @@ class UCO_DigitalAddressFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -508,7 +496,7 @@ class UCO_DigitalAddressFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAddress(UCO_Address):
@@ -521,7 +509,7 @@ class UCO_DigitalAddress(UCO_Address):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -534,7 +522,7 @@ class UCO_DigitalAddress(UCO_Address):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SmartDevice(UCO_Device):
@@ -547,7 +535,7 @@ class UCO_SmartDevice(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -560,7 +548,7 @@ class UCO_SmartDevice(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobilePhone(UCO_MobileDevice):
@@ -573,7 +561,7 @@ class UCO_MobilePhone(UCO_MobileDevice):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -586,7 +574,7 @@ class UCO_MobilePhone(UCO_MobileDevice):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Computer(UCO_Device):
@@ -599,7 +587,7 @@ class UCO_Computer(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -612,7 +600,7 @@ class UCO_Computer(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentityAbstraction(UCO_UcoObject):
@@ -625,7 +613,7 @@ class UCO_IdentityAbstraction(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -638,7 +626,7 @@ class UCO_IdentityAbstraction(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Compilation(UCO_UcoObject):
@@ -651,7 +639,7 @@ class UCO_Compilation(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -664,7 +652,7 @@ class UCO_Compilation(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Action(UCO_UcoObject):
@@ -677,7 +665,7 @@ class UCO_Action(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -690,7 +678,7 @@ class UCO_Action(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Victim(UCO_NeutralRole):
@@ -703,7 +691,7 @@ class UCO_Victim(UCO_NeutralRole):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -716,7 +704,7 @@ class UCO_Victim(UCO_NeutralRole):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Item(NodeConstructor):
@@ -729,7 +717,7 @@ class CO_Item(NodeConstructor):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -738,7 +726,7 @@ class CO_Item(NodeConstructor):
             _n_types = {rdflib.term.URIRef("http://purl.org/co/Item")}
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Bag(CO_Collection):
@@ -751,7 +739,7 @@ class CO_Bag(CO_Collection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -760,7 +748,7 @@ class CO_Bag(CO_Collection):
             _n_types = {rdflib.term.URIRef("http://purl.org/co/Bag")}
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DictionaryEntry(UCO_UcoInherentCharacterizationThing):
@@ -773,7 +761,7 @@ class UCO_DictionaryEntry(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -786,7 +774,7 @@ class UCO_DictionaryEntry(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Dictionary(UCO_UcoInherentCharacterizationThing):
@@ -799,7 +787,7 @@ class UCO_Dictionary(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -812,7 +800,7 @@ class UCO_Dictionary(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tool(UCO_UcoObject):
@@ -825,7 +813,7 @@ class UCO_Tool(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -838,7 +826,7 @@ class UCO_Tool(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Pattern(UCO_UcoObject):
@@ -851,7 +839,7 @@ class UCO_Pattern(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -864,7 +852,7 @@ class UCO_Pattern(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkConnection(UCO_ObservableObject):
@@ -877,7 +865,7 @@ class UCO_NetworkConnection(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -890,7 +878,7 @@ class UCO_NetworkConnection(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProcessThread(UCO_ObservableObject):
@@ -903,7 +891,7 @@ class UCO_ProcessThread(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -916,7 +904,7 @@ class UCO_ProcessThread(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Process(UCO_ObservableObject):
@@ -929,7 +917,7 @@ class UCO_Process(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -942,7 +930,7 @@ class UCO_Process(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_File(UCO_FileSystemObject):
@@ -955,7 +943,7 @@ class UCO_File(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -968,7 +956,7 @@ class UCO_File(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAccount(UCO_Account):
@@ -981,7 +969,7 @@ class UCO_DigitalAccount(UCO_Account):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -994,7 +982,7 @@ class UCO_DigitalAccount(UCO_Account):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MACAddressFacet(UCO_DigitalAddressFacet):
@@ -1007,7 +995,7 @@ class UCO_MACAddressFacet(UCO_DigitalAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1020,7 +1008,7 @@ class UCO_MACAddressFacet(UCO_DigitalAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MACAddress(UCO_DigitalAddress):
@@ -1033,7 +1021,7 @@ class UCO_MACAddress(UCO_DigitalAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1046,7 +1034,7 @@ class UCO_MACAddress(UCO_DigitalAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactFacet(UCO_Facet):
@@ -1059,7 +1047,7 @@ class UCO_ContactFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1072,7 +1060,7 @@ class UCO_ContactFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DefinedEffectFacet(UCO_Facet):
@@ -1085,7 +1073,7 @@ class UCO_DefinedEffectFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1098,7 +1086,7 @@ class UCO_DefinedEffectFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Message(UCO_ObservableObject):
@@ -1111,7 +1099,7 @@ class UCO_Message(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1124,7 +1112,7 @@ class UCO_Message(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Appliance(UCO_Device):
@@ -1137,7 +1125,7 @@ class UCO_Appliance(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1150,7 +1138,7 @@ class UCO_Appliance(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Relationship(UCO_UcoObject):
@@ -1163,7 +1151,7 @@ class UCO_Relationship(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1176,7 +1164,7 @@ class UCO_Relationship(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPAddressFacet(UCO_DigitalAddressFacet):
@@ -1189,7 +1177,7 @@ class UCO_IPAddressFacet(UCO_DigitalAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1202,7 +1190,7 @@ class UCO_IPAddressFacet(UCO_DigitalAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPAddress(UCO_DigitalAddress):
@@ -1215,7 +1203,7 @@ class UCO_IPAddress(UCO_DigitalAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1228,7 +1216,7 @@ class UCO_IPAddress(UCO_DigitalAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SmartPhone(UCO_Computer, UCO_MobilePhone, UCO_SmartDevice):
@@ -1241,7 +1229,7 @@ class UCO_SmartPhone(UCO_Computer, UCO_MobilePhone, UCO_SmartDevice):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1254,7 +1242,7 @@ class UCO_SmartPhone(UCO_Computer, UCO_MobilePhone, UCO_SmartDevice):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AppleDevice(UCO_Device):
@@ -1267,7 +1255,7 @@ class UCO_AppleDevice(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1280,7 +1268,7 @@ class UCO_AppleDevice(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Software(UCO_ObservableObject):
@@ -1293,7 +1281,7 @@ class UCO_Software(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1306,7 +1294,7 @@ class UCO_Software(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidDevice(UCO_Device):
@@ -1319,7 +1307,7 @@ class UCO_AndroidDevice(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1332,7 +1320,7 @@ class UCO_AndroidDevice(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingModel(UCO_UcoInherentCharacterizationThing):
@@ -1345,7 +1333,7 @@ class UCO_MarkingModel(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1358,7 +1346,7 @@ class UCO_MarkingModel(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingDefinitionAbstraction(UCO_UcoObject):
@@ -1371,7 +1359,7 @@ class UCO_MarkingDefinitionAbstraction(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1384,7 +1372,7 @@ class UCO_MarkingDefinitionAbstraction(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentityFacet(UCO_Facet):
@@ -1397,7 +1385,7 @@ class UCO_IdentityFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1410,7 +1398,7 @@ class UCO_IdentityFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Identity(UCO_IdentityAbstraction):
@@ -1423,7 +1411,7 @@ class UCO_Identity(UCO_IdentityAbstraction):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1436,7 +1424,7 @@ class UCO_Identity(UCO_IdentityAbstraction):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContextualCompilation(UCO_Compilation):
@@ -1449,7 +1437,7 @@ class UCO_ContextualCompilation(UCO_Compilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1462,7 +1450,7 @@ class UCO_ContextualCompilation(UCO_Compilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EnclosingCompilation(UCO_Compilation):
@@ -1475,7 +1463,7 @@ class UCO_EnclosingCompilation(UCO_Compilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1488,7 +1476,7 @@ class UCO_EnclosingCompilation(UCO_Compilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Assertion(UCO_UcoObject):
@@ -1501,7 +1489,7 @@ class UCO_Assertion(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1514,7 +1502,7 @@ class UCO_Assertion(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticResultFacet(UCO_Facet):
@@ -1527,7 +1515,7 @@ class UCO_AnalyticResultFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1540,7 +1528,7 @@ class UCO_AnalyticResultFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionLifecycle(UCO_Action):
@@ -1553,7 +1541,7 @@ class UCO_ActionLifecycle(UCO_Action):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1566,7 +1554,7 @@ class UCO_ActionLifecycle(UCO_Action):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VictimTargeting(UCO_Victim):
@@ -1579,7 +1567,7 @@ class UCO_VictimTargeting(UCO_Victim):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1592,7 +1580,7 @@ class UCO_VictimTargeting(UCO_Victim):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ThreadItem(CO_Item, UCO_UcoThing):
@@ -1605,7 +1593,7 @@ class UCO_ThreadItem(CO_Item, UCO_UcoThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1618,7 +1606,7 @@ class UCO_ThreadItem(CO_Item, UCO_UcoThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Thread(CO_Bag, UCO_UcoThing):
@@ -1631,7 +1619,7 @@ class UCO_Thread(CO_Bag, UCO_UcoThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1644,7 +1632,7 @@ class UCO_Thread(CO_Bag, UCO_UcoThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Hash(UCO_UcoInherentCharacterizationThing):
@@ -1657,7 +1645,7 @@ class UCO_Hash(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1670,7 +1658,7 @@ class UCO_Hash(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledDictionaryEntry(UCO_DictionaryEntry):
@@ -1683,7 +1671,7 @@ class UCO_ControlledDictionaryEntry(UCO_DictionaryEntry):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1696,7 +1684,7 @@ class UCO_ControlledDictionaryEntry(UCO_DictionaryEntry):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledDictionary(UCO_Dictionary):
@@ -1709,7 +1697,7 @@ class UCO_ControlledDictionary(UCO_Dictionary):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1722,7 +1710,7 @@ class UCO_ControlledDictionary(UCO_Dictionary):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MaliciousTool(UCO_Tool):
@@ -1735,7 +1723,7 @@ class UCO_MaliciousTool(UCO_Tool):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1748,7 +1736,7 @@ class UCO_MaliciousTool(UCO_Tool):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LibraryType(UCO_UcoInherentCharacterizationThing):
@@ -1761,7 +1749,7 @@ class UCO_LibraryType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1774,7 +1762,7 @@ class UCO_LibraryType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DefensiveTool(UCO_Tool):
@@ -1787,7 +1775,7 @@ class UCO_DefensiveTool(UCO_Tool):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1800,7 +1788,7 @@ class UCO_DefensiveTool(UCO_Tool):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfiguredTool(UCO_Tool):
@@ -1813,7 +1801,7 @@ class UCO_ConfiguredTool(UCO_Tool):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1826,7 +1814,7 @@ class UCO_ConfiguredTool(UCO_Tool):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CompilerType(UCO_UcoInherentCharacterizationThing):
@@ -1839,7 +1827,7 @@ class UCO_CompilerType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1852,7 +1840,7 @@ class UCO_CompilerType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildUtilityType(UCO_UcoInherentCharacterizationThing):
@@ -1865,7 +1853,7 @@ class UCO_BuildUtilityType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1878,7 +1866,7 @@ class UCO_BuildUtilityType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildInformationType(UCO_UcoInherentCharacterizationThing):
@@ -1891,7 +1879,7 @@ class UCO_BuildInformationType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1904,7 +1892,7 @@ class UCO_BuildInformationType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BuildFacet(UCO_Facet):
@@ -1917,7 +1905,7 @@ class UCO_BuildFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1930,7 +1918,7 @@ class UCO_BuildFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticTool(UCO_Tool):
@@ -1943,7 +1931,7 @@ class UCO_AnalyticTool(UCO_Tool):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1956,7 +1944,7 @@ class UCO_AnalyticTool(UCO_Tool):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MaliciousRole(UCO_Role):
@@ -1969,7 +1957,7 @@ class UCO_MaliciousRole(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -1982,7 +1970,7 @@ class UCO_MaliciousRole(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BenevolentRole(UCO_Role):
@@ -1995,7 +1983,7 @@ class UCO_BenevolentRole(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2008,7 +1996,7 @@ class UCO_BenevolentRole(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PatternExpression(UCO_UcoInherentCharacterizationThing):
@@ -2021,7 +2009,7 @@ class UCO_PatternExpression(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2034,7 +2022,7 @@ class UCO_PatternExpression(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LogicalPattern(UCO_Pattern):
@@ -2047,7 +2035,7 @@ class UCO_LogicalPattern(UCO_Pattern):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2060,7 +2048,7 @@ class UCO_LogicalPattern(UCO_Pattern):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509V3ExtensionsFacet(UCO_Facet):
@@ -2073,7 +2061,7 @@ class UCO_X509V3ExtensionsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2086,7 +2074,7 @@ class UCO_X509V3ExtensionsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509V3Certificate(UCO_ObservableObject):
@@ -2099,7 +2087,7 @@ class UCO_X509V3Certificate(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2112,7 +2100,7 @@ class UCO_X509V3Certificate(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509CertificateFacet(UCO_Facet):
@@ -2125,7 +2113,7 @@ class UCO_X509CertificateFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2138,7 +2126,7 @@ class UCO_X509CertificateFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_X509Certificate(UCO_ObservableObject):
@@ -2151,7 +2139,7 @@ class UCO_X509Certificate(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2164,7 +2152,7 @@ class UCO_X509Certificate(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WriteBlocker(UCO_Device):
@@ -2177,7 +2165,7 @@ class UCO_WriteBlocker(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2190,7 +2178,7 @@ class UCO_WriteBlocker(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WirelessNetworkConnectionFacet(UCO_Facet):
@@ -2203,7 +2191,7 @@ class UCO_WirelessNetworkConnectionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2216,7 +2204,7 @@ class UCO_WirelessNetworkConnectionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WirelessNetworkConnection(UCO_NetworkConnection):
@@ -2229,7 +2217,7 @@ class UCO_WirelessNetworkConnection(UCO_NetworkConnection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2242,7 +2230,7 @@ class UCO_WirelessNetworkConnection(UCO_NetworkConnection):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsWaitableTime(UCO_ObservableObject):
@@ -2255,7 +2243,7 @@ class UCO_WindowsWaitableTime(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2268,7 +2256,7 @@ class UCO_WindowsWaitableTime(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsVolumeFacet(UCO_Facet):
@@ -2281,7 +2269,7 @@ class UCO_WindowsVolumeFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2294,7 +2282,7 @@ class UCO_WindowsVolumeFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsThreadFacet(UCO_Facet):
@@ -2307,7 +2295,7 @@ class UCO_WindowsThreadFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2320,7 +2308,7 @@ class UCO_WindowsThreadFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsThread(UCO_ProcessThread):
@@ -2333,7 +2321,7 @@ class UCO_WindowsThread(UCO_ProcessThread):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2346,7 +2334,7 @@ class UCO_WindowsThread(UCO_ProcessThread):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsTaskFacet(UCO_Facet):
@@ -2359,7 +2347,7 @@ class UCO_WindowsTaskFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2372,7 +2360,7 @@ class UCO_WindowsTaskFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsTask(UCO_ObservableObject):
@@ -2385,7 +2373,7 @@ class UCO_WindowsTask(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2398,7 +2386,7 @@ class UCO_WindowsTask(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsSystemRestore(UCO_ObservableObject):
@@ -2411,7 +2399,7 @@ class UCO_WindowsSystemRestore(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2424,7 +2412,7 @@ class UCO_WindowsSystemRestore(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsServiceFacet(UCO_Facet):
@@ -2437,7 +2425,7 @@ class UCO_WindowsServiceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2450,7 +2438,7 @@ class UCO_WindowsServiceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsService(UCO_ObservableObject):
@@ -2463,7 +2451,7 @@ class UCO_WindowsService(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2476,7 +2464,7 @@ class UCO_WindowsService(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryValue(UCO_UcoInherentCharacterizationThing):
@@ -2489,7 +2477,7 @@ class UCO_WindowsRegistryValue(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2502,7 +2490,7 @@ class UCO_WindowsRegistryValue(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryKeyFacet(UCO_Facet):
@@ -2515,7 +2503,7 @@ class UCO_WindowsRegistryKeyFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2528,7 +2516,7 @@ class UCO_WindowsRegistryKeyFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryKey(UCO_ObservableObject):
@@ -2541,7 +2529,7 @@ class UCO_WindowsRegistryKey(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2554,7 +2542,7 @@ class UCO_WindowsRegistryKey(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryHiveFacet(UCO_Facet):
@@ -2567,7 +2555,7 @@ class UCO_WindowsRegistryHiveFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2580,7 +2568,7 @@ class UCO_WindowsRegistryHiveFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsRegistryHive(UCO_ObservableObject):
@@ -2593,7 +2581,7 @@ class UCO_WindowsRegistryHive(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2606,7 +2594,7 @@ class UCO_WindowsRegistryHive(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsProcessFacet(UCO_Facet):
@@ -2619,7 +2607,7 @@ class UCO_WindowsProcessFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2632,7 +2620,7 @@ class UCO_WindowsProcessFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsProcess(UCO_Process):
@@ -2645,7 +2633,7 @@ class UCO_WindowsProcess(UCO_Process):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2658,7 +2646,7 @@ class UCO_WindowsProcess(UCO_Process):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPrefetchFacet(UCO_Facet):
@@ -2671,7 +2659,7 @@ class UCO_WindowsPrefetchFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2684,7 +2672,7 @@ class UCO_WindowsPrefetchFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPrefetch(UCO_ObservableObject):
@@ -2697,7 +2685,7 @@ class UCO_WindowsPrefetch(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2710,7 +2698,7 @@ class UCO_WindowsPrefetch(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPESection(UCO_UcoInherentCharacterizationThing):
@@ -2723,7 +2711,7 @@ class UCO_WindowsPESection(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2736,7 +2724,7 @@ class UCO_WindowsPESection(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEOptionalHeader(UCO_UcoInherentCharacterizationThing):
@@ -2749,7 +2737,7 @@ class UCO_WindowsPEOptionalHeader(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2762,7 +2750,7 @@ class UCO_WindowsPEOptionalHeader(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEFileHeader(UCO_UcoInherentCharacterizationThing):
@@ -2775,7 +2763,7 @@ class UCO_WindowsPEFileHeader(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2788,7 +2776,7 @@ class UCO_WindowsPEFileHeader(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEBinaryFileFacet(UCO_Facet):
@@ -2801,7 +2789,7 @@ class UCO_WindowsPEBinaryFileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2814,7 +2802,7 @@ class UCO_WindowsPEBinaryFileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsPEBinaryFile(UCO_File):
@@ -2827,7 +2815,7 @@ class UCO_WindowsPEBinaryFile(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2840,7 +2828,7 @@ class UCO_WindowsPEBinaryFile(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsNetworkShare(UCO_ObservableObject):
@@ -2853,7 +2841,7 @@ class UCO_WindowsNetworkShare(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2866,7 +2854,7 @@ class UCO_WindowsNetworkShare(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsMailslot(UCO_ObservableObject):
@@ -2879,7 +2867,7 @@ class UCO_WindowsMailslot(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2892,7 +2880,7 @@ class UCO_WindowsMailslot(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsHook(UCO_ObservableObject):
@@ -2905,7 +2893,7 @@ class UCO_WindowsHook(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2918,7 +2906,7 @@ class UCO_WindowsHook(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsHandle(UCO_ObservableObject):
@@ -2931,7 +2919,7 @@ class UCO_WindowsHandle(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2944,7 +2932,7 @@ class UCO_WindowsHandle(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsFilemapping(UCO_ObservableObject):
@@ -2957,7 +2945,7 @@ class UCO_WindowsFilemapping(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2970,7 +2958,7 @@ class UCO_WindowsFilemapping(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsEvent(UCO_ObservableObject):
@@ -2983,7 +2971,7 @@ class UCO_WindowsEvent(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -2996,7 +2984,7 @@ class UCO_WindowsEvent(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsCriticalSection(UCO_ObservableObject):
@@ -3009,7 +2997,7 @@ class UCO_WindowsCriticalSection(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3022,7 +3010,7 @@ class UCO_WindowsCriticalSection(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsComputerSpecificationFacet(UCO_Facet):
@@ -3035,7 +3023,7 @@ class UCO_WindowsComputerSpecificationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3048,7 +3036,7 @@ class UCO_WindowsComputerSpecificationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsComputerSpecification(UCO_ObservableObject):
@@ -3061,7 +3049,7 @@ class UCO_WindowsComputerSpecification(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3074,7 +3062,7 @@ class UCO_WindowsComputerSpecification(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsActiveDirectoryAccountFacet(UCO_Facet):
@@ -3087,7 +3075,7 @@ class UCO_WindowsActiveDirectoryAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3100,7 +3088,7 @@ class UCO_WindowsActiveDirectoryAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsActiveDirectoryAccount(UCO_DigitalAccount):
@@ -3113,7 +3101,7 @@ class UCO_WindowsActiveDirectoryAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3126,7 +3114,7 @@ class UCO_WindowsActiveDirectoryAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsAccountFacet(UCO_Facet):
@@ -3139,7 +3127,7 @@ class UCO_WindowsAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3152,7 +3140,7 @@ class UCO_WindowsAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WindowsAccount(UCO_DigitalAccount):
@@ -3165,7 +3153,7 @@ class UCO_WindowsAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3178,7 +3166,7 @@ class UCO_WindowsAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WikiArticle(UCO_ObservableObject):
@@ -3191,7 +3179,7 @@ class UCO_WikiArticle(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3204,7 +3192,7 @@ class UCO_WikiArticle(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Wiki(UCO_ObservableObject):
@@ -3217,7 +3205,7 @@ class UCO_Wiki(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3230,7 +3218,7 @@ class UCO_Wiki(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WifiAddressFacet(UCO_MACAddressFacet):
@@ -3243,7 +3231,7 @@ class UCO_WifiAddressFacet(UCO_MACAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3256,7 +3244,7 @@ class UCO_WifiAddressFacet(UCO_MACAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WifiAddress(UCO_MACAddress):
@@ -3269,7 +3257,7 @@ class UCO_WifiAddress(UCO_MACAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3282,7 +3270,7 @@ class UCO_WifiAddress(UCO_MACAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoisRegistrarInfoType(UCO_UcoInherentCharacterizationThing):
@@ -3295,7 +3283,7 @@ class UCO_WhoisRegistrarInfoType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3308,7 +3296,7 @@ class UCO_WhoisRegistrarInfoType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoisContactFacet(UCO_ContactFacet):
@@ -3321,7 +3309,7 @@ class UCO_WhoisContactFacet(UCO_ContactFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3334,7 +3322,7 @@ class UCO_WhoisContactFacet(UCO_ContactFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoIsFacet(UCO_Facet):
@@ -3347,7 +3335,7 @@ class UCO_WhoIsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3360,7 +3348,7 @@ class UCO_WhoIsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WhoIs(UCO_ObservableObject):
@@ -3373,7 +3361,7 @@ class UCO_WhoIs(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3386,7 +3374,7 @@ class UCO_WhoIs(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WebPage(UCO_ObservableObject):
@@ -3399,7 +3387,7 @@ class UCO_WebPage(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3412,7 +3400,7 @@ class UCO_WebPage(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_WearableDevice(UCO_SmartDevice):
@@ -3425,7 +3413,7 @@ class UCO_WearableDevice(UCO_SmartDevice):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3438,7 +3426,7 @@ class UCO_WearableDevice(UCO_SmartDevice):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VolumeFacet(UCO_Facet):
@@ -3451,7 +3439,7 @@ class UCO_VolumeFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3464,7 +3452,7 @@ class UCO_VolumeFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Volume(UCO_ObservableObject):
@@ -3477,7 +3465,7 @@ class UCO_Volume(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3490,7 +3478,7 @@ class UCO_Volume(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ValuesEnumeratedEffectFacet(UCO_DefinedEffectFacet):
@@ -3503,7 +3491,7 @@ class UCO_ValuesEnumeratedEffectFacet(UCO_DefinedEffectFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3516,7 +3504,7 @@ class UCO_ValuesEnumeratedEffectFacet(UCO_DefinedEffectFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserSessionFacet(UCO_Facet):
@@ -3529,7 +3517,7 @@ class UCO_UserSessionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3542,7 +3530,7 @@ class UCO_UserSessionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserSession(UCO_ObservableObject):
@@ -3555,7 +3543,7 @@ class UCO_UserSession(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3568,7 +3556,7 @@ class UCO_UserSession(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserAccountFacet(UCO_Facet):
@@ -3581,7 +3569,7 @@ class UCO_UserAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3594,7 +3582,7 @@ class UCO_UserAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UserAccount(UCO_DigitalAccount):
@@ -3607,7 +3595,7 @@ class UCO_UserAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3620,7 +3608,7 @@ class UCO_UserAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLVisitFacet(UCO_Facet):
@@ -3633,7 +3621,7 @@ class UCO_URLVisitFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3646,7 +3634,7 @@ class UCO_URLVisitFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLVisit(UCO_ObservableObject):
@@ -3659,7 +3647,7 @@ class UCO_URLVisit(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3672,7 +3660,7 @@ class UCO_URLVisit(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistoryFacet(UCO_Facet):
@@ -3685,7 +3673,7 @@ class UCO_URLHistoryFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3698,7 +3686,7 @@ class UCO_URLHistoryFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistoryEntry(UCO_UcoInherentCharacterizationThing):
@@ -3711,7 +3699,7 @@ class UCO_URLHistoryEntry(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3724,7 +3712,7 @@ class UCO_URLHistoryEntry(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLHistory(UCO_ObservableObject):
@@ -3737,7 +3725,7 @@ class UCO_URLHistory(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3750,7 +3738,7 @@ class UCO_URLHistory(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URLFacet(UCO_Facet):
@@ -3763,7 +3751,7 @@ class UCO_URLFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3776,7 +3764,7 @@ class UCO_URLFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_URL(UCO_ObservableObject):
@@ -3789,7 +3777,7 @@ class UCO_URL(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3802,7 +3790,7 @@ class UCO_URL(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXVolumeFacet(UCO_Facet):
@@ -3815,7 +3803,7 @@ class UCO_UNIXVolumeFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3828,7 +3816,7 @@ class UCO_UNIXVolumeFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXProcessFacet(UCO_Facet):
@@ -3841,7 +3829,7 @@ class UCO_UNIXProcessFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3854,7 +3842,7 @@ class UCO_UNIXProcessFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXProcess(UCO_Process):
@@ -3867,7 +3855,7 @@ class UCO_UNIXProcess(UCO_Process):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3880,7 +3868,7 @@ class UCO_UNIXProcess(UCO_Process):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXFilePermissionsFacet(UCO_Facet):
@@ -3893,7 +3881,7 @@ class UCO_UNIXFilePermissionsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3906,7 +3894,7 @@ class UCO_UNIXFilePermissionsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXFile(UCO_File):
@@ -3919,7 +3907,7 @@ class UCO_UNIXFile(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3932,7 +3920,7 @@ class UCO_UNIXFile(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXAccountFacet(UCO_Facet):
@@ -3945,7 +3933,7 @@ class UCO_UNIXAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3958,7 +3946,7 @@ class UCO_UNIXAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_UNIXAccount(UCO_DigitalAccount):
@@ -3971,7 +3959,7 @@ class UCO_UNIXAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -3984,7 +3972,7 @@ class UCO_UNIXAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TwitterProfileFacet(UCO_Facet):
@@ -3997,7 +3985,7 @@ class UCO_TwitterProfileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4010,7 +3998,7 @@ class UCO_TwitterProfileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tweet(UCO_Message):
@@ -4023,7 +4011,7 @@ class UCO_Tweet(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4036,7 +4024,7 @@ class UCO_Tweet(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TriggerType(UCO_UcoInherentCharacterizationThing):
@@ -4049,7 +4037,7 @@ class UCO_TriggerType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4062,7 +4050,7 @@ class UCO_TriggerType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TaskActionType(UCO_UcoInherentCharacterizationThing):
@@ -4075,7 +4063,7 @@ class UCO_TaskActionType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4088,7 +4076,7 @@ class UCO_TaskActionType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
@@ -4101,7 +4089,7 @@ class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4114,7 +4102,7 @@ class UCO_Tablet(UCO_Computer, UCO_MobileDevice, UCO_SmartDevice):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TableFieldFacet(UCO_Facet):
@@ -4127,7 +4115,7 @@ class UCO_TableFieldFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4140,7 +4128,7 @@ class UCO_TableFieldFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TableField(UCO_ObservableObject):
@@ -4153,7 +4141,7 @@ class UCO_TableField(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4166,7 +4154,7 @@ class UCO_TableField(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TCPConnectionFacet(UCO_Facet):
@@ -4179,7 +4167,7 @@ class UCO_TCPConnectionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4192,7 +4180,7 @@ class UCO_TCPConnectionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TCPConnection(UCO_NetworkConnection):
@@ -4205,7 +4193,7 @@ class UCO_TCPConnection(UCO_NetworkConnection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4218,7 +4206,7 @@ class UCO_TCPConnection(UCO_NetworkConnection):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SymbolicLinkFacet(UCO_Facet):
@@ -4231,7 +4219,7 @@ class UCO_SymbolicLinkFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4244,7 +4232,7 @@ class UCO_SymbolicLinkFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SymbolicLink(UCO_FileSystemObject):
@@ -4257,7 +4245,7 @@ class UCO_SymbolicLink(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4270,7 +4258,7 @@ class UCO_SymbolicLink(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StorageMediumFacet(UCO_Facet):
@@ -4283,7 +4271,7 @@ class UCO_StorageMediumFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4296,7 +4284,7 @@ class UCO_StorageMediumFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StorageMedium(UCO_Device):
@@ -4309,7 +4297,7 @@ class UCO_StorageMedium(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4322,7 +4310,7 @@ class UCO_StorageMedium(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StateChangeEffectFacet(UCO_DefinedEffectFacet):
@@ -4335,7 +4323,7 @@ class UCO_StateChangeEffectFacet(UCO_DefinedEffectFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4348,7 +4336,7 @@ class UCO_StateChangeEffectFacet(UCO_DefinedEffectFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SoftwareFacet(UCO_Facet):
@@ -4361,7 +4349,7 @@ class UCO_SoftwareFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4374,7 +4362,7 @@ class UCO_SoftwareFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SocketAddress(UCO_Address):
@@ -4387,7 +4375,7 @@ class UCO_SocketAddress(UCO_Address):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4400,7 +4388,7 @@ class UCO_SocketAddress(UCO_Address):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Socket(UCO_FileSystemObject):
@@ -4413,7 +4401,7 @@ class UCO_Socket(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4426,7 +4414,7 @@ class UCO_Socket(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Snapshot(UCO_FileSystemObject):
@@ -4439,7 +4427,7 @@ class UCO_Snapshot(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4452,7 +4440,7 @@ class UCO_Snapshot(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ShopListing(UCO_ObservableObject):
@@ -4465,7 +4453,7 @@ class UCO_ShopListing(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4478,7 +4466,7 @@ class UCO_ShopListing(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Server(UCO_Computer):
@@ -4491,7 +4479,7 @@ class UCO_Server(UCO_Computer):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4504,7 +4492,7 @@ class UCO_Server(UCO_Computer):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SendControlCodeEffectFacet(UCO_DefinedEffectFacet):
@@ -4517,7 +4505,7 @@ class UCO_SendControlCodeEffectFacet(UCO_DefinedEffectFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4530,7 +4518,7 @@ class UCO_SendControlCodeEffectFacet(UCO_DefinedEffectFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Semaphore(UCO_ObservableObject):
@@ -4543,7 +4531,7 @@ class UCO_Semaphore(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4556,7 +4544,7 @@ class UCO_Semaphore(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SecurityAppliance(UCO_Appliance):
@@ -4569,7 +4557,7 @@ class UCO_SecurityAppliance(UCO_Appliance):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4582,7 +4570,7 @@ class UCO_SecurityAppliance(UCO_Appliance):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SQLiteBlobFacet(UCO_Facet):
@@ -4595,7 +4583,7 @@ class UCO_SQLiteBlobFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4608,7 +4596,7 @@ class UCO_SQLiteBlobFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SQLiteBlob(UCO_ObservableObject):
@@ -4621,7 +4609,7 @@ class UCO_SQLiteBlob(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4634,7 +4622,7 @@ class UCO_SQLiteBlob(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SMSMessageFacet(UCO_Facet):
@@ -4647,7 +4635,7 @@ class UCO_SMSMessageFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4660,7 +4648,7 @@ class UCO_SMSMessageFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SMSMessage(UCO_Message):
@@ -4673,7 +4661,7 @@ class UCO_SMSMessage(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4686,7 +4674,7 @@ class UCO_SMSMessage(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIPAddressFacet(UCO_DigitalAddressFacet):
@@ -4699,7 +4687,7 @@ class UCO_SIPAddressFacet(UCO_DigitalAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4712,7 +4700,7 @@ class UCO_SIPAddressFacet(UCO_DigitalAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIPAddress(UCO_DigitalAddress):
@@ -4725,7 +4713,7 @@ class UCO_SIPAddress(UCO_DigitalAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4738,7 +4726,7 @@ class UCO_SIPAddress(UCO_DigitalAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIMCardFacet(UCO_Facet):
@@ -4751,7 +4739,7 @@ class UCO_SIMCardFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4764,7 +4752,7 @@ class UCO_SIMCardFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SIMCard(UCO_Device):
@@ -4777,7 +4765,7 @@ class UCO_SIMCard(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4790,7 +4778,7 @@ class UCO_SIMCard(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ReparsePoint(UCO_FileSystemObject):
@@ -4803,7 +4791,7 @@ class UCO_ReparsePoint(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4816,7 +4804,7 @@ class UCO_ReparsePoint(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RecoveredObjectFacet(UCO_Facet):
@@ -4829,7 +4817,7 @@ class UCO_RecoveredObjectFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4842,7 +4830,7 @@ class UCO_RecoveredObjectFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RecoveredObject(UCO_ObservableObject):
@@ -4855,7 +4843,7 @@ class UCO_RecoveredObject(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4868,7 +4856,7 @@ class UCO_RecoveredObject(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RasterPictureFacet(UCO_Facet):
@@ -4881,7 +4869,7 @@ class UCO_RasterPictureFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4894,7 +4882,7 @@ class UCO_RasterPictureFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RasterPicture(UCO_File):
@@ -4907,7 +4895,7 @@ class UCO_RasterPicture(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4920,7 +4908,7 @@ class UCO_RasterPicture(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProtocolConverter(UCO_Device):
@@ -4933,7 +4921,7 @@ class UCO_ProtocolConverter(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4946,7 +4934,7 @@ class UCO_ProtocolConverter(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PropertyReadEffectFacet(UCO_DefinedEffectFacet):
@@ -4959,7 +4947,7 @@ class UCO_PropertyReadEffectFacet(UCO_DefinedEffectFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4972,7 +4960,7 @@ class UCO_PropertyReadEffectFacet(UCO_DefinedEffectFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PropertiesEnumeratedEffectFacet(UCO_DefinedEffectFacet, UCO_Facet):
@@ -4985,7 +4973,7 @@ class UCO_PropertiesEnumeratedEffectFacet(UCO_DefinedEffectFacet, UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -4998,7 +4986,7 @@ class UCO_PropertiesEnumeratedEffectFacet(UCO_DefinedEffectFacet, UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProfileFacet(UCO_Facet):
@@ -5011,7 +4999,7 @@ class UCO_ProfileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5024,7 +5012,7 @@ class UCO_ProfileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Profile(UCO_ObservableObject):
@@ -5037,7 +5025,7 @@ class UCO_Profile(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5050,7 +5038,7 @@ class UCO_Profile(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ProcessFacet(UCO_Facet):
@@ -5063,7 +5051,7 @@ class UCO_ProcessFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5076,7 +5064,7 @@ class UCO_ProcessFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Post(UCO_Message):
@@ -5089,7 +5077,7 @@ class UCO_Post(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5102,7 +5090,7 @@ class UCO_Post(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Pipe(UCO_ObservableObject):
@@ -5115,7 +5103,7 @@ class UCO_Pipe(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5128,7 +5116,7 @@ class UCO_Pipe(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhoneAccountFacet(UCO_Facet):
@@ -5141,7 +5129,7 @@ class UCO_PhoneAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5154,7 +5142,7 @@ class UCO_PhoneAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhoneAccount(UCO_DigitalAccount):
@@ -5167,7 +5155,7 @@ class UCO_PhoneAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5180,7 +5168,7 @@ class UCO_PhoneAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PaymentCard(UCO_ObservableObject):
@@ -5193,7 +5181,7 @@ class UCO_PaymentCard(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5206,7 +5194,7 @@ class UCO_PaymentCard(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PathRelationFacet(UCO_Facet):
@@ -5219,7 +5207,7 @@ class UCO_PathRelationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5232,7 +5220,7 @@ class UCO_PathRelationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PDFFileFacet(UCO_Facet):
@@ -5245,7 +5233,7 @@ class UCO_PDFFileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5258,7 +5246,7 @@ class UCO_PDFFileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PDFFile(UCO_File):
@@ -5271,7 +5259,7 @@ class UCO_PDFFile(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5284,7 +5272,7 @@ class UCO_PDFFile(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OperatingSystemFacet(UCO_Facet):
@@ -5297,7 +5285,7 @@ class UCO_OperatingSystemFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5310,7 +5298,7 @@ class UCO_OperatingSystemFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OperatingSystem(UCO_ObservableObject):
@@ -5323,7 +5311,7 @@ class UCO_OperatingSystem(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5336,7 +5324,7 @@ class UCO_OperatingSystem(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OnlineServiceFacet(UCO_Facet):
@@ -5349,7 +5337,7 @@ class UCO_OnlineServiceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5362,7 +5350,7 @@ class UCO_OnlineServiceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OnlineService(UCO_ObservableObject):
@@ -5375,7 +5363,7 @@ class UCO_OnlineService(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5388,7 +5376,7 @@ class UCO_OnlineService(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Observation(UCO_Action):
@@ -5401,7 +5389,7 @@ class UCO_Observation(UCO_Action):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5414,7 +5402,7 @@ class UCO_Observation(UCO_Action):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableRelationship(UCO_Observable, UCO_Relationship):
@@ -5427,7 +5415,7 @@ class UCO_ObservableRelationship(UCO_Observable, UCO_Relationship):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5440,7 +5428,7 @@ class UCO_ObservableRelationship(UCO_Observable, UCO_Relationship):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservablePattern(UCO_Observable):
@@ -5453,7 +5441,7 @@ class UCO_ObservablePattern(UCO_Observable):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5466,7 +5454,7 @@ class UCO_ObservablePattern(UCO_Observable):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ObservableAction(UCO_Action, UCO_Observable):
@@ -5479,7 +5467,7 @@ class UCO_ObservableAction(UCO_Action, UCO_Observable):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5492,7 +5480,7 @@ class UCO_ObservableAction(UCO_Action, UCO_Observable):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NoteFacet(UCO_Facet):
@@ -5505,7 +5493,7 @@ class UCO_NoteFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5518,7 +5506,7 @@ class UCO_NoteFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Note(UCO_ObservableObject):
@@ -5531,7 +5519,7 @@ class UCO_Note(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5544,7 +5532,7 @@ class UCO_Note(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkSubnet(UCO_ObservableObject):
@@ -5557,7 +5545,7 @@ class UCO_NetworkSubnet(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5570,7 +5558,7 @@ class UCO_NetworkSubnet(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkRoute(UCO_ObservableObject):
@@ -5583,7 +5571,7 @@ class UCO_NetworkRoute(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5596,7 +5584,7 @@ class UCO_NetworkRoute(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkProtocol(UCO_ObservableObject):
@@ -5609,7 +5597,7 @@ class UCO_NetworkProtocol(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5622,7 +5610,7 @@ class UCO_NetworkProtocol(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkInterfaceFacet(UCO_Facet):
@@ -5635,7 +5623,7 @@ class UCO_NetworkInterfaceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5648,7 +5636,7 @@ class UCO_NetworkInterfaceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkInterface(UCO_ObservableObject):
@@ -5661,7 +5649,7 @@ class UCO_NetworkInterface(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5674,7 +5662,7 @@ class UCO_NetworkInterface(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkFlowFacet(UCO_Facet):
@@ -5687,7 +5675,7 @@ class UCO_NetworkFlowFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5700,7 +5688,7 @@ class UCO_NetworkFlowFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkFlow(UCO_ObservableObject):
@@ -5713,7 +5701,7 @@ class UCO_NetworkFlow(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5726,7 +5714,7 @@ class UCO_NetworkFlow(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkConnectionFacet(UCO_Facet):
@@ -5739,7 +5727,7 @@ class UCO_NetworkConnectionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5752,7 +5740,7 @@ class UCO_NetworkConnectionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NetworkAppliance(UCO_Appliance):
@@ -5765,7 +5753,7 @@ class UCO_NetworkAppliance(UCO_Appliance):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5778,7 +5766,7 @@ class UCO_NetworkAppliance(UCO_Appliance):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NamedPipe(UCO_FileSystemObject):
@@ -5791,7 +5779,7 @@ class UCO_NamedPipe(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5804,7 +5792,7 @@ class UCO_NamedPipe(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFilePermissionsFacet(UCO_Facet):
@@ -5817,7 +5805,7 @@ class UCO_NTFSFilePermissionsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5830,7 +5818,7 @@ class UCO_NTFSFilePermissionsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFileFacet(UCO_Facet):
@@ -5843,7 +5831,7 @@ class UCO_NTFSFileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5856,7 +5844,7 @@ class UCO_NTFSFileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NTFSFile(UCO_File):
@@ -5869,7 +5857,7 @@ class UCO_NTFSFile(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5882,7 +5870,7 @@ class UCO_NTFSFile(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MutexFacet(UCO_Facet):
@@ -5895,7 +5883,7 @@ class UCO_MutexFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5908,7 +5896,7 @@ class UCO_MutexFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Mutex(UCO_ObservableObject):
@@ -5921,7 +5909,7 @@ class UCO_Mutex(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5934,7 +5922,7 @@ class UCO_Mutex(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileDeviceFacet(UCO_Facet):
@@ -5947,7 +5935,7 @@ class UCO_MobileDeviceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5960,7 +5948,7 @@ class UCO_MobileDeviceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileAccountFacet(UCO_Facet):
@@ -5973,7 +5961,7 @@ class UCO_MobileAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -5986,7 +5974,7 @@ class UCO_MobileAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MobileAccount(UCO_DigitalAccount):
@@ -5999,7 +5987,7 @@ class UCO_MobileAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6012,7 +6000,7 @@ class UCO_MobileAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MimePartType(UCO_UcoInherentCharacterizationThing):
@@ -6025,7 +6013,7 @@ class UCO_MimePartType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6038,7 +6026,7 @@ class UCO_MimePartType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MftRecordFacet(UCO_Facet):
@@ -6051,7 +6039,7 @@ class UCO_MftRecordFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6064,7 +6052,7 @@ class UCO_MftRecordFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageThreadFacet(UCO_Facet):
@@ -6077,7 +6065,7 @@ class UCO_MessageThreadFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6090,7 +6078,7 @@ class UCO_MessageThreadFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageThread(UCO_ObservableObject):
@@ -6103,7 +6091,7 @@ class UCO_MessageThread(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6116,7 +6104,7 @@ class UCO_MessageThread(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MessageFacet(UCO_Facet):
@@ -6129,7 +6117,7 @@ class UCO_MessageFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6142,7 +6130,7 @@ class UCO_MessageFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MemoryFacet(UCO_Facet):
@@ -6155,7 +6143,7 @@ class UCO_MemoryFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6168,7 +6156,7 @@ class UCO_MemoryFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Memory(UCO_ObservableObject):
@@ -6181,7 +6169,7 @@ class UCO_Memory(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6194,7 +6182,7 @@ class UCO_Memory(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LibraryFacet(UCO_Facet):
@@ -6207,7 +6195,7 @@ class UCO_LibraryFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6220,7 +6208,7 @@ class UCO_LibraryFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Library(UCO_ObservableObject):
@@ -6233,7 +6221,7 @@ class UCO_Library(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6246,7 +6234,7 @@ class UCO_Library(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Laptop(UCO_Computer):
@@ -6259,7 +6247,7 @@ class UCO_Laptop(UCO_Computer):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6272,7 +6260,7 @@ class UCO_Laptop(UCO_Computer):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Junction(UCO_FileSystemObject):
@@ -6285,7 +6273,7 @@ class UCO_Junction(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6298,7 +6286,7 @@ class UCO_Junction(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_InstantMessagingAddressFacet(UCO_DigitalAddressFacet):
@@ -6311,7 +6299,7 @@ class UCO_InstantMessagingAddressFacet(UCO_DigitalAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6324,7 +6312,7 @@ class UCO_InstantMessagingAddressFacet(UCO_DigitalAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_InstantMessagingAddress(UCO_DigitalAddress):
@@ -6337,7 +6325,7 @@ class UCO_InstantMessagingAddress(UCO_DigitalAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6350,7 +6338,7 @@ class UCO_InstantMessagingAddress(UCO_DigitalAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ImageFacet(UCO_Facet):
@@ -6363,7 +6351,7 @@ class UCO_ImageFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6376,7 +6364,7 @@ class UCO_ImageFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Image(UCO_ObservableObject):
@@ -6389,7 +6377,7 @@ class UCO_Image(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6402,7 +6390,7 @@ class UCO_Image(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IShowMessageActionType(UCO_UcoInherentCharacterizationThing):
@@ -6415,7 +6403,7 @@ class UCO_IShowMessageActionType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6428,7 +6416,7 @@ class UCO_IShowMessageActionType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv6AddressFacet(UCO_IPAddressFacet):
@@ -6441,7 +6429,7 @@ class UCO_IPv6AddressFacet(UCO_IPAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6454,7 +6442,7 @@ class UCO_IPv6AddressFacet(UCO_IPAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv6Address(UCO_IPAddress):
@@ -6467,7 +6455,7 @@ class UCO_IPv6Address(UCO_IPAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6480,7 +6468,7 @@ class UCO_IPv6Address(UCO_IPAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv4AddressFacet(UCO_IPAddressFacet):
@@ -6493,7 +6481,7 @@ class UCO_IPv4AddressFacet(UCO_IPAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6506,7 +6494,7 @@ class UCO_IPv4AddressFacet(UCO_IPAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPv4Address(UCO_IPAddress):
@@ -6519,7 +6507,7 @@ class UCO_IPv4Address(UCO_IPAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6532,7 +6520,7 @@ class UCO_IPv4Address(UCO_IPAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPhone(UCO_AppleDevice, UCO_SmartPhone):
@@ -6545,7 +6533,7 @@ class UCO_IPhone(UCO_AppleDevice, UCO_SmartPhone):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6558,7 +6546,7 @@ class UCO_IPhone(UCO_AppleDevice, UCO_SmartPhone):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IPNetmask(UCO_ObservableObject):
@@ -6571,7 +6559,7 @@ class UCO_IPNetmask(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6584,7 +6572,7 @@ class UCO_IPNetmask(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IExecActionType(UCO_UcoInherentCharacterizationThing):
@@ -6597,7 +6585,7 @@ class UCO_IExecActionType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6610,7 +6598,7 @@ class UCO_IExecActionType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IComHandlerActionType(UCO_UcoInherentCharacterizationThing):
@@ -6623,7 +6611,7 @@ class UCO_IComHandlerActionType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6636,7 +6624,7 @@ class UCO_IComHandlerActionType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ICMPConnectionFacet(UCO_Facet):
@@ -6649,7 +6637,7 @@ class UCO_ICMPConnectionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6662,7 +6650,7 @@ class UCO_ICMPConnectionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ICMPConnection(UCO_NetworkConnection):
@@ -6675,7 +6663,7 @@ class UCO_ICMPConnection(UCO_NetworkConnection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6688,7 +6676,7 @@ class UCO_ICMPConnection(UCO_NetworkConnection):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Hostname(UCO_ObservableObject):
@@ -6701,7 +6689,7 @@ class UCO_Hostname(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6714,7 +6702,7 @@ class UCO_Hostname(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_HTTPConnectionFacet(UCO_Facet):
@@ -6727,7 +6715,7 @@ class UCO_HTTPConnectionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6740,7 +6728,7 @@ class UCO_HTTPConnectionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_HTTPConnection(UCO_NetworkConnection):
@@ -6753,7 +6741,7 @@ class UCO_HTTPConnection(UCO_NetworkConnection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6766,7 +6754,7 @@ class UCO_HTTPConnection(UCO_NetworkConnection):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GlobalFlagType(UCO_UcoInherentCharacterizationThing):
@@ -6779,7 +6767,7 @@ class UCO_GlobalFlagType(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6792,7 +6780,7 @@ class UCO_GlobalFlagType(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationTrackFacet(UCO_Facet):
@@ -6805,7 +6793,7 @@ class UCO_GeoLocationTrackFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6818,7 +6806,7 @@ class UCO_GeoLocationTrackFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationTrack(UCO_ObservableObject):
@@ -6831,7 +6819,7 @@ class UCO_GeoLocationTrack(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6844,7 +6832,7 @@ class UCO_GeoLocationTrack(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationLogFacet(UCO_Facet):
@@ -6857,7 +6845,7 @@ class UCO_GeoLocationLogFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6870,7 +6858,7 @@ class UCO_GeoLocationLogFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationLog(UCO_ObservableObject):
@@ -6883,7 +6871,7 @@ class UCO_GeoLocationLog(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6896,7 +6884,7 @@ class UCO_GeoLocationLog(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationEntryFacet(UCO_Facet):
@@ -6909,7 +6897,7 @@ class UCO_GeoLocationEntryFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6922,7 +6910,7 @@ class UCO_GeoLocationEntryFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GeoLocationEntry(UCO_ObservableObject):
@@ -6935,7 +6923,7 @@ class UCO_GeoLocationEntry(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6948,7 +6936,7 @@ class UCO_GeoLocationEntry(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GenericObservableObject(UCO_ObservableObject):
@@ -6961,7 +6949,7 @@ class UCO_GenericObservableObject(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -6974,7 +6962,7 @@ class UCO_GenericObservableObject(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GamingConsole(UCO_Device):
@@ -6987,7 +6975,7 @@ class UCO_GamingConsole(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7000,7 +6988,7 @@ class UCO_GamingConsole(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GUI(UCO_ObservableObject):
@@ -7013,7 +7001,7 @@ class UCO_GUI(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7026,7 +7014,7 @@ class UCO_GUI(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FragmentFacet(UCO_Facet):
@@ -7039,7 +7027,7 @@ class UCO_FragmentFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7052,7 +7040,7 @@ class UCO_FragmentFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ForumPrivateMessage(UCO_Message):
@@ -7065,7 +7053,7 @@ class UCO_ForumPrivateMessage(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7078,7 +7066,7 @@ class UCO_ForumPrivateMessage(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ForumPost(UCO_Message):
@@ -7091,7 +7079,7 @@ class UCO_ForumPost(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7104,7 +7092,7 @@ class UCO_ForumPost(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystemFacet(UCO_Facet):
@@ -7117,7 +7105,7 @@ class UCO_FileSystemFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7130,7 +7118,7 @@ class UCO_FileSystemFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileSystem(UCO_ObservableObject):
@@ -7143,7 +7131,7 @@ class UCO_FileSystem(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7156,7 +7144,7 @@ class UCO_FileSystem(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FilePermissionsFacet(UCO_Facet):
@@ -7169,7 +7157,7 @@ class UCO_FilePermissionsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7182,7 +7170,7 @@ class UCO_FilePermissionsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_FileFacet(UCO_Facet):
@@ -7195,7 +7183,7 @@ class UCO_FileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7208,7 +7196,7 @@ class UCO_FileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtractedStringsFacet(UCO_Facet):
@@ -7221,7 +7209,7 @@ class UCO_ExtractedStringsFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7234,7 +7222,7 @@ class UCO_ExtractedStringsFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtractedString(UCO_UcoInherentCharacterizationThing):
@@ -7247,7 +7235,7 @@ class UCO_ExtractedString(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7260,7 +7248,7 @@ class UCO_ExtractedString(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExtInodeFacet(UCO_Facet):
@@ -7273,7 +7261,7 @@ class UCO_ExtInodeFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7286,7 +7274,7 @@ class UCO_ExtInodeFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventRecordFacet(UCO_Facet):
@@ -7299,7 +7287,7 @@ class UCO_EventRecordFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7312,7 +7300,7 @@ class UCO_EventRecordFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventRecord(UCO_ObservableObject):
@@ -7325,7 +7313,7 @@ class UCO_EventRecord(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7338,7 +7326,7 @@ class UCO_EventRecord(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventLog(UCO_ObservableObject):
@@ -7351,7 +7339,7 @@ class UCO_EventLog(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7364,7 +7352,7 @@ class UCO_EventLog(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EnvironmentVariable(UCO_UcoInherentCharacterizationThing):
@@ -7377,7 +7365,7 @@ class UCO_EnvironmentVariable(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7390,7 +7378,7 @@ class UCO_EnvironmentVariable(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EncryptedStreamFacet(UCO_Facet):
@@ -7403,7 +7391,7 @@ class UCO_EncryptedStreamFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7416,7 +7404,7 @@ class UCO_EncryptedStreamFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EncodedStreamFacet(UCO_Facet):
@@ -7429,7 +7417,7 @@ class UCO_EncodedStreamFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7442,7 +7430,7 @@ class UCO_EncodedStreamFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmbeddedDevice(UCO_Device):
@@ -7455,7 +7443,7 @@ class UCO_EmbeddedDevice(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7468,7 +7456,7 @@ class UCO_EmbeddedDevice(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailMessageFacet(UCO_Facet):
@@ -7481,7 +7469,7 @@ class UCO_EmailMessageFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7494,7 +7482,7 @@ class UCO_EmailMessageFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailMessage(UCO_Message):
@@ -7507,7 +7495,7 @@ class UCO_EmailMessage(UCO_Message):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7520,7 +7508,7 @@ class UCO_EmailMessage(UCO_Message):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAddressFacet(UCO_DigitalAddressFacet):
@@ -7533,7 +7521,7 @@ class UCO_EmailAddressFacet(UCO_DigitalAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7546,7 +7534,7 @@ class UCO_EmailAddressFacet(UCO_DigitalAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAddress(UCO_DigitalAddress):
@@ -7559,7 +7547,7 @@ class UCO_EmailAddress(UCO_DigitalAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7572,7 +7560,7 @@ class UCO_EmailAddress(UCO_DigitalAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAccountFacet(UCO_Facet):
@@ -7585,7 +7573,7 @@ class UCO_EmailAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7598,7 +7586,7 @@ class UCO_EmailAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EmailAccount(UCO_DigitalAccount):
@@ -7611,7 +7599,7 @@ class UCO_EmailAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7624,7 +7612,7 @@ class UCO_EmailAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EXIFFacet(UCO_Facet):
@@ -7637,7 +7625,7 @@ class UCO_EXIFFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7650,7 +7638,7 @@ class UCO_EXIFFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Drone(UCO_MobileDevice):
@@ -7663,7 +7651,7 @@ class UCO_Drone(UCO_MobileDevice):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7676,7 +7664,7 @@ class UCO_Drone(UCO_MobileDevice):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DomainNameFacet(UCO_Facet):
@@ -7689,7 +7677,7 @@ class UCO_DomainNameFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7702,7 +7690,7 @@ class UCO_DomainNameFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DomainName(UCO_ObservableObject):
@@ -7715,7 +7703,7 @@ class UCO_DomainName(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7728,7 +7716,7 @@ class UCO_DomainName(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskPartitionFacet(UCO_Facet):
@@ -7741,7 +7729,7 @@ class UCO_DiskPartitionFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7754,7 +7742,7 @@ class UCO_DiskPartitionFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskPartition(UCO_ObservableObject):
@@ -7767,7 +7755,7 @@ class UCO_DiskPartition(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7780,7 +7768,7 @@ class UCO_DiskPartition(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DiskFacet(UCO_Facet):
@@ -7793,7 +7781,7 @@ class UCO_DiskFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7806,7 +7794,7 @@ class UCO_DiskFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Disk(UCO_ObservableObject):
@@ -7819,7 +7807,7 @@ class UCO_Disk(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7832,7 +7820,7 @@ class UCO_Disk(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Directory(UCO_FileSystemObject):
@@ -7845,7 +7833,7 @@ class UCO_Directory(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7858,7 +7846,7 @@ class UCO_Directory(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalSignatureInfoFacet(UCO_Facet):
@@ -7871,7 +7859,7 @@ class UCO_DigitalSignatureInfoFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7884,7 +7872,7 @@ class UCO_DigitalSignatureInfoFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalSignatureInfo(UCO_ObservableObject):
@@ -7897,7 +7885,7 @@ class UCO_DigitalSignatureInfo(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7910,7 +7898,7 @@ class UCO_DigitalSignatureInfo(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalCamera(UCO_Device):
@@ -7923,7 +7911,7 @@ class UCO_DigitalCamera(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7936,7 +7924,7 @@ class UCO_DigitalCamera(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DigitalAccountFacet(UCO_Facet):
@@ -7949,7 +7937,7 @@ class UCO_DigitalAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7962,7 +7950,7 @@ class UCO_DigitalAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DeviceFacet(UCO_Facet):
@@ -7975,7 +7963,7 @@ class UCO_DeviceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -7988,7 +7976,7 @@ class UCO_DeviceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DataRangeFacet(UCO_Facet):
@@ -8001,7 +7989,7 @@ class UCO_DataRangeFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8014,7 +8002,7 @@ class UCO_DataRangeFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DNSRecord(UCO_ObservableObject):
@@ -8027,7 +8015,7 @@ class UCO_DNSRecord(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8040,7 +8028,7 @@ class UCO_DNSRecord(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_DNSCache(UCO_ObservableObject):
@@ -8053,7 +8041,7 @@ class UCO_DNSCache(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8066,7 +8054,7 @@ class UCO_DNSCache(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CredentialDump(UCO_ObservableObject):
@@ -8079,7 +8067,7 @@ class UCO_CredentialDump(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8092,7 +8080,7 @@ class UCO_CredentialDump(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Credential(UCO_ObservableObject):
@@ -8105,7 +8093,7 @@ class UCO_Credential(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8118,7 +8106,7 @@ class UCO_Credential(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CookieHistory(UCO_ObservableObject):
@@ -8131,7 +8119,7 @@ class UCO_CookieHistory(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8144,7 +8132,7 @@ class UCO_CookieHistory(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContentDataFacet(UCO_Facet):
@@ -8157,7 +8145,7 @@ class UCO_ContentDataFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8170,12 +8158,12 @@ class UCO_ContentDataFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
         self._hashes: typing.List[UCO_Hash] = []
 
     def add_hash(self, hash: UCO_Hash) -> None:
         self.hashes.append(hash)
-        self.graph.add((self.node, NS_UCO_OBSERVABLE.hash, hash.node))
+        self.graph.add((self.n_node, NS_UCO_OBSERVABLE.hash, hash.n_node))
 
     @property
     def hashes(self) -> typing.List[UCO_Hash]:
@@ -8192,7 +8180,7 @@ class UCO_ContentData(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8205,7 +8193,7 @@ class UCO_ContentData(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactURL(UCO_UcoInherentCharacterizationThing):
@@ -8218,7 +8206,7 @@ class UCO_ContactURL(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8231,7 +8219,7 @@ class UCO_ContactURL(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactSIP(UCO_UcoInherentCharacterizationThing):
@@ -8244,7 +8232,7 @@ class UCO_ContactSIP(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8257,7 +8245,7 @@ class UCO_ContactSIP(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactProfile(UCO_UcoInherentCharacterizationThing):
@@ -8270,7 +8258,7 @@ class UCO_ContactProfile(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8283,7 +8271,7 @@ class UCO_ContactProfile(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactPhone(UCO_UcoInherentCharacterizationThing):
@@ -8296,7 +8284,7 @@ class UCO_ContactPhone(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8309,7 +8297,7 @@ class UCO_ContactPhone(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactMessaging(UCO_UcoInherentCharacterizationThing):
@@ -8322,7 +8310,7 @@ class UCO_ContactMessaging(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8335,7 +8323,7 @@ class UCO_ContactMessaging(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactListFacet(UCO_Facet):
@@ -8348,7 +8336,7 @@ class UCO_ContactListFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8361,7 +8349,7 @@ class UCO_ContactListFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactList(UCO_ObservableObject):
@@ -8374,7 +8362,7 @@ class UCO_ContactList(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8387,7 +8375,7 @@ class UCO_ContactList(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactEmail(UCO_UcoInherentCharacterizationThing):
@@ -8400,7 +8388,7 @@ class UCO_ContactEmail(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8413,7 +8401,7 @@ class UCO_ContactEmail(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactAffiliation(UCO_UcoInherentCharacterizationThing):
@@ -8426,7 +8414,7 @@ class UCO_ContactAffiliation(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8439,7 +8427,7 @@ class UCO_ContactAffiliation(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ContactAddress(UCO_UcoInherentCharacterizationThing):
@@ -8452,7 +8440,7 @@ class UCO_ContactAddress(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8465,7 +8453,7 @@ class UCO_ContactAddress(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Contact(UCO_ObservableObject):
@@ -8478,7 +8466,7 @@ class UCO_Contact(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8491,7 +8479,7 @@ class UCO_Contact(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfiguredSoftware(UCO_Software):
@@ -8504,7 +8492,7 @@ class UCO_ConfiguredSoftware(UCO_Software):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8517,7 +8505,7 @@ class UCO_ConfiguredSoftware(UCO_Software):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ComputerSpecificationFacet(UCO_Facet):
@@ -8530,7 +8518,7 @@ class UCO_ComputerSpecificationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8543,7 +8531,7 @@ class UCO_ComputerSpecificationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ComputerSpecification(UCO_ObservableObject):
@@ -8556,7 +8544,7 @@ class UCO_ComputerSpecification(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8569,7 +8557,7 @@ class UCO_ComputerSpecification(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CompressedStreamFacet(UCO_Facet):
@@ -8582,7 +8570,7 @@ class UCO_CompressedStreamFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8595,7 +8583,7 @@ class UCO_CompressedStreamFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Code(UCO_ObservableObject):
@@ -8608,7 +8596,7 @@ class UCO_Code(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8621,7 +8609,7 @@ class UCO_Code(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CharacterDeviceNode(UCO_FileSystemObject):
@@ -8634,7 +8622,7 @@ class UCO_CharacterDeviceNode(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8647,7 +8635,7 @@ class UCO_CharacterDeviceNode(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CellSiteFacet(UCO_Facet):
@@ -8660,7 +8648,7 @@ class UCO_CellSiteFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8673,7 +8661,7 @@ class UCO_CellSiteFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CellSite(UCO_ObservableObject):
@@ -8684,7 +8672,7 @@ class UCO_CellSite(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8697,7 +8685,7 @@ class UCO_CellSite(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CapturedTelecommunicationsInformationFacet(UCO_Facet):
@@ -8710,7 +8698,7 @@ class UCO_CapturedTelecommunicationsInformationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8723,7 +8711,7 @@ class UCO_CapturedTelecommunicationsInformationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CapturedTelecommunicationsInformation(UCO_ObservableObject):
@@ -8734,7 +8722,7 @@ class UCO_CapturedTelecommunicationsInformation(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8747,7 +8735,7 @@ class UCO_CapturedTelecommunicationsInformation(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CallFacet(UCO_Facet):
@@ -8760,7 +8748,7 @@ class UCO_CallFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8773,7 +8761,7 @@ class UCO_CallFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Call(UCO_ObservableObject):
@@ -8786,7 +8774,7 @@ class UCO_Call(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8799,7 +8787,7 @@ class UCO_Call(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarFacet(UCO_Facet):
@@ -8812,7 +8800,7 @@ class UCO_CalendarFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8825,7 +8813,7 @@ class UCO_CalendarFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarEntryFacet(UCO_Facet):
@@ -8838,7 +8826,7 @@ class UCO_CalendarEntryFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8851,7 +8839,7 @@ class UCO_CalendarEntryFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CalendarEntry(UCO_ObservableObject):
@@ -8864,7 +8852,7 @@ class UCO_CalendarEntry(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8877,7 +8865,7 @@ class UCO_CalendarEntry(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Calendar(UCO_ObservableObject):
@@ -8890,7 +8878,7 @@ class UCO_Calendar(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8903,7 +8891,7 @@ class UCO_Calendar(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserCookieFacet(UCO_Facet):
@@ -8916,7 +8904,7 @@ class UCO_BrowserCookieFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8929,7 +8917,7 @@ class UCO_BrowserCookieFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserCookie(UCO_ObservableObject):
@@ -8942,7 +8930,7 @@ class UCO_BrowserCookie(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8955,7 +8943,7 @@ class UCO_BrowserCookie(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserBookmarkFacet(UCO_Facet):
@@ -8968,7 +8956,7 @@ class UCO_BrowserBookmarkFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -8981,7 +8969,7 @@ class UCO_BrowserBookmarkFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BrowserBookmark(UCO_ObservableObject):
@@ -8994,7 +8982,7 @@ class UCO_BrowserBookmark(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9007,7 +8995,7 @@ class UCO_BrowserBookmark(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BotConfiguration(UCO_ObservableObject):
@@ -9020,7 +9008,7 @@ class UCO_BotConfiguration(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9033,7 +9021,7 @@ class UCO_BotConfiguration(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BluetoothAddressFacet(UCO_MACAddressFacet):
@@ -9046,7 +9034,7 @@ class UCO_BluetoothAddressFacet(UCO_MACAddressFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9059,7 +9047,7 @@ class UCO_BluetoothAddressFacet(UCO_MACAddressFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BluetoothAddress(UCO_MACAddress):
@@ -9072,7 +9060,7 @@ class UCO_BluetoothAddress(UCO_MACAddress):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9085,7 +9073,7 @@ class UCO_BluetoothAddress(UCO_MACAddress):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BlockDeviceNode(UCO_FileSystemObject):
@@ -9098,7 +9086,7 @@ class UCO_BlockDeviceNode(UCO_FileSystemObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9111,7 +9099,7 @@ class UCO_BlockDeviceNode(UCO_FileSystemObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BlackberryPhone(UCO_SmartPhone):
@@ -9124,7 +9112,7 @@ class UCO_BlackberryPhone(UCO_SmartPhone):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9137,7 +9125,7 @@ class UCO_BlackberryPhone(UCO_SmartPhone):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AutonomousSystemFacet(UCO_Facet):
@@ -9150,7 +9138,7 @@ class UCO_AutonomousSystemFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9163,7 +9151,7 @@ class UCO_AutonomousSystemFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AutonomousSystem(UCO_ObservableObject):
@@ -9176,7 +9164,7 @@ class UCO_AutonomousSystem(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9189,7 +9177,7 @@ class UCO_AutonomousSystem(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AudioFacet(UCO_Facet):
@@ -9202,7 +9190,7 @@ class UCO_AudioFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9215,7 +9203,7 @@ class UCO_AudioFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Audio(UCO_ObservableObject):
@@ -9228,7 +9216,7 @@ class UCO_Audio(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9241,7 +9229,7 @@ class UCO_Audio(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArchiveFileFacet(UCO_Facet):
@@ -9254,7 +9242,7 @@ class UCO_ArchiveFileFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9267,7 +9255,7 @@ class UCO_ArchiveFileFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArchiveFile(UCO_File):
@@ -9280,7 +9268,7 @@ class UCO_ArchiveFile(UCO_File):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9293,7 +9281,7 @@ class UCO_ArchiveFile(UCO_File):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationVersion(UCO_UcoInherentCharacterizationThing):
@@ -9306,7 +9294,7 @@ class UCO_ApplicationVersion(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9319,7 +9307,7 @@ class UCO_ApplicationVersion(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationFacet(UCO_Facet):
@@ -9332,7 +9320,7 @@ class UCO_ApplicationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9345,7 +9333,7 @@ class UCO_ApplicationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationAccountFacet(UCO_Facet):
@@ -9358,7 +9346,7 @@ class UCO_ApplicationAccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9371,7 +9359,7 @@ class UCO_ApplicationAccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ApplicationAccount(UCO_DigitalAccount):
@@ -9384,7 +9372,7 @@ class UCO_ApplicationAccount(UCO_DigitalAccount):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9397,7 +9385,7 @@ class UCO_ApplicationAccount(UCO_DigitalAccount):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Application(UCO_ObservableObject):
@@ -9410,7 +9398,7 @@ class UCO_Application(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9423,7 +9411,7 @@ class UCO_Application(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AntennaFacet(UCO_Facet):
@@ -9436,7 +9424,7 @@ class UCO_AntennaFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9449,7 +9437,7 @@ class UCO_AntennaFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidPhone(UCO_AndroidDevice, UCO_SmartPhone):
@@ -9462,7 +9450,7 @@ class UCO_AndroidPhone(UCO_AndroidDevice, UCO_SmartPhone):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9475,7 +9463,7 @@ class UCO_AndroidPhone(UCO_AndroidDevice, UCO_SmartPhone):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AndroidDeviceFacet(UCO_Facet):
@@ -9488,7 +9476,7 @@ class UCO_AndroidDeviceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9501,7 +9489,7 @@ class UCO_AndroidDeviceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AlternateDataStreamFacet(UCO_Facet):
@@ -9514,7 +9502,7 @@ class UCO_AlternateDataStreamFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9527,7 +9515,7 @@ class UCO_AlternateDataStreamFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AlternateDataStream(UCO_ObservableObject):
@@ -9540,7 +9528,7 @@ class UCO_AlternateDataStream(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9553,7 +9541,7 @@ class UCO_AlternateDataStream(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Adaptor(UCO_Device):
@@ -9566,7 +9554,7 @@ class UCO_Adaptor(UCO_Device):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9579,7 +9567,7 @@ class UCO_Adaptor(UCO_Device):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AccountFacet(UCO_Facet):
@@ -9592,7 +9580,7 @@ class UCO_AccountFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9605,7 +9593,7 @@ class UCO_AccountFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AccountAuthenticationFacet(UCO_Facet):
@@ -9618,7 +9606,7 @@ class UCO_AccountAuthenticationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9631,7 +9619,7 @@ class UCO_AccountAuthenticationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ARPCacheEntry(UCO_ObservableObject):
@@ -9644,7 +9632,7 @@ class UCO_ARPCacheEntry(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9657,7 +9645,7 @@ class UCO_ARPCacheEntry(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ARPCache(UCO_ObservableObject):
@@ -9670,7 +9658,7 @@ class UCO_ARPCache(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9683,7 +9671,7 @@ class UCO_ARPCache(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_API(UCO_ObservableObject):
@@ -9696,7 +9684,7 @@ class UCO_API(UCO_ObservableObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9709,7 +9697,7 @@ class UCO_API(UCO_ObservableObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_TermsOfUseMarking(UCO_MarkingModel):
@@ -9722,7 +9710,7 @@ class UCO_TermsOfUseMarking(UCO_MarkingModel):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9735,7 +9723,7 @@ class UCO_TermsOfUseMarking(UCO_MarkingModel):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_StatementMarking(UCO_MarkingModel):
@@ -9748,7 +9736,7 @@ class UCO_StatementMarking(UCO_MarkingModel):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9761,7 +9749,7 @@ class UCO_StatementMarking(UCO_MarkingModel):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ReleaseToMarking(UCO_MarkingModel):
@@ -9774,7 +9762,7 @@ class UCO_ReleaseToMarking(UCO_MarkingModel):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9787,7 +9775,7 @@ class UCO_ReleaseToMarking(UCO_MarkingModel):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_MarkingDefinition(UCO_MarkingDefinitionAbstraction):
@@ -9800,7 +9788,7 @@ class UCO_MarkingDefinition(UCO_MarkingDefinitionAbstraction):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9813,7 +9801,7 @@ class UCO_MarkingDefinition(UCO_MarkingDefinitionAbstraction):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LicenseMarking(UCO_MarkingModel):
@@ -9826,7 +9814,7 @@ class UCO_LicenseMarking(UCO_MarkingModel):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9839,7 +9827,7 @@ class UCO_LicenseMarking(UCO_MarkingModel):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GranularMarking(UCO_UcoInherentCharacterizationThing):
@@ -9852,7 +9840,7 @@ class UCO_GranularMarking(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9865,7 +9853,7 @@ class UCO_GranularMarking(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SimpleAddressFacet(UCO_Facet):
@@ -9878,7 +9866,7 @@ class UCO_SimpleAddressFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9891,7 +9879,7 @@ class UCO_SimpleAddressFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Location(UCO_UcoObject):
@@ -9904,7 +9892,7 @@ class UCO_Location(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9917,7 +9905,7 @@ class UCO_Location(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LatLongCoordinatesFacet(UCO_Facet):
@@ -9930,7 +9918,7 @@ class UCO_LatLongCoordinatesFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9943,7 +9931,7 @@ class UCO_LatLongCoordinatesFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_GPSCoordinatesFacet(UCO_Facet):
@@ -9956,7 +9944,7 @@ class UCO_GPSCoordinatesFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9969,7 +9957,7 @@ class UCO_GPSCoordinatesFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_VisaFacet(UCO_IdentityFacet):
@@ -9982,7 +9970,7 @@ class UCO_VisaFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -9995,7 +9983,7 @@ class UCO_VisaFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_SimpleNameFacet(UCO_IdentityFacet):
@@ -10008,7 +9996,7 @@ class UCO_SimpleNameFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10021,7 +10009,7 @@ class UCO_SimpleNameFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_RelatedIdentityFacet(UCO_IdentityFacet):
@@ -10034,7 +10022,7 @@ class UCO_RelatedIdentityFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10047,7 +10035,7 @@ class UCO_RelatedIdentityFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_QualificationFacet(UCO_IdentityFacet):
@@ -10060,7 +10048,7 @@ class UCO_QualificationFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10073,7 +10061,7 @@ class UCO_QualificationFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PhysicalInfoFacet(UCO_IdentityFacet):
@@ -10086,7 +10074,7 @@ class UCO_PhysicalInfoFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10099,7 +10087,7 @@ class UCO_PhysicalInfoFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_PersonalDetailsFacet(UCO_IdentityFacet):
@@ -10112,7 +10100,7 @@ class UCO_PersonalDetailsFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10125,7 +10113,7 @@ class UCO_PersonalDetailsFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Person(UCO_Identity):
@@ -10138,7 +10126,7 @@ class UCO_Person(UCO_Identity):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10151,7 +10139,7 @@ class UCO_Person(UCO_Identity):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OrganizationDetailsFacet(UCO_IdentityFacet):
@@ -10164,7 +10152,7 @@ class UCO_OrganizationDetailsFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10177,7 +10165,7 @@ class UCO_OrganizationDetailsFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Organization(UCO_Identity):
@@ -10190,7 +10178,7 @@ class UCO_Organization(UCO_Identity):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10203,7 +10191,7 @@ class UCO_Organization(UCO_Identity):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_OccupationFacet(UCO_IdentityFacet):
@@ -10216,7 +10204,7 @@ class UCO_OccupationFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10229,7 +10217,7 @@ class UCO_OccupationFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_NationalityFacet(UCO_IdentityFacet):
@@ -10242,7 +10230,7 @@ class UCO_NationalityFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10255,7 +10243,7 @@ class UCO_NationalityFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_LanguagesFacet(UCO_IdentityFacet):
@@ -10268,7 +10256,7 @@ class UCO_LanguagesFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10281,7 +10269,7 @@ class UCO_LanguagesFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_IdentifierFacet(UCO_IdentityFacet):
@@ -10294,7 +10282,7 @@ class UCO_IdentifierFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10307,7 +10295,7 @@ class UCO_IdentifierFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_EventsFacet(UCO_IdentityFacet):
@@ -10320,7 +10308,7 @@ class UCO_EventsFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10333,7 +10321,7 @@ class UCO_EventsFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_CountryOfResidenceFacet(UCO_IdentityFacet):
@@ -10346,7 +10334,7 @@ class UCO_CountryOfResidenceFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10359,7 +10347,7 @@ class UCO_CountryOfResidenceFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_BirthInformationFacet(UCO_IdentityFacet):
@@ -10372,7 +10360,7 @@ class UCO_BirthInformationFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10385,7 +10373,7 @@ class UCO_BirthInformationFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AffiliationFacet(UCO_IdentityFacet):
@@ -10398,7 +10386,7 @@ class UCO_AffiliationFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10411,7 +10399,7 @@ class UCO_AffiliationFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AddressFacet(UCO_IdentityFacet):
@@ -10424,7 +10412,7 @@ class UCO_AddressFacet(UCO_IdentityFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10437,7 +10425,7 @@ class UCO_AddressFacet(UCO_IdentityFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ModusOperandi(UCO_UcoObject):
@@ -10450,7 +10438,7 @@ class UCO_ModusOperandi(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10463,7 +10451,7 @@ class UCO_ModusOperandi(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Grouping(UCO_ContextualCompilation):
@@ -10476,7 +10464,7 @@ class UCO_Grouping(UCO_ContextualCompilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10489,7 +10477,7 @@ class UCO_Grouping(UCO_ContextualCompilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
@@ -10502,7 +10490,7 @@ class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10515,7 +10503,7 @@ class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ControlledVocabulary(UCO_UcoObject):
@@ -10528,7 +10516,7 @@ class UCO_ControlledVocabulary(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10541,7 +10529,7 @@ class UCO_ControlledVocabulary(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfidenceFacet(UCO_Facet):
@@ -10554,7 +10542,7 @@ class UCO_ConfidenceFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10567,7 +10555,7 @@ class UCO_ConfidenceFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Bundle(UCO_EnclosingCompilation):
@@ -10580,7 +10568,7 @@ class UCO_Bundle(UCO_EnclosingCompilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10593,7 +10581,7 @@ class UCO_Bundle(UCO_EnclosingCompilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AttributedName(UCO_UcoObject):
@@ -10606,7 +10594,7 @@ class UCO_AttributedName(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10619,7 +10607,7 @@ class UCO_AttributedName(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Annotation(UCO_Assertion):
@@ -10632,7 +10620,7 @@ class UCO_Annotation(UCO_Assertion):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10645,7 +10633,7 @@ class UCO_Annotation(UCO_Assertion):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Dependency(UCO_UcoInherentCharacterizationThing):
@@ -10658,7 +10646,7 @@ class UCO_Dependency(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10671,7 +10659,7 @@ class UCO_Dependency(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ConfigurationEntry(UCO_UcoInherentCharacterizationThing):
@@ -10684,7 +10672,7 @@ class UCO_ConfigurationEntry(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10697,7 +10685,7 @@ class UCO_ConfigurationEntry(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Configuration(UCO_UcoObject):
@@ -10710,7 +10698,7 @@ class UCO_Configuration(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10723,7 +10711,7 @@ class UCO_Configuration(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
@@ -10736,7 +10724,7 @@ class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10749,7 +10737,7 @@ class UCO_ArtifactClassificationResultFacet(UCO_AnalyticResultFacet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
@@ -10762,7 +10750,7 @@ class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10775,7 +10763,7 @@ class UCO_ArtifactClassification(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_AnalyticResult(UCO_Assertion):
@@ -10788,7 +10776,7 @@ class UCO_AnalyticResult(UCO_Assertion):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10801,7 +10789,7 @@ class UCO_AnalyticResult(UCO_Assertion):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_Analysis(UCO_Action):
@@ -10814,7 +10802,7 @@ class UCO_Analysis(UCO_Action):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10827,7 +10815,7 @@ class UCO_Analysis(UCO_Action):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ArrayOfAction(UCO_UcoInherentCharacterizationThing):
@@ -10840,7 +10828,7 @@ class UCO_ArrayOfAction(UCO_UcoInherentCharacterizationThing):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10853,7 +10841,7 @@ class UCO_ArrayOfAction(UCO_UcoInherentCharacterizationThing):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionPattern(UCO_Action, UCO_Pattern):
@@ -10866,7 +10854,7 @@ class UCO_ActionPattern(UCO_Action, UCO_Pattern):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10879,7 +10867,7 @@ class UCO_ActionPattern(UCO_Action, UCO_Pattern):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionFrequencyFacet(UCO_Facet):
@@ -10892,7 +10880,7 @@ class UCO_ActionFrequencyFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10905,7 +10893,7 @@ class UCO_ActionFrequencyFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionEstimationFacet(UCO_Facet):
@@ -10918,7 +10906,7 @@ class UCO_ActionEstimationFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10931,7 +10919,7 @@ class UCO_ActionEstimationFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class UCO_ActionArgumentFacet(UCO_Facet):
@@ -10944,7 +10932,7 @@ class UCO_ActionArgumentFacet(UCO_Facet):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10957,7 +10945,7 @@ class UCO_ActionArgumentFacet(UCO_Facet):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_VictimActionLifecycle(UCO_ActionLifecycle):
@@ -10970,7 +10958,7 @@ class CASE_VictimActionLifecycle(UCO_ActionLifecycle):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -10983,7 +10971,7 @@ class CASE_VictimActionLifecycle(UCO_ActionLifecycle):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_SubjectActionLifecycle(UCO_ActionLifecycle):
@@ -10996,7 +10984,7 @@ class CASE_SubjectActionLifecycle(UCO_ActionLifecycle):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11009,7 +10997,7 @@ class CASE_SubjectActionLifecycle(UCO_ActionLifecycle):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Subject(UCO_Role):
@@ -11022,7 +11010,7 @@ class CASE_Subject(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11035,7 +11023,7 @@ class CASE_Subject(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_ProvenanceRecord(UCO_ContextualCompilation):
@@ -11048,7 +11036,7 @@ class CASE_ProvenanceRecord(UCO_ContextualCompilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11061,7 +11049,7 @@ class CASE_ProvenanceRecord(UCO_ContextualCompilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Investigator(UCO_Role):
@@ -11074,7 +11062,7 @@ class CASE_Investigator(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11087,7 +11075,7 @@ class CASE_Investigator(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_InvestigativeAction(UCO_Action):
@@ -11100,7 +11088,7 @@ class CASE_InvestigativeAction(UCO_Action):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11113,7 +11101,7 @@ class CASE_InvestigativeAction(UCO_Action):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Investigation(UCO_ContextualCompilation):
@@ -11126,7 +11114,7 @@ class CASE_Investigation(UCO_ContextualCompilation):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11139,7 +11127,7 @@ class CASE_Investigation(UCO_ContextualCompilation):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_ExaminerActionLifecycle(UCO_ActionLifecycle):
@@ -11152,7 +11140,7 @@ class CASE_ExaminerActionLifecycle(UCO_ActionLifecycle):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11165,7 +11153,7 @@ class CASE_ExaminerActionLifecycle(UCO_ActionLifecycle):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Examiner(UCO_Role):
@@ -11178,7 +11166,7 @@ class CASE_Examiner(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11191,7 +11179,7 @@ class CASE_Examiner(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Authorization(UCO_UcoObject):
@@ -11204,7 +11192,7 @@ class CASE_Authorization(UCO_UcoObject):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11217,7 +11205,7 @@ class CASE_Authorization(UCO_UcoObject):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CASE_Attorney(UCO_Role):
@@ -11230,7 +11218,7 @@ class CASE_Attorney(UCO_Role):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11243,7 +11231,7 @@ class CASE_Attorney(UCO_Role):
             }
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CO_Set(CO_Collection):
@@ -11256,7 +11244,7 @@ class CO_Set(CO_Collection):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11265,7 +11253,7 @@ class CO_Set(CO_Collection):
             _n_types = {rdflib.term.URIRef("http://purl.org/co/Set")}
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
 class CO_ListItem(CO_Item):
@@ -11278,7 +11266,7 @@ class CO_ListItem(CO_Item):
     def __init__(
         self,
         graph: rdflib.Graph,
-        node_iri: str,
+        n_node: rdflib.URIRef,
         *args: typing.Any,
         n_types: typing.Set[rdflib.URIRef] = set(),
         **kwargs: typing.Any,
@@ -11287,4 +11275,4 @@ class CO_ListItem(CO_Item):
             _n_types = {rdflib.term.URIRef("http://purl.org/co/ListItem")}
         else:
             _n_types = n_types
-        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
