@@ -37,56 +37,7 @@
   },
   "@graph": [
     {
-      "@id": "http://example.org/kb/content-data-facet-bda9b72d-2753-54ab-9292-e1e260be4f6d",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet",
-      "https://ontology.unifiedcyberontology.org/uco/observable/hash": [
-        {
-          "@id": "http://example.org/kb/hash-8ebb651a-314b-554a-b63e-78b9e69111d8"
-        },
-        {
-          "@id": "http://example.org/kb/hash-c77cb4f1-ac2a-52c7-b67e-016e209515cb"
-        },
-        {
-          "@id": "http://example.org/kb/hash-bdb2ba7d-8cb2-5591-a051-0c20d134e894"
-        },
-        {
-          "@id": "http://example.org/kb/hash-bf689e82-1cc4-507f-a6fb-7fc01b9289c6"
-        },
-        {
-          "@id": "http://example.org/kb/hash-dd2161f0-4943-55c0-b08e-a2ad8a85dce8"
-        },
-        {
-          "@id": "http://example.org/kb/hash-28dd6731-4eda-5ae7-9810-efedc7593912"
-        }
-      ],
-      "https://ontology.unifiedcyberontology.org/uco/observable/sizeInBytes": 4
-    },
-    {
-      "@id": "http://example.org/kb/hash-bdb2ba7d-8cb2-5591-a051-0c20d134e894",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
-      "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
-        "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
-        "@value": "SHA256"
-      },
-      "https://ontology.unifiedcyberontology.org/uco/types/hashValue": {
-        "@type": "http://www.w3.org/2001/XMLSchema#hexBinary",
-        "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-      }
-    },
-    {
-      "@id": "http://example.org/kb/file-23f45d80-7b16-5e7f-ba34-40392fa4f8fc",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/File",
-      "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
-        {
-          "@id": "http://example.org/kb/file-facet-a5d9606e-a5cf-5531-9462-5bed0ac4219c"
-        },
-        {
-          "@id": "http://example.org/kb/content-data-facet-bda9b72d-2753-54ab-9292-e1e260be4f6d"
-        }
-      ]
-    },
-    {
-      "@id": "http://example.org/kb/hash-28dd6731-4eda-5ae7-9810-efedc7593912",
+      "@id": "http://example.org/kb/Hash-7395c349-e7ab-59b4-acdd-9d857c32413a",
       "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
       "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
         "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
@@ -98,29 +49,19 @@
       }
     },
     {
-      "@id": "http://example.org/kb/file-facet-a5d9606e-a5cf-5531-9462-5bed0ac4219c",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/FileFacet",
-      "https://ontology.unifiedcyberontology.org/uco/observable/fileName": "sample.txt",
-      "https://ontology.unifiedcyberontology.org/uco/observable/modifiedTime": {
-        "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-        "@value": "2010-01-02T03:04:56+00:00"
-      },
-      "https://ontology.unifiedcyberontology.org/uco/observable/sizeInBytes": 4
-    },
-    {
-      "@id": "http://example.org/kb/hash-8ebb651a-314b-554a-b63e-78b9e69111d8",
+      "@id": "http://example.org/kb/Hash-fe2030ac-2380-520f-8499-5f2a1e5d69af",
       "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
       "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
         "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
-        "@value": "MD5"
+        "@value": "SHA1"
       },
       "https://ontology.unifiedcyberontology.org/uco/types/hashValue": {
         "@type": "http://www.w3.org/2001/XMLSchema#hexBinary",
-        "@value": "098f6bcd4621d373cade4e832627b4f6"
+        "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
       }
     },
     {
-      "@id": "http://example.org/kb/hash-bf689e82-1cc4-507f-a6fb-7fc01b9289c6",
+      "@id": "http://example.org/kb/Hash-acdba760-7dc3-5601-8d5f-480c1def8492",
       "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
       "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
         "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
@@ -132,7 +73,19 @@
       }
     },
     {
-      "@id": "http://example.org/kb/hash-dd2161f0-4943-55c0-b08e-a2ad8a85dce8",
+      "@id": "http://example.org/kb/Hash-9527b473-6268-5385-9a74-4eb1a98fef93",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
+      "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
+        "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
+        "@value": "SHA256"
+      },
+      "https://ontology.unifiedcyberontology.org/uco/types/hashValue": {
+        "@type": "http://www.w3.org/2001/XMLSchema#hexBinary",
+        "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+      }
+    },
+    {
+      "@id": "http://example.org/kb/Hash-ae02b896-5a0b-57c0-9441-c90ce6382a72",
       "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
       "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
         "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
@@ -144,15 +97,62 @@
       }
     },
     {
-      "@id": "http://example.org/kb/hash-c77cb4f1-ac2a-52c7-b67e-016e209515cb",
+      "@id": "http://example.org/kb/ContentDataFacet-3258a70d-6307-5a70-b796-b6ffd530700a",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet",
+      "https://ontology.unifiedcyberontology.org/uco/observable/hash": [
+        {
+          "@id": "http://example.org/kb/Hash-244595b7-3a16-50e3-ab5d-1fc767d4f337"
+        },
+        {
+          "@id": "http://example.org/kb/Hash-fe2030ac-2380-520f-8499-5f2a1e5d69af"
+        },
+        {
+          "@id": "http://example.org/kb/Hash-9527b473-6268-5385-9a74-4eb1a98fef93"
+        },
+        {
+          "@id": "http://example.org/kb/Hash-acdba760-7dc3-5601-8d5f-480c1def8492"
+        },
+        {
+          "@id": "http://example.org/kb/Hash-ae02b896-5a0b-57c0-9441-c90ce6382a72"
+        },
+        {
+          "@id": "http://example.org/kb/Hash-7395c349-e7ab-59b4-acdd-9d857c32413a"
+        }
+      ],
+      "https://ontology.unifiedcyberontology.org/uco/observable/sizeInBytes": 4
+    },
+    {
+      "@id": "http://example.org/kb/FileFacet-3e49a502-dc39-5ff2-9148-2601e1929e2b",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/FileFacet",
+      "https://ontology.unifiedcyberontology.org/uco/observable/fileName": "sample.txt",
+      "https://ontology.unifiedcyberontology.org/uco/observable/modifiedTime": {
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "@value": "2010-01-02T03:04:56+00:00"
+      },
+      "https://ontology.unifiedcyberontology.org/uco/observable/sizeInBytes": 4
+    },
+    {
+      "@id": "http://example.org/kb/File-a28858e3-5087-5c84-a2b6-710b00b15605",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/File",
+      "https://ontology.unifiedcyberontology.org/uco/core/hasFacet": [
+        {
+          "@id": "http://example.org/kb/FileFacet-3e49a502-dc39-5ff2-9148-2601e1929e2b"
+        },
+        {
+          "@id": "http://example.org/kb/ContentDataFacet-3258a70d-6307-5a70-b796-b6ffd530700a"
+        }
+      ]
+    },
+    {
+      "@id": "http://example.org/kb/Hash-244595b7-3a16-50e3-ab5d-1fc767d4f337",
       "@type": "https://ontology.unifiedcyberontology.org/uco/types/Hash",
       "https://ontology.unifiedcyberontology.org/uco/types/hashMethod": {
         "@type": "https://ontology.unifiedcyberontology.org/uco/vocabulary/HashNameVocab",
-        "@value": "SHA1"
+        "@value": "MD5"
       },
       "https://ontology.unifiedcyberontology.org/uco/types/hashValue": {
         "@type": "http://www.w3.org/2001/XMLSchema#hexBinary",
-        "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
+        "@value": "098f6bcd4621d373cade4e832627b4f6"
       }
     }
   ]

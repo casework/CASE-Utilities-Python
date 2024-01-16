@@ -1,11 +1,14 @@
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
-# of their official duties. Pursuant to title 17 Section 105 of the
-# United States Code this software is not subject to copyright
-# protection and is in the public domain. NIST assumes no
-# responsibility whatsoever for its use by other parties, and makes
-# no guarantees, expressed or implied, about its quality,
-# reliability, or any other characteristic.
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
 
@@ -13,13 +16,15 @@ name: Continuous Integration
 
 on:
   push:
-    branches: 
+    branches:
       - main
       - develop
+      - support-*
   pull_request:
-    branches: 
+    branches:
       - main
       - develop
+      - support-*
   release:
     types:
       - published
@@ -32,18 +37,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: 
-          - '3.8'
-          - '3.11'
+        python-version:
+          - '3.9'
+          - '3.12'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '11'
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Pre-commit Checks
@@ -54,7 +59,7 @@ jobs:
       run: make clean
     - name: Run tests
       run: make PYTHON3=python check
-    
+
     # Build the binary wheel as well as the source tar
     - name: Build Objects
       run: |
@@ -68,7 +73,7 @@ jobs:
 
     # Upload the packages on all develop and main pipleines for test consumption
     - name: Upload HTML Docs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: packages
         path: ./dist/

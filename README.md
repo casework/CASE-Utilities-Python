@@ -19,7 +19,9 @@ This repository can be installed from PyPI or from source.
 pip install case-utils
 ```
 
-Users who wish to install from PyPI should be aware that while CASE's ontology is in its pre-1.0.0 release state, backwards-incompatible ontology changes may occur.  This may manifest as [`case_validate`](#case_validate) reporting data review errors after installing an updated `case_utils` version.  Users may wish to pin `case_utils` within any dependent code bases to be less than the next unreleased SEMVER-minor version.  (E.g. if `case_utils` version `0.8.0` is currently available, a newly adopting project might wish to track `case_utils<0.9.0` among its dependencies.)
+Users who wish to install from PyPI should be aware that though CASE's ontology is in its post-1.0.0 release state, this Python project is in a pre-1.0.0 release state.  Backwards-incompatible ontology changes will only occur in accordance with [SEMVER](https://semver.org/).  This Python project is not yet committed to its API, and backwards-incompatiable changes may occur.  They are likely to occur with advance notice.
+
+Users may wish to pin `case-utils` within any dependent code bases to be less than the next unreleased SEMVER-minor version.  (E.g. if `case-utils` version `0.14.0` is currently available, a newly adopting project might wish to track `case-utils<0.15.0` among its dependencies.)
 
 
 ### Installing from source
@@ -120,7 +122,7 @@ case_sparql_select output.md input.sparql input.json [input-2.json ...]
 
 ### `local_uuid`
 
-This [module](case_utils/local_uuid.py) provides a wrapper UUID generator, `local_uuid()`.  Its main purpose is making example data generate consistent identifiers, and intentionally includes mechanisms to make it difficult to activate this mode without awareness of the caller.
+_Migration:_ Functionality previously in [`case_utils.local_uuid`](case_utils/local_uuid.py) has been exported to [`cdo-local-uuid`](https://github.com/Cyber-Domain-Ontology/CDO-Utility-Local-UUID).  A future `case-utils` release will drop this re-export.
 
 
 ### Built versions

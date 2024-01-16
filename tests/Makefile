@@ -1,13 +1,16 @@
 #!/usr/bin/make -f
 
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
-# of their official duties. Pursuant to title 17 Section 105 of the
-# United States Code this software is not subject to copyright
-# protection and is in the public domain. NIST assumes no
-# responsibility whatsoever for its use by other parties, and makes
-# no guarantees, expressed or implied, about its quality,
-# reliability, or any other characteristic.
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
 
@@ -23,6 +26,7 @@ all: \
 .PHONY: \
   all-case_utils \
   check-case_utils \
+  check-doctest \
   check-isomorphic_diff \
   check-mypy \
   download
@@ -57,6 +61,7 @@ all-case_utils: \
 # These check calls are provided in preferred run-order.
 check: \
   check-mypy \
+  check-doctest \
   check-isomorphic_diff \
   check-case_utils
 	source venv/bin/activate \
@@ -70,6 +75,14 @@ check-case_utils: \
 	  PYTHON3=$(PYTHON3) \
 	  --directory case_utils \
 	  check
+
+check-doctest: \
+  .venv.done.log
+	source venv/bin/activate \
+	  && pytest \
+	    --doctest-modules \
+	    --log-level=DEBUG \
+	    $(top_srcdir)/case_utils
 
 check-isomorphic_diff: \
   .venv.done.log

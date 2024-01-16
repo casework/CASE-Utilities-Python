@@ -3,8 +3,24 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
+<http://purl.org/co/Bag>
+	rdfs:subClassOf <http://purl.org/co/Collection> ;
+	.
+
+<http://purl.org/co/Collection>
+	rdfs:subClassOf owl:Thing ;
+	.
+
+<http://purl.org/co/Item>
+	rdfs:subClassOf owl:Thing ;
+	.
+
 <http://purl.org/co/ListItem>
 	rdfs:subClassOf <http://purl.org/co/Item> ;
+	.
+
+<http://purl.org/co/Set>
+	rdfs:subClassOf <http://purl.org/co/Collection> ;
 	.
 
 <https://ontology.caseontology.org/case/investigation/Attorney>

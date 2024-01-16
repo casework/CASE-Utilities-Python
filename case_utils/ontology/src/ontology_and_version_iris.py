@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
-# of their official duties. Pursuant to title 17 Section 105 of the
-# United States Code this software is not subject to copyright
-# protection and is in the public domain. NIST assumes no
-# responsibility whatsoever for its use by other parties, and makes
-# no guarantees, expressed or implied, about its quality,
-# reliability, or any other characteristic.
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
 
@@ -15,7 +18,7 @@
 This script creates a list of all ontology and version IRIs that have ever existed in a CDO ontology to describe a CDO ontology.  I.e. the subject of triples with owl:Ontology as predicate are included, as are the objects of version-referencing triples (owl:versionIRI, owl:incompatibleWith, etc.).
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 import argparse
 import typing
@@ -29,6 +32,11 @@ NS_RDF = rdflib.RDF
 def concept_is_cdo_concept(n_concept: rdflib.URIRef) -> bool:
     """
     This function is purposefully distinct from the function used in case_validate.  Within this script, the publishing history of CASE and UCO is reviewed.
+
+    >>> concept_is_cdo_concept(rdflib.URIRef("http://example.org/ontology/Thing"))
+    False
+    >>> concept_is_cdo_concept(rdflib.URIRef("https://ontology.unifiedcyberontology.org/uco/core/UcoThing"))
+    True
     """
     concept_iri = str(n_concept)
     return (

@@ -1,13 +1,16 @@
 #!/usr/bin/make -f
 
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
-# of their official duties. Pursuant to title 17 Section 105 of the
-# United States Code this software is not subject to copyright
-# protection and is in the public domain. NIST assumes no
-# responsibility whatsoever for its use by other parties, and makes
-# no guarantees, expressed or implied, about its quality,
-# reliability, or any other characteristic.
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
 
@@ -82,6 +85,9 @@ kb.ttl: \
 
 #TODO - kb.json has a conversion error with context dictionary construction and custom datatypes.
 kb_validation.ttl: \
+  $(top_srcdir)/case_utils/case_validate/__init__.py \
+  $(top_srcdir)/case_utils/case_validate/validate_types.py \
+  $(top_srcdir)/case_utils/case_validate/validate_utils.py \
   kb.ttl
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
@@ -111,14 +117,15 @@ sample.txt.json: \
   $(tests_srcdir)/src/isomorphic_diff.py \
   $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
-  $(top_srcdir)/case_utils/local_uuid.py \
+  $(top_srcdir)/case_utils/inherent_uuid.py \
   $(top_srcdir)/case_utils/namespace.py \
   sample.txt-nocompact.json
 	rm -f $@ _$@ __$@
-	export CASE_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
+	export CDO_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
 	  && source $(tests_srcdir)/venv/bin/activate \
 	    && case_file \
 	      --debug \
+	      --use-deterministic-uuids \
 	      __$@ \
 	      sample.txt
 	source $(tests_srcdir)/venv/bin/activate \
@@ -145,14 +152,15 @@ sample.txt.ttl: \
   $(tests_srcdir)/.venv.done.log \
   $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
-  $(top_srcdir)/case_utils/local_uuid.py \
+  $(top_srcdir)/case_utils/inherent_uuid.py \
   $(top_srcdir)/case_utils/namespace.py \
   sample.txt.done.log
 	rm -f _$@ __$@
-	export CASE_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
+	export CDO_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
 	  && source $(tests_srcdir)/venv/bin/activate \
 	    && case_file \
 	      --debug \
+	      --use-deterministic-uuids \
 	      __$@ \
 	      sample.txt
 	java -jar $(RDF_TOOLKIT_JAR) \
@@ -170,15 +178,16 @@ sample.txt-disable_hashes.ttl: \
   $(tests_srcdir)/.venv.done.log \
   $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
-  $(top_srcdir)/case_utils/local_uuid.py \
+  $(top_srcdir)/case_utils/inherent_uuid.py \
   $(top_srcdir)/case_utils/namespace.py \
   sample.txt.done.log
 	rm -f _$@ __$@
-	export CASE_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
+	export CDO_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
 	  && source $(tests_srcdir)/venv/bin/activate \
 	    && case_file \
 	      --debug \
 	      --disable-hashes \
+	      --use-deterministic-uuids \
 	      __$@ \
 	      sample.txt
 	java -jar $(RDF_TOOLKIT_JAR) \
@@ -197,14 +206,15 @@ sample.txt-nocompact.json: \
   $(tests_srcdir)/src/isomorphic_diff.py \
   $(top_srcdir)/case_utils/bindings/__init__.py \
   $(top_srcdir)/case_utils/case_file/__init__.py \
-  $(top_srcdir)/case_utils/local_uuid.py \
+  $(top_srcdir)/case_utils/inherent_uuid.py \
   $(top_srcdir)/case_utils/namespace.py \
   sample.txt.done.log
 	rm -f _$@
-	export CASE_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
+	export CDO_DEMO_NONRANDOM_UUID_BASE="$(top_srcdir)" \
 	  && source $(tests_srcdir)/venv/bin/activate \
 	    && case_file \
 	      --debug \
+	      --use-deterministic-uuids \
 	      _$@ \
 	      sample.txt
 	# To avoid making noisy, uninformative updates from blank node identifiers, only move the new file into place if it is not isomorphic with the Git-tracked version of the target.

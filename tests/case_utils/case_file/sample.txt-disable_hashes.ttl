@@ -6,12 +6,12 @@
 @prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-kb:file-800784de-5c9e-5eb2-b843-0ac51a1bd4b9
+kb:File-23016945-cf7c-5c9c-9fe0-8cefc221ccb2
 	a uco-observable:File ;
-	uco-core:hasFacet kb:file-facet-ffa3e6bb-dffc-549d-a7c4-ffc5e90ac55d ;
+	uco-core:hasFacet kb:FileFacet-d086baca-c585-5b5e-b34d-4592bcddb659 ;
 	.
 
-kb:file-facet-ffa3e6bb-dffc-549d-a7c4-ffc5e90ac55d
+kb:FileFacet-d086baca-c585-5b5e-b34d-4592bcddb659
 	a uco-observable:FileFacet ;
 	uco-observable:fileName "sample.txt" ;
 	uco-observable:modifiedTime "2010-01-02T03:04:56+00:00"^^xsd:dateTime ;

@@ -1,13 +1,16 @@
 #!/usr/bin/make -f
 
+# Portions of this file contributed by NIST are governed by the following
+# statement:
+#
 # This software was developed at the National Institute of Standards
 # and Technology by employees of the Federal Government in the course
-# of their official duties. Pursuant to title 17 Section 105 of the
-# United States Code this software is not subject to copyright
-# protection and is in the public domain. NIST assumes no
-# responsibility whatsoever for its use by other parties, and makes
-# no guarantees, expressed or implied, about its quality,
-# reliability, or any other characteristic.
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
 #
 # We would appreciate acknowledgement if the software is used.
 
@@ -25,6 +28,8 @@ all: \
   .venv-pre-commit/var/.pre-commit-built.log
 
 .PHONY: \
+  check-supply-chain \
+  check-supply-chain-pre-commit \
   download
 
 .git_submodule_init.done.log: \
@@ -85,6 +90,19 @@ check: \
 	  PYTHON3=$(PYTHON3) \
 	  --directory tests \
 	  check
+
+# This target's dependencies potentially modify the working directory's Git state, so it is intentionally not a dependency of check.
+check-supply-chain: \
+  check-supply-chain-pre-commit
+
+# This target is scheduled to run as part of prerelease review.
+check-supply-chain-pre-commit: \
+  .venv-pre-commit/var/.pre-commit-built.log
+	source .venv-pre-commit/bin/activate \
+	  && pre-commit autoupdate
+	git diff \
+	  --exit-code \
+	  .pre-commit-config.yaml
 
 clean:
 	@$(MAKE) \
