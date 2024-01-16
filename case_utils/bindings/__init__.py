@@ -376,6 +376,28 @@ class UCO_NeutralRole(UCO_Role):
         super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
 
 
+class CO_Collection(NodeConstructor):
+    """
+    A group of objects that can be considered as a whole.
+
+    Based on class with IRI 'http://purl.org/co/Collection'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {"http://purl.org/co/Collection"}
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
 class UCO_FileSystemObject(UCO_ObservableObject):
     """
     A file system object is an informational object represented and managed within a file system.
@@ -638,6 +660,8 @@ class UCO_Victim(UCO_NeutralRole):
 
 class CO_Item(NodeConstructor):
     """
+    Element belonging to a bag
+
     Based on class with IRI 'http://purl.org/co/Item'.
     """
 
@@ -656,8 +680,10 @@ class CO_Item(NodeConstructor):
         super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
 
 
-class CO_Bag(NodeConstructor):
+class CO_Bag(CO_Collection):
     """
+    Collection that can have a number of copies of each object
+
     Based on class with IRI 'http://purl.org/co/Bag'.
     """
 
@@ -10338,6 +10364,50 @@ class CASE_Attorney(UCO_Role):
             _type_iris = {
                 "https://ontology.caseontology.org/case/investigation/Attorney"
             }
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class CO_Set(CO_Collection):
+    """
+    A collection that cannot contain duplicate elements.
+
+    Based on class with IRI 'http://purl.org/co/Set'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {"http://purl.org/co/Set"}
+        else:
+            _type_iris = type_iris
+        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
+
+
+class CO_ListItem(CO_Item):
+    """
+    element belonging to a list
+
+    Based on class with IRI 'http://purl.org/co/ListItem'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        node_iri: str,
+        *args: typing.Any,
+        type_iris: typing.Set[str] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(type_iris) == 0:
+            _type_iris = {"http://purl.org/co/ListItem"}
         else:
             _type_iris = type_iris
         super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)
