@@ -98,7 +98,9 @@ def create_file_node(
     if node_iri is None:
         node_slug = "File-" + local_uuid()
         node_iri = node_namespace[node_slug]
-    file_constructor = case_utils.bindings.UCO_File(graph, node_iri)
+
+    n_file = rdflib.URIRef(node_iri)
+    file_constructor = case_utils.bindings.UCO_File(graph, n_file)
 
     n_file_facet: rdflib.URIRef
     if use_deterministic_uuids:
@@ -114,14 +116,14 @@ def create_file_node(
     basename = os.path.basename(filepath)
     literal_basename = rdflib.Literal(basename)
     graph.add(
-        (file_facet_constructor.node, NS_UCO_OBSERVABLE.fileName, literal_basename)
+        (file_facet_constructor.n_node, NS_UCO_OBSERVABLE.fileName, literal_basename)
     )
 
     file_stat = os.stat(filepath)
 
     graph.add(
         (
-            file_facet_constructor.node,
+            file_facet_constructor.n_node,
             NS_UCO_OBSERVABLE.sizeInBytes,
             rdflib.Literal(int(file_stat.st_size)),
         )
@@ -134,7 +136,11 @@ def create_file_node(
         str_mtime = mtime_datetime.isoformat()
         literal_mtime = rdflib.Literal(str_mtime, datatype=NS_XSD.dateTime)
         graph.add(
-            (file_facet_constructor.node, NS_UCO_OBSERVABLE.modifiedTime, literal_mtime)
+            (
+                file_facet_constructor.n_node,
+                NS_UCO_OBSERVABLE.modifiedTime,
+                literal_mtime,
+            )
         )
 
     if not disable_hashes:
@@ -214,7 +220,7 @@ def create_file_node(
         # TODO - Discuss whether this property should be recorded even if hashes are not attempted.
         graph.add(
             (
-                content_data_facet_constructor.node,
+                content_data_facet_constructor.n_node,
                 NS_UCO_OBSERVABLE.sizeInBytes,
                 rdflib.Literal(successful_hashdict.filesize),
             )
@@ -255,14 +261,14 @@ def create_file_node(
 
             graph.add(
                 (
-                    hash_constructor.node,
+                    hash_constructor.n_node,
                     NS_UCO_TYPES.hashMethod,
                     l_hash_method,
                 )
             )
             graph.add(
                 (
-                    hash_constructor.node,
+                    hash_constructor.n_node,
                     NS_UCO_TYPES.hashValue,
                     l_hash_value,
                 )
