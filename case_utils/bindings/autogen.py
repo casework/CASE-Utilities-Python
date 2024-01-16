@@ -34,12 +34,14 @@ NS_OWL = rdflib.OWL
 NS_RDF = rdflib.RDF
 
 
-def class_iri_to_constructor_class_name(graph: rdflib.Graph, class_iri: str) -> str:
+def n_class_to_constructor_class_name(
+    graph: rdflib.Graph, n_class: rdflib.URIRef
+) -> str:
     (
         class_iri_prefix,
         class_iri_namespace,
         class_iri_basename,
-    ) = graph.namespace_manager.compute_qname(class_iri, False)
+    ) = graph.namespace_manager.compute_qname(n_class, False)
 
     class_iri_namespace_str = str(class_iri_namespace)
     if class_iri_namespace_str.startswith("http://purl.org/co/"):
@@ -53,7 +55,7 @@ def class_iri_to_constructor_class_name(graph: rdflib.Graph, class_iri: str) -> 
     elif class_iri_namespace_str.startswith(str(NS_OWL)):
         constructor_class_prefix = "OWL_"
     else:
-        raise NotImplementedError("Unrecognized IRI start: %r." % class_iri)
+        raise NotImplementedError("Unrecognized IRI start: %r." % n_class)
 
     return constructor_class_prefix + class_iri_basename
 
@@ -76,15 +78,13 @@ class CASEClassConstructor(object):
     def __init__(
         self,
         graph: rdflib.Graph,
-        class_iri: str,
+        n_class: rdflib.URIRef,
         *args: typing.Any,
         documentation_comment: typing.Optional[str] = None,
         **kwargs: typing.Any
     ) -> None:
-        self.class_iri: str = class_iri
-        self.case_class_name: str = class_iri_to_constructor_class_name(
-            graph, class_iri
-        )
+        self.n_class: rdflib.URIRef = n_class
+        self.case_class_name: str = n_class_to_constructor_class_name(graph, n_class)
         self.documentation_comment: typing.Optional[str] = documentation_comment
         self.parent_constructor_class_names: typing.Set[str] = set()
         self.required_properties: typing.Dict[str, CASEPropertyConstructor] = dict()
@@ -108,22 +108,22 @@ class CASEClassConstructor(object):
             for documentation_comment_line in documentation_comment_lines:
                 parts.append(("    " + documentation_comment_line).rstrip())
             parts.append("")
-        parts.append("    Based on class with IRI %r." % self.class_iri)
+        parts.append("    Based on class with IRI '%s'." % self.n_class)
         parts.append('    """')
 
         # Build initializer.
         parts.append(
-            "    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, type_iris: typing.Set[str] = set(), **kwargs: typing.Any) -> None:"
+            "    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:"
         )
         # Add types in initializer.
-        if "'" in self.class_iri:
-            raise ValueError('Unexpected "\'" character in IRI: %r.' % self.class_iri)
-        parts.append("        if len(type_iris) == 0:")
-        parts.append("            _type_iris = {'%s'}" % self.class_iri)
+        if "'" in str(self.n_class):
+            raise ValueError('Unexpected "\'" character in IRI: %r.' % self.n_class)
+        parts.append("        if len(n_types) == 0:")
+        parts.append("            _n_types = {%r}" % self.n_class)
         parts.append("        else:")
-        parts.append("            _type_iris = type_iris")
+        parts.append("            _n_types = n_types")
         parts.append(
-            "        super().__init__(graph, node_iri, *args, type_iris=_type_iris, **kwargs)"
+            "        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)"
         )
 
         # Add special-case initialization.
@@ -203,21 +203,21 @@ NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/co
 NS_UCO_OBSERVABLE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/observable/")
 
 class NodeConstructor(object):
-    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, type_iris: typing.Set[str] = set(), **kwargs: typing.Any) -> None:
+    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
         self._node: typing.Optional[rdflib.URIRef] = None
         self._node_iri = node_iri
-        self._type_iris: typing.Set[str] = type_iris
-        for type_iri in sorted(self.type_iris):
-            self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+        self._n_types: typing.Set[rdflib.URIRef] = n_types
+        for n_type in sorted(self.n_types):
+            self.graph.add((self.node, NS_RDF.type, n_type))
 
-    def add_type_iri(self, type_iri: str) -> None:
+    def add_type(self, n_type: rdflib.URIRef) -> None:
         '''
         Add additional RDF type to graph node.
         '''
-        self.type_iris.add(type_iri)
-        self.graph.add((self.node, NS_RDF.type, rdflib.URIRef(type_iri)))
+        self.n_types.add(n_type)
+        self.graph.add((self.node, NS_RDF.type, n_type))
 
     @property
     def graph(self) -> rdflib.Graph:
@@ -242,21 +242,23 @@ class NodeConstructor(object):
         self._node_iri = value
 
     @property
-    def type_iris(self) -> typing.Set[str]:
-        return self._type_iris
+    def n_types(self) -> typing.Set[rdflib.URIRef]:
+        return self._n_types
 
     def add_to_graph(self, graph: rdflib.Graph) -> None:
-        for type_iri in sorted(self.type_iris):
+        for n_type in sorted(self.n_types):
             graph.add((
                 self.node,
                 rdflib.RDF.type,
-                rdflib.URIRef(type_iri)
+                n_type
             ))
 """
     )
 
-    class_iris: typing.Set[str] = set()
-    class_iri_to_documentation_comment: typing.Dict[str, typing.Optional[str]] = dict()
+    n_classes: typing.Set[rdflib.URIRef] = set()
+    n_class_to_documentation_comment: typing.Dict[
+        rdflib.URIRef, typing.Optional[str]
+    ] = dict()
     class_query_str = """\
 SELECT ?nClass ?nComment
 WHERE {
@@ -270,26 +272,26 @@ WHERE {
     for class_result in graph.query(class_query_str):
         assert isinstance(class_result, rdflib.query.ResultRow)
         assert isinstance(class_result[0], rdflib.URIRef)
-        class_iris.add(class_result[0].toPython())
+        n_classes.add(class_result[0])
         if isinstance(class_result[1], rdflib.Literal):
-            class_iri_to_documentation_comment[
-                class_result[0].toPython()
-            ] = class_result[1].toPython()
+            n_class_to_documentation_comment[class_result[0]] = class_result[
+                1
+            ].toPython()
 
     constructor_class_name_to_case_class_constructor: typing.Dict[
         str, CASEClassConstructor
     ] = dict()
-    for class_iri in class_iris:
-        constructor_class_name = class_iri_to_constructor_class_name(graph, class_iri)
+    for n_class in n_classes:
+        constructor_class_name = n_class_to_constructor_class_name(graph, n_class)
         if constructor_class_name in constructor_class_name_to_case_class_constructor:
-            _logger.debug("class_iri = %r.", class_iri)
+            _logger.debug("n_class = %r.", n_class)
             raise ValueError("Duplicate class name: %r." % constructor_class_name)
         constructor_class_name_to_case_class_constructor[
             constructor_class_name
         ] = CASEClassConstructor(
             graph,
-            class_iri,
-            documentation_comment=class_iri_to_documentation_comment.get(class_iri),
+            n_class,
+            documentation_comment=n_class_to_documentation_comment.get(n_class),
         )
 
     # Link generated class names.
@@ -311,17 +313,16 @@ WHERE {
         assert isinstance(parent_result, rdflib.query.ResultRow)
         assert isinstance(parent_result[0], rdflib.URIRef)
         assert isinstance(parent_result[1], rdflib.URIRef)
-        constructor_class_name = class_iri_to_constructor_class_name(
-            graph, parent_result[0].toPython()
+        constructor_class_name = n_class_to_constructor_class_name(
+            graph, parent_result[0]
         )
 
         n_parent_class = parent_result[1]
         if n_parent_class is None or n_parent_class == NS_OWL.Thing:
             parent_constructor_class_name = "NodeConstructor"
         else:
-            parent_class_iri: str = parent_result[1].toPython()
-            parent_constructor_class_name = class_iri_to_constructor_class_name(
-                graph, parent_class_iri
+            parent_constructor_class_name = n_class_to_constructor_class_name(
+                graph, n_parent_class
             )
 
         constructor_class_name_to_case_class_constructor[
