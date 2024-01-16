@@ -113,7 +113,7 @@ class CASEClassConstructor(object):
 
         # Build initializer.
         parts.append(
-            "    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:"
+            "    def __init__(self, graph: rdflib.Graph, n_node: rdflib.URIRef, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:"
         )
         # Add types in initializer.
         if "'" in str(self.n_class):
@@ -123,7 +123,7 @@ class CASEClassConstructor(object):
         parts.append("        else:")
         parts.append("            _n_types = n_types")
         parts.append(
-            "        super().__init__(graph, node_iri, *args, n_types=_n_types, **kwargs)"
+            "        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)"
         )
 
         # Add special-case initialization.
@@ -137,7 +137,7 @@ class CASEClassConstructor(object):
             parts.append("    def add_facet(self, facet: UCO_Facet) -> None:")
             parts.append("        self.facets.append(facet)")
             parts.append(
-                "        self.graph.add((self.node, NS_UCO_CORE.hasFacet, facet.node))"
+                "        self.graph.add((self.n_node, NS_UCO_CORE.hasFacet, facet.n_node))"
             )
             parts.append("    @property")
             parts.append("    def facets(self) -> typing.List[UCO_Facet]:")
@@ -146,7 +146,7 @@ class CASEClassConstructor(object):
             parts.append("    def add_hash(self, hash: UCO_Hash) -> None:")
             parts.append("        self.hashes.append(hash)")
             parts.append(
-                "        self.graph.add((self.node, NS_UCO_OBSERVABLE.hash, hash.node))"
+                "        self.graph.add((self.n_node, NS_UCO_OBSERVABLE.hash, hash.n_node))"
             )
             parts.append("    @property")
             parts.append("    def hashes(self) -> typing.List[UCO_Hash]:")
@@ -203,43 +203,31 @@ NS_UCO_CORE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/co
 NS_UCO_OBSERVABLE = rdflib.Namespace("https://ontology.unifiedcyberontology.org/uco/observable/")
 
 class NodeConstructor(object):
-    def __init__(self, graph: rdflib.Graph, node_iri: str, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:
+    def __init__(self, graph: rdflib.Graph, n_node: rdflib.URIRef, *args: typing.Any, n_types: typing.Set[rdflib.URIRef] = set(), **kwargs: typing.Any) -> None:
         super().__init__()
         self._graph: rdflib.Graph = graph
-        self._node: typing.Optional[rdflib.URIRef] = None
-        self._node_iri = node_iri
+        self._n_node = n_node
         self._n_types: typing.Set[rdflib.URIRef] = n_types
         for n_type in sorted(self.n_types):
-            self.graph.add((self.node, NS_RDF.type, n_type))
+            self.graph.add((self.n_node, NS_RDF.type, n_type))
 
     def add_type(self, n_type: rdflib.URIRef) -> None:
         '''
         Add additional RDF type to graph node.
         '''
         self.n_types.add(n_type)
-        self.graph.add((self.node, NS_RDF.type, n_type))
+        self.graph.add((self.n_node, NS_RDF.type, n_type))
 
     @property
     def graph(self) -> rdflib.Graph:
         return self._graph
 
     @property
-    def node(self) -> rdflib.URIRef:
+    def n_node(self) -> rdflib.URIRef:
         '''
-        Set on first access.
+        The individual this NodeConstructor supports.
         '''
-        if self._node is None:
-            self._node = rdflib.URIRef(self.node_iri)
-        return self._node
-
-    @property
-    def node_iri(self) -> str:
-        return self._node_iri
-
-    @node_iri.setter
-    def node_iri(self, value: str) -> None:
-        assert isinstance(value, str)
-        self._node_iri = value
+        return self._n_node
 
     @property
     def n_types(self) -> typing.Set[rdflib.URIRef]:
@@ -248,7 +236,7 @@ class NodeConstructor(object):
     def add_to_graph(self, graph: rdflib.Graph) -> None:
         for n_type in sorted(self.n_types):
             graph.add((
-                self.node,
+                self.n_node,
                 rdflib.RDF.type,
                 n_type
             ))
