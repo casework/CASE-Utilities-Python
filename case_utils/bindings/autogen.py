@@ -47,6 +47,8 @@ def class_iri_to_constructor_class_name(graph: rdflib.Graph, class_iri: str) -> 
         "https://ontology.unifiedcyberontology.org/"
     ):
         constructor_class_prefix = "UCO_"
+    elif class_iri_namespace_str.startswith(str(NS_OWL)):
+        constructor_class_prefix = "OWL_"
     else:
         raise NotImplementedError("Unrecognized IRI start: %r." % class_iri)
 
@@ -260,8 +262,10 @@ WHERE {
 }
 """
     for class_result in graph.query(class_query_str):
+        assert isinstance(class_result, rdflib.query.ResultRow)
+        assert isinstance(class_result[0], rdflib.URIRef)
         class_iris.add(class_result[0].toPython())
-        if not class_result[1] is None:
+        if isinstance(class_result[1], rdflib.Literal):
             class_iri_to_documentation_comment[
                 class_result[0].toPython()
             ] = class_result[1].toPython()
@@ -285,7 +289,7 @@ WHERE {
     # Link generated class names.
     constructor_class_dependencies = networkx.DiGraph()
 
-    # Record direct parents.
+    # Record direct parents, excluding anonymous classes and owl:Restrictions.
     query_str = """\
 SELECT ?nClass ?nParentClass
 WHERE {
@@ -294,9 +298,13 @@ WHERE {
     ?nClass rdfs:subClassOf ?nParentClass .
   }
   FILTER isIRI(?nClass)
+  FILTER isIRI(?nParentClass)
 }
 """
     for parent_result in graph.query(query_str):
+        assert isinstance(parent_result, rdflib.query.ResultRow)
+        assert isinstance(parent_result[0], rdflib.URIRef)
+        assert isinstance(parent_result[1], rdflib.URIRef)
         constructor_class_name = class_iri_to_constructor_class_name(
             graph, parent_result[0].toPython()
         )
