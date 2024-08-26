@@ -75,7 +75,7 @@ jobs:
     - name: Upload HTML Docs
       uses: actions/upload-artifact@v3
       with:
-        name: packages
+        name: packages-${{ matrix.python-version }}
         path: ./dist/
 
     # If this commit is the result of a Git tag, push the wheel and tar packages
