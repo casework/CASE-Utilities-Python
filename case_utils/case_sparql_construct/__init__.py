@@ -42,9 +42,11 @@ def main() -> None:
 
     # Configure debug logging before running parse_args, because there could be an error raised before the construction of the argument parser.
     logging.basicConfig(
-        level=logging.DEBUG
-        if ("--debug" in sys.argv or "-d" in sys.argv)
-        else logging.INFO
+        level=(
+            logging.DEBUG
+            if ("--debug" in sys.argv or "-d" in sys.argv)
+            else logging.INFO
+        )
     )
 
     parser.add_argument("-d", "--debug", action="store_true")
