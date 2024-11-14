@@ -41,7 +41,7 @@ import sys
 import warnings
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import pyshacl  # type: ignore
+import pyshacl
 import rdflib
 from rdflib import Graph
 
