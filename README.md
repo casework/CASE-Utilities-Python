@@ -172,6 +172,29 @@ Some `make` targets are defined for this repository:
 * `download` - Download files sufficiently to run the unit tests offline.  This will *not* include the ontology repositories tracked as submodules.  Note if you do need to work offline, be aware touching the `setup.cfg` file in the project root directory, or `tests/requirements.txt`, will trigger a virtual environment rebuild.
 
 
+## Windows Executables
+
+This repository supports building Windows executables with [PyInstaller](https://pyinstaller.org/en/stable/index.html).
+This packages a Python executable along with the code for portability.
+
+```powershell
+# Create the virtual environment (optional)
+python3 -m venv venv
+
+# Activate the virtual environment (optional)
+./venv/Scripts/activate .
+
+# Install PyInstaller and verify the version
+pip install pyinstaller
+pyinstaller --version
+
+# Build the executable with the .spec file
+pyinstaller .\case_validate.spec
+
+# Confirm the build
+.\dist\case_validate.exe -h
+```
+
 ## Licensing
 
 This repository is licensed under the Apache 2.0 License.  See [LICENSE](LICENSE).
