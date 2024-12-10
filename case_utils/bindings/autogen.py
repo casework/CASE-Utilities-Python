@@ -248,11 +248,11 @@ class NodeConstructor(object):
         rdflib.URIRef, typing.Optional[str]
     ] = dict()
     class_query_str = """\
-SELECT ?nClass ?nComment
+SELECT ?nClass ?lComment
 WHERE {
   ?nClass a owl:Class .
 
-  OPTIONAL { ?nClass rdfs:comment ?nComment . }
+  OPTIONAL { ?nClass rdfs:comment ?lComment . }
 
   FILTER isIRI(?nClass)
 }
