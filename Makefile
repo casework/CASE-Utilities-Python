@@ -116,12 +116,23 @@ clean:
 	  || $(MAKE) \
 	    --directory dependencies/CASE \
 	    clean
-	@# Restore CASE validation output files that do not affect CASE build process.
+	@# Restore CASE validation and catalog output files that do not affect CASE build process.
 	@test ! -r dependencies/CASE/README.md \
 	  || ( \
 	    cd dependencies/CASE \
 	      && git checkout \
 	        -- \
+	        ontology \
+	        tests/examples \
+	        || true \
+	  )
+	@# Restore UCO catalog output files that do not affect CASE build process.
+	@test ! -r dependencies/CASE/dependencies/UCO/README.md \
+	  || ( \
+	    cd dependencies/CASE/dependencies/UCO \
+	      && git checkout \
+	        -- \
+	        ontology \
 	        tests/examples \
 	        || true \
 	  )

@@ -42,29 +42,34 @@ jobs:
           - '3.12'
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-java@v3
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '11'
+  
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+  
     - name: Pre-commit Checks
       run: |
         pip -q install pre-commit
         pre-commit run --all-files
+
     - name: Start from clean state
       run: make clean
+
     - name: Run tests
       run: make PYTHON3=python check
 
     # Build the binary wheel as well as the source tar
     - name: Build Objects
       run: |
-        pip install -q twine wheel
-        python setup.py sdist bdist_wheel
+        pip install -q twine build
+        python -m build
 
     # Ensure the objects were packaged correctly and there wasn't an issue with
     # the compilation or packaging process.
@@ -73,9 +78,9 @@ jobs:
 
     # Upload the packages on all develop and main pipleines for test consumption
     - name: Upload HTML Docs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: packages
+        name: packages-${{ matrix.python-version }}
         path: ./dist/
 
     # If this commit is the result of a Git tag, push the wheel and tar packages

@@ -14,4 +14,4 @@
 #
 # We would appreciate acknowledgement if the software is used.
 
-__version__ = "0.15.0"
+__version__ = "0.16.0"
