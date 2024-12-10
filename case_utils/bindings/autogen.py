@@ -274,12 +274,12 @@ WHERE {
         if constructor_class_name in constructor_class_name_to_case_class_constructor:
             _logger.debug("n_class = %r.", n_class)
             raise ValueError("Duplicate class name: %r." % constructor_class_name)
-        constructor_class_name_to_case_class_constructor[
-            constructor_class_name
-        ] = CASEClassConstructor(
-            graph,
-            n_class,
-            documentation_comment=n_class_to_documentation_comment.get(n_class),
+        constructor_class_name_to_case_class_constructor[constructor_class_name] = (
+            CASEClassConstructor(
+                graph,
+                n_class,
+                documentation_comment=n_class_to_documentation_comment.get(n_class),
+            )
         )
 
     # Link generated class names.
