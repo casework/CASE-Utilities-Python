@@ -10506,6 +10506,32 @@ class UCO_ExternalReference(UCO_UcoInherentCharacterizationThing):
         super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
 
 
+class UCO_Event(UCO_UcoObject):
+    """
+    An Event is a noteworthy occurrence (something that happens or might happen).
+
+    Based on class with IRI 'https://ontology.unifiedcyberontology.org/uco/core/Event'.
+    """
+
+    def __init__(
+        self,
+        graph: rdflib.Graph,
+        n_node: rdflib.URIRef,
+        *args: typing.Any,
+        n_types: typing.Set[rdflib.URIRef] = set(),
+        **kwargs: typing.Any,
+    ) -> None:
+        if len(n_types) == 0:
+            _n_types = {
+                rdflib.term.URIRef(
+                    "https://ontology.unifiedcyberontology.org/uco/core/Event"
+                )
+            }
+        else:
+            _n_types = n_types
+        super().__init__(graph, n_node, *args, n_types=_n_types, **kwargs)
+
+
 class UCO_ControlledVocabulary(UCO_UcoObject):
     """
     A controlled vocabulary is an explicitly constrained set of string values.
