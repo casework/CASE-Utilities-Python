@@ -66,16 +66,16 @@ from typing import Any, Dict, Optional, Tuple
 
 from rdflib import Literal, Namespace, URIRef
 
-from case_utils.namespace import NS_UCO_CORE, NS_UCO_VOCABULARY, NS_XSD
+from case_utils.namespace import NS_UCO_CORE, NS_XSD
 
-L_MD5 = Literal("MD5", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA1 = Literal("SHA1", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA256 = Literal("SHA256", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA3_256 = Literal("SHA3-256", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA3_512 = Literal("SHA3-512", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA384 = Literal("SHA384", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA512 = Literal("SHA512", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SSDEEP = Literal("SSDEEP", datatype=NS_UCO_VOCABULARY.HashNameVocab)
+L_MD5 = Literal("MD5")
+L_SHA1 = Literal("SHA1")
+L_SHA256 = Literal("SHA256")
+L_SHA3_256 = Literal("SHA3-256")
+L_SHA3_512 = Literal("SHA3-512")
+L_SHA384 = Literal("SHA384")
+L_SHA512 = Literal("SHA512")
+L_SSDEEP = Literal("SSDEEP")
 
 # Key: hashMethod literal.
 # Value: Tuple.

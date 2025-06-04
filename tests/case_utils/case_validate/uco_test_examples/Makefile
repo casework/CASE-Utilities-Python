@@ -30,12 +30,16 @@ validation_ttls := \
   action_inheritance_PASS_validation.ttl \
   action_inheritance_XFAIL_validation.ttl \
   action_result_PASS_validation.ttl \
+  alternate_data_stream_PASS_validation.ttl \
   co_PASS_validation.ttl \
   co_XFAIL_validation.ttl \
   configuration_setting_PASS_validation.ttl \
   configuration_setting_XFAIL_validation.ttl \
   database_records_PASS_validation.ttl \
   database_records_XFAIL_validation.ttl \
+  dictionary_PASS_validation.ttl \
+  dictionary_XFAIL_validation.ttl \
+  disjointedness_PASS_validation.ttl \
   event_XFAIL_validation.ttl \
   file_url_PASS_validation.ttl \
   has_facet_inverse_functional_PASS_validation.ttl \
@@ -46,7 +50,10 @@ validation_ttls := \
   location_XFAIL_validation.ttl \
   message_thread_PASS_validation.ttl \
   message_thread_XFAIL_validation.ttl \
+  object_status_PASS_validation.ttl \
+  object_status_XFAIL_validation.ttl \
   observable_creation_time_PASS_validation.ttl \
+  operating_system_PASS_validation.ttl \
   owl_axiom_PASS_validation.ttl \
   owl_axiom_XFAIL_validation.ttl \
   owl_properties_PASS_validation.ttl \
