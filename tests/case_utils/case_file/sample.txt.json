@@ -28,7 +28,6 @@
         "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
         "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
         "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
-        "uco-vocabulary": "https://ontology.unifiedcyberontology.org/uco/vocabulary/",
         "vann": "http://purl.org/vocab/vann/",
         "void": "http://rdfs.org/ns/void#",
         "wgs": "https://www.w3.org/2003/01/geo/wgs84_pos#",
@@ -37,15 +36,12 @@
     },
     "@graph": [
         {
-            "@id": "kb:Hash-9527b473-6268-5385-9a74-4eb1a98fef93",
+            "@id": "kb:Hash-fe2030ac-2380-520f-8499-5f2a1e5d69af",
             "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "SHA256"
-            },
+            "uco-types:hashMethod": "SHA1",
             "uco-types:hashValue": {
                 "@type": "xsd:hexBinary",
-                "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+                "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
             }
         },
         {
@@ -57,30 +53,6 @@
                 "@value": "2010-01-02T03:04:56+00:00"
             },
             "uco-observable:sizeInBytes": 4
-        },
-        {
-            "@id": "kb:Hash-fe2030ac-2380-520f-8499-5f2a1e5d69af",
-            "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "SHA1"
-            },
-            "uco-types:hashValue": {
-                "@type": "xsd:hexBinary",
-                "@value": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
-            }
-        },
-        {
-            "@id": "kb:Hash-ae02b896-5a0b-57c0-9441-c90ce6382a72",
-            "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "SHA3-256"
-            },
-            "uco-types:hashValue": {
-                "@type": "xsd:hexBinary",
-                "@value": "36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80"
-            }
         },
         {
             "@id": "kb:ContentDataFacet-bb169f87-b3b7-55b5-96a5-dec7738c441b",
@@ -108,42 +80,6 @@
             "uco-observable:sizeInBytes": 4
         },
         {
-            "@id": "kb:Hash-acdba760-7dc3-5601-8d5f-480c1def8492",
-            "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "SHA512"
-            },
-            "uco-types:hashValue": {
-                "@type": "xsd:hexBinary",
-                "@value": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
-            }
-        },
-        {
-            "@id": "kb:Hash-244595b7-3a16-50e3-ab5d-1fc767d4f337",
-            "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "MD5"
-            },
-            "uco-types:hashValue": {
-                "@type": "xsd:hexBinary",
-                "@value": "098f6bcd4621d373cade4e832627b4f6"
-            }
-        },
-        {
-            "@id": "kb:Hash-7395c349-e7ab-59b4-acdd-9d857c32413a",
-            "@type": "uco-types:Hash",
-            "uco-types:hashMethod": {
-                "@type": "uco-vocabulary:HashNameVocab",
-                "@value": "SHA3-512"
-            },
-            "uco-types:hashValue": {
-                "@type": "xsd:hexBinary",
-                "@value": "9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14"
-            }
-        },
-        {
             "@id": "kb:File-d15507da-29e5-5575-bce6-f59dc788dcc9",
             "@type": "uco-observable:File",
             "uco-core:hasFacet": [
@@ -154,6 +90,51 @@
                     "@id": "kb:ContentDataFacet-bb169f87-b3b7-55b5-96a5-dec7738c441b"
                 }
             ]
+        },
+        {
+            "@id": "kb:Hash-244595b7-3a16-50e3-ab5d-1fc767d4f337",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": "MD5",
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "098f6bcd4621d373cade4e832627b4f6"
+            }
+        },
+        {
+            "@id": "kb:Hash-7395c349-e7ab-59b4-acdd-9d857c32413a",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": "SHA3-512",
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14"
+            }
+        },
+        {
+            "@id": "kb:Hash-9527b473-6268-5385-9a74-4eb1a98fef93",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": "SHA256",
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+            }
+        },
+        {
+            "@id": "kb:Hash-ae02b896-5a0b-57c0-9441-c90ce6382a72",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": "SHA3-256",
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80"
+            }
+        },
+        {
+            "@id": "kb:Hash-acdba760-7dc3-5601-8d5f-480c1def8492",
+            "@type": "uco-types:Hash",
+            "uco-types:hashMethod": "SHA512",
+            "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
+            }
         }
     ]
 }

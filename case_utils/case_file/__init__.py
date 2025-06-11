@@ -38,7 +38,6 @@ from case_utils.namespace import (
     NS_UCO_CORE,
     NS_UCO_OBSERVABLE,
     NS_UCO_TYPES,
-    NS_UCO_VOCABULARY,
     NS_XSD,
 )
 
@@ -228,14 +227,9 @@ def create_file_node(
 
             l_hash_method: rdflib.Literal
             if key in ("sha3_256", "sha3_512"):
-                l_hash_method = rdflib.Literal(
-                    key.replace("_", "-").upper(),
-                    datatype=NS_UCO_VOCABULARY.HashNameVocab,
-                )
+                l_hash_method = rdflib.Literal(key.replace("_", "-").upper())
             else:
-                l_hash_method = rdflib.Literal(
-                    key.upper(), datatype=NS_UCO_VOCABULARY.HashNameVocab
-                )
+                l_hash_method = rdflib.Literal(key.upper())
 
             hash_value: str = getattr(successful_hashdict, key)
             l_hash_value = rdflib.Literal(hash_value.upper(), datatype=NS_XSD.hexBinary)
@@ -300,7 +294,6 @@ def main() -> None:
     graph.namespace_manager.bind("uco-core", NS_UCO_CORE)
     graph.namespace_manager.bind("uco-observable", NS_UCO_OBSERVABLE)
     graph.namespace_manager.bind("uco-types", NS_UCO_TYPES)
-    graph.namespace_manager.bind("uco-vocabulary", NS_UCO_VOCABULARY)
     graph.namespace_manager.bind("xsd", NS_XSD)
 
     output_format = None
