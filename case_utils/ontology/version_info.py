@@ -22,7 +22,7 @@ This program serves two roles:
 When preparing to build a new monolithic ontology, please edit this variable to match the new respective version.
 """
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 __all__ = ["CURRENT_CASE_VERSION", "built_version_choices_list"]
 
