@@ -32,7 +32,7 @@ a monolithic file; see case_utils.ontology if interested in further
 details.)
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 import argparse
 import logging
@@ -41,7 +41,7 @@ import sys
 import warnings
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import pyshacl  # type: ignore
+import pyshacl
 import rdflib
 from rdflib import Graph
 
@@ -120,14 +120,14 @@ def validate(
     )
 
     # Validate data graph against ontology graph.
-    validate_result: Tuple[
-        bool, Union[Exception, bytes, str, rdflib.Graph], str
-    ] = pyshacl.validate(
-        data_graph,
-        *args,
-        ont_graph=ontology_graph,
-        shacl_graph=ontology_graph,
-        **kwargs,
+    validate_result: Tuple[bool, Union[Exception, bytes, str, rdflib.Graph], str] = (
+        pyshacl.validate(
+            data_graph,
+            *args,
+            ont_graph=ontology_graph,
+            shacl_graph=ontology_graph,
+            **kwargs,
+        )
     )
 
     # Relieve RAM of the data graph after validation has run.
@@ -159,9 +159,11 @@ def main() -> None:
     # could be an error raised before the construction of the argument
     # parser.
     logging.basicConfig(
-        level=logging.DEBUG
-        if ("--debug" in sys.argv or "-d" in sys.argv)
-        else logging.INFO
+        level=(
+            logging.DEBUG
+            if ("--debug" in sys.argv or "-d" in sys.argv)
+            else logging.INFO
+        )
     )
 
     # Add arguments specific to case_validate.

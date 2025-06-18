@@ -1,0 +1,1 @@
+*Note*: Some files in this directory have contents incongruous with their file extension.  This is a test of whether the `--format` flag overrides the file name detection, so incongruities are expected.

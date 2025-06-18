@@ -29,7 +29,7 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 import argparse
 import binascii
@@ -197,9 +197,11 @@ def main() -> None:
 
     # Configure debug logging before running parse_args, because there could be an error raised before the construction of the argument parser.
     logging.basicConfig(
-        level=logging.DEBUG
-        if ("--debug" in sys.argv or "-d" in sys.argv)
-        else logging.INFO
+        level=(
+            logging.DEBUG
+            if ("--debug" in sys.argv or "-d" in sys.argv)
+            else logging.INFO
+        )
     )
 
     parser.add_argument("-d", "--debug", action="store_true")

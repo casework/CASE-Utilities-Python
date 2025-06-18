@@ -57,7 +57,7 @@ The two IRIs end with the same UUID.
 >>> assert str(n_file_facet)[-36:] == str(n_file_facet_2)[-36:]
 """
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 import binascii
 import re
@@ -66,16 +66,16 @@ from typing import Any, Dict, Optional, Tuple
 
 from rdflib import Literal, Namespace, URIRef
 
-from case_utils.namespace import NS_UCO_CORE, NS_UCO_VOCABULARY, NS_XSD
+from case_utils.namespace import NS_UCO_CORE, NS_XSD
 
-L_MD5 = Literal("MD5", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA1 = Literal("SHA1", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA256 = Literal("SHA256", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA3_256 = Literal("SHA3-256", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA3_512 = Literal("SHA3-512", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA384 = Literal("SHA384", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SHA512 = Literal("SHA512", datatype=NS_UCO_VOCABULARY.HashNameVocab)
-L_SSDEEP = Literal("SSDEEP", datatype=NS_UCO_VOCABULARY.HashNameVocab)
+L_MD5 = Literal("MD5")
+L_SHA1 = Literal("SHA1")
+L_SHA256 = Literal("SHA256")
+L_SHA3_256 = Literal("SHA3-256")
+L_SHA3_512 = Literal("SHA3-512")
+L_SHA384 = Literal("SHA384")
+L_SHA512 = Literal("SHA512")
+L_SSDEEP = Literal("SSDEEP")
 
 # Key: hashMethod literal.
 # Value: Tuple.
@@ -94,6 +94,15 @@ HASH_METHOD_CASTINGS: Dict[Literal, Tuple[str, Optional[int]]] = {
 RX_UUID = re.compile(
     "[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$", re.IGNORECASE
 )
+
+
+def dictionary_entry_inherence_uuid(
+    uco_object_uuid_namespace: uuid.UUID, key_name: str, *args: Any, **kwargs: Any
+) -> uuid.UUID:
+    """
+    This function returns a UUIDv5 for dictionary entries, incorporating the key string's value.
+    """
+    return uuid.uuid5(uco_object_uuid_namespace, key_name)
 
 
 def inherence_uuid(n_thing: URIRef, *args: Any, **kwargs: Any) -> uuid.UUID:
@@ -150,6 +159,47 @@ def facet_inherence_uuid(
     # NOTE: Further reviewing whether n_facet_class pertains to a Facet subclass is not done in this library.  Both a set of all such known classes, as well as an extension mechanism for non-standard Facet subclasses (probably either a Set or Graph as an extra parameter), would need to be implemented.
 
     return uuid.uuid5(uco_object_inherence_uuid, str(n_facet_class))
+
+
+def get_dictionary_entry_uriref(
+    n_dictionary: URIRef,
+    n_dictionary_entry_class: URIRef,
+    key_name: str,
+    *args: Any,
+    namespace: Namespace,
+    **kwargs: Any
+) -> URIRef:
+    """
+    :param namespace: An RDFLib Namespace object to use for prefixing the Dictionary IRI with a knowledge base prefix IRI.
+    :type namespace rdflib.Namespace:
+
+    :param n_dictionary_entry_class: Assumed to be a "Proper Dictionary", as defined in UCO Issue 602.
+
+    References
+    ==========
+    * https://github.com/ucoProject/UCO/issues/602
+
+    Examples
+    ========
+    A dictionary has to have an entry with key "foo". What is the IRI of the dictionary entry?
+
+    >>> from case_utils.namespace import NS_UCO_TYPES
+    >>> ns_kb = Namespace("http://example.org/kb/")
+    >>> n_dictionary = ns_kb["Dictionary-eb7e68d8-94db-4071-86fa-a51a33dc4a97"]
+    >>> n_dictionary_entry = get_dictionary_entry_uriref(n_dictionary, NS_UCO_TYPES.DictionaryEntry, "foo", namespace=ns_kb)
+    >>> n_dictionary_entry
+    rdflib.term.URIRef('http://example.org/kb/DictionaryEntry-6ce6b412-6a3a-5ebf-993a-9df2c80d2107')
+    """
+    uco_object_uuid_namespace: uuid.UUID = inherence_uuid(n_dictionary)
+    dictionary_entry_uuid = dictionary_entry_inherence_uuid(
+        uco_object_uuid_namespace, key_name
+    )
+
+    dictionary_entry_class_local_name = str(n_dictionary_entry_class).rsplit("/")[-1]
+
+    return namespace[
+        dictionary_entry_class_local_name + "-" + str(dictionary_entry_uuid)
+    ]
 
 
 def get_facet_uriref(
