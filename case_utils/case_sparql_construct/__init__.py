@@ -18,7 +18,7 @@
 This script executes a SPARQL CONSTRUCT query, returning a graph of the generated triples.
 """
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 import argparse
 import logging

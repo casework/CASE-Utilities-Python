@@ -18,7 +18,7 @@
 This module creates a graph object that provides a basic UCO characterization of a single file.  The gathered metadata is among the more "durable" file characteristics, i.e. characteristics that would remain consistent when transferring a file between locations.
 """
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 import argparse
 import datetime

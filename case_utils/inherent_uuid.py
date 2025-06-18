@@ -57,7 +57,7 @@ The two IRIs end with the same UUID.
 >>> assert str(n_file_facet)[-36:] == str(n_file_facet_2)[-36:]
 """
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 import binascii
 import re
