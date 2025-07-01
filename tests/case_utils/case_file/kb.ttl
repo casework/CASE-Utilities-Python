@@ -5,7 +5,6 @@
 @prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
 @prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
 @prefix uco-types: <https://ontology.unifiedcyberontology.org/uco/types/> .
-@prefix uco-vocabulary: <https://ontology.unifiedcyberontology.org/uco/vocabulary/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 kb:ContentDataFacet-e154c2c4-bbf7-54f5-b7a0-837a3bbbeac8
@@ -50,37 +49,37 @@ kb:FileFacet-d086baca-c585-5b5e-b34d-4592bcddb659
 
 kb:Hash-244595b7-3a16-50e3-ab5d-1fc767d4f337
 	a uco-types:Hash ;
-	uco-types:hashMethod "MD5"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "MD5" ;
 	uco-types:hashValue "098f6bcd4621d373cade4e832627b4f6"^^xsd:hexBinary ;
 	.
 
 kb:Hash-7395c349-e7ab-59b4-acdd-9d857c32413a
 	a uco-types:Hash ;
-	uco-types:hashMethod "SHA3-512"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "SHA3-512" ;
 	uco-types:hashValue "9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14"^^xsd:hexBinary ;
 	.
 
 kb:Hash-9527b473-6268-5385-9a74-4eb1a98fef93
 	a uco-types:Hash ;
-	uco-types:hashMethod "SHA256"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "SHA256" ;
 	uco-types:hashValue "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"^^xsd:hexBinary ;
 	.
 
 kb:Hash-acdba760-7dc3-5601-8d5f-480c1def8492
 	a uco-types:Hash ;
-	uco-types:hashMethod "SHA512"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "SHA512" ;
 	uco-types:hashValue "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"^^xsd:hexBinary ;
 	.
 
 kb:Hash-ae02b896-5a0b-57c0-9441-c90ce6382a72
 	a uco-types:Hash ;
-	uco-types:hashMethod "SHA3-256"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "SHA3-256" ;
 	uco-types:hashValue "36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80"^^xsd:hexBinary ;
 	.
 
 kb:Hash-fe2030ac-2380-520f-8499-5f2a1e5d69af
 	a uco-types:Hash ;
-	uco-types:hashMethod "SHA1"^^uco-vocabulary:HashNameVocab ;
+	uco-types:hashMethod "SHA1" ;
 	uco-types:hashValue "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"^^xsd:hexBinary ;
 	.
 
