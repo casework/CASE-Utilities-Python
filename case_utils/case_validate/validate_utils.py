@@ -23,7 +23,7 @@ from typing import List, Optional, Set
 
 import rdflib
 
-import case_utils
+import case_utils.ontology
 from case_utils.case_validate.validate_types import NonExistentCASEVersionError
 from case_utils.ontology.version_info import CURRENT_CASE_VERSION
 

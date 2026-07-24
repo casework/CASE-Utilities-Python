@@ -86,7 +86,7 @@ def main() -> None:
     # _report("2", g2)
 
     if args.debug:
-        (in_both, in_first, in_second) = rdflib.compare.graph_diff(i1, i2)
+        in_both, in_first, in_second = rdflib.compare.graph_diff(i1, i2)
         _report("<", in_first)
         _report(">", in_second)
 
