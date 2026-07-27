@@ -57,7 +57,7 @@ def query_text_to_variables(select_query_text: str) -> typing.List[str]:
     select_query_text_lines = select_query_text.split("\n")
     select_line = [
         line for line in select_query_text_lines if line.startswith("SELECT ")
-    ][0]
+    ][0].strip()
     variables = select_line.replace(" DISTINCT", "").replace("SELECT ", "").split(" ")
     return variables
 

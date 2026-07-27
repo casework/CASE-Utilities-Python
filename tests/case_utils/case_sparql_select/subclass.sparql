@@ -1,5 +1,7 @@
 PREFIX uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/>
-SELECT ?nFile
+# NOTE: There is intentionally a trailing whitespace in the SELECT clause.
+# NOTE: This query is expected to have one output column.
+SELECT ?nFile 
 WHERE {
   ?nFile a/rdfs:subClassOf* uco-observable:ObservableObject .
 }
