@@ -92,7 +92,6 @@ all: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    --allow-warnings \
-	    --debug \
 	    --format turtle \
 	    $< \
 	    > __$@ \
@@ -122,7 +121,6 @@ rdf_list_XFAIL_validation.ttl: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    --allow-warnings \
-	    --debug \
 	    --format turtle \
 	    --review-tbox \
 	    $< \
@@ -153,7 +151,6 @@ owl_properties_XFAIL_validation.ttl: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    --allow-warnings \
-	    --debug \
 	    --format turtle \
 	    --review-tbox \
 	    $< \
