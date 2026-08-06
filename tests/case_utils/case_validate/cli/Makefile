@@ -79,7 +79,6 @@ errant_cdo_concept_PASS.txt: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    --allow-warnings \
-	    --debug \
 	    errant_cdo_concept.ttl \
 	    > _$@
 	mv _$@ $@
@@ -94,7 +93,6 @@ errant_cdo_concept_XFAIL.txt: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    errant_cdo_concept.ttl \
-	    --debug \
 	    > _$@ \
 	    ; test 1 -eq $$?
 	test -s _$@
@@ -109,7 +107,6 @@ format_human_output_%: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format human \
 	    --output _$@ \
 	    $<
@@ -124,7 +121,6 @@ format_human_output_unspecified.txt: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format human \
 	    $< \
 	    > _$@
@@ -141,7 +137,6 @@ format_jsonld_output_%: \
 	rm -f __$@ _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format json-ld \
 	    --output __$@ \
 	    $<
@@ -161,7 +156,6 @@ format_jsonld_output_unspecified.jsonld: \
 	rm -f __$@ _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format json-ld \
 	    $< \
 	    > __$@
@@ -181,7 +175,6 @@ format_turtle_output_%: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format turtle \
 	    --output _$@ \
 	    $<
@@ -196,7 +189,6 @@ format_turtle_output_unspecified.ttl: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --format turtle \
 	    $< \
 	    > _$@
@@ -211,7 +203,6 @@ format_unspecified_output_%: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    --output _$@ \
 	    $<
 	mv _$@ $@
@@ -225,7 +216,6 @@ format_unspecified_output_unspecified.txt: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    $< \
 	    > _$@
 	mv _$@ $@
@@ -270,7 +260,6 @@ split_data_graph_PASS.txt: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    split_data_graph_1.json \
 	    split_data_graph_2.json \
 	    > _$@
@@ -285,7 +274,6 @@ split_data_graph_XFAIL.txt: \
 	rm -f _$@
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
-	    --debug \
 	    split_data_graph_1.json \
 	    > _$@ \
 	    ; rc=$$? ; test 1 -eq $$rc
