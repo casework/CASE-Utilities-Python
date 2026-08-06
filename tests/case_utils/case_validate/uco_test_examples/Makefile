@@ -67,7 +67,13 @@ validation_ttls := \
   thread_XFAIL_validation.ttl
 
 all: \
-  $(validation_ttls)
+  $(validation_ttls) \
+  all-technique
+
+.PHONY: \
+  all-technique \
+  check-technique \
+  clean-technique
 
 .PRECIOUS: \
   %_validation.ttl
@@ -171,12 +177,29 @@ owl_properties_XFAIL_validation.ttl: \
 	rm __$@
 	mv _$@ $@
 
+all-technique:
+	$(MAKE) \
+	  --directory technique
+
 check: \
-  $(validation_ttls)
+  $(validation_ttls) \
+  check-technique
 	source $(tests_srcdir)/venv/bin/activate \
 	  && pytest \
 	    --log-level=DEBUG
 
-clean:
+check-technique: \
+  all-technique
+	$(MAKE) \
+	  --directory technique \
+	  check
+
+clean: \
+  clean-technique
 	@rm -f \
 	  *_validation.ttl
+
+clean-technique:
+	@$(MAKE) \
+	  --directory technique \
+	  clean
