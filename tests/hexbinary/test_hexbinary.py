@@ -75,14 +75,12 @@ def test_sparql_syntax_bind_boolean() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( 1 = 1 AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -97,14 +95,12 @@ def test_pytest_syntax_xfail() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( 1 = 2 AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -118,14 +114,12 @@ def test_sparql_syntax_integer_coercion() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( 1 = "1"^^xsd:integer AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -139,14 +133,12 @@ def test_sparql_syntax_integer_cast() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( 1 = xsd:integer("1") AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -161,14 +153,12 @@ def test_sparql_cast_custom_type() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( 1 = xsd:integer("1"^^xsd:hexBinaryTypoXXXX) AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -179,14 +169,12 @@ WHERE {
 def test_sparql_compare_hexbinary_mixcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinary = "AB"^^xsd:hexBinary AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -197,14 +185,12 @@ WHERE {
 def test_sparql_compare_hexbinary_matchcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinary = "AB"^^xsd:hexBinary AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -215,14 +201,12 @@ WHERE {
 def test_sparql_compare_hexbinarycanonical_matchcase() -> None:
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinaryCanonical = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -237,14 +221,12 @@ def test_sparql_compare_hexbinarycanonical_mixcase() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinaryCanonical = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -259,14 +241,12 @@ def test_sparql_compare_hb_hbc_mixcase() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "AB"^^xsd:hexBinary = "AB"^^xsd:hexBinaryCanonical AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -281,14 +261,12 @@ def test_sparql_compare_hb_hbc_mixcase_cast() -> None:
     """
     confirmed = None
     graph = rdflib.Graph()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?lValue
 WHERE {
   BIND( "ab"^^xsd:hexBinary = xsd:hexBinary("AB"^^xsd:hexBinaryCanonical) AS ?lValue )
 }
-"""
-    ):
+"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.Literal)
         l_value = result[0]
@@ -331,15 +309,13 @@ def _query_all_value_matches(graph: rdflib.Graph) -> typing.Set[str]:
     "matching" is determined by the SPARQL engine's type and data coercions.
     """
     computed = set()
-    for result in graph.query(
-        """\
+    for result in graph.query("""\
 SELECT ?nNode1 ?nNode2
 WHERE {
   ?nNode1 ?p ?lValue .
   ?nNode2 ?p ?lValue .
   FILTER ( ?nNode1 != ?nNode2 )
-}"""
-    ):
+}"""):
         assert isinstance(result, rdflib.query.ResultRow)
         assert isinstance(result[0], rdflib.URIRef)
         assert isinstance(result[1], rdflib.URIRef)

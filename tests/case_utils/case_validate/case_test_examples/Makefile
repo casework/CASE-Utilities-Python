@@ -54,7 +54,6 @@ all: \
 	source $(tests_srcdir)/venv/bin/activate \
 	  && case_validate \
 	    --allow-infos \
-	    --debug \
 	    --format turtle \
 	    --output __$@ \
 	    $< \

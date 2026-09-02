@@ -29,7 +29,7 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"
 
 import argparse
 import binascii
@@ -57,7 +57,7 @@ def query_text_to_variables(select_query_text: str) -> typing.List[str]:
     select_query_text_lines = select_query_text.split("\n")
     select_line = [
         line for line in select_query_text_lines if line.startswith("SELECT ")
-    ][0]
+    ][0].strip()
     variables = select_line.replace(" DISTINCT", "").replace("SELECT ", "").split(" ")
     return variables
 
