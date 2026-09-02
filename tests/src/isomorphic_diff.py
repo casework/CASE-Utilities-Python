@@ -30,7 +30,7 @@ https://github.com/RDFLib/rdflib/issues/812
 On resolution of rdflib issue 812, and on adding some format-support flexibility, isomorphic_diff.py is likely to be deprecated in favor of using the upstream rdfgraphisomorphism command.
 """
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 import argparse
 import logging

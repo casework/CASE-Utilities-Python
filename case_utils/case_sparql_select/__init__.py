@@ -29,7 +29,7 @@ The word "DISTINCT" will also be cut from the query, if present.
 Should a more complex query be necessary, an outer, wrapping SELECT query would let this script continue to function.
 """
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"
 
 import argparse
 import binascii
