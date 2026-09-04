@@ -1,0 +1,54 @@
+# Portions of this file contributed by NIST are governed by the
+# following statement:
+#
+# This software was developed at the National Institute of Standards
+# and Technology by employees of the Federal Government in the course
+# of their official duties. Pursuant to Title 17 Section 105 of the
+# United States Code, this software is not subject to copyright
+# protection within the United States. NIST assumes no responsibility
+# whatsoever for its use by other parties, and makes no guarantees,
+# expressed or implied, about its quality, reliability, or any other
+# characteristic.
+#
+# We would appreciate acknowledgement if the software is used.
+
+# This file was started from template code from:
+# https://docs.pypi.org/trusted-publishers/using-a-publisher/
+
+name: Publish
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      # https://docs.pypi.org/trusted-publishers/using-a-publisher/
+      id-token: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Set up oldest tested Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install -q twine build
+
+      - name: Build Package
+        run: python -m build
+
+      # Ensure the objects were packaged correctly and there wasn't an issue with
+      # the compilation or packaging process.
+      - name: Check Objects
+        run: twine check dist/*
+
+      - name: Push to PyPi
+        uses: pypa/gh-action-pypi-publish@release/v1
